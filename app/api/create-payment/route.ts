@@ -108,19 +108,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Add VAT line item showing 0% due to reverse charge
-    lineItems.push({
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: 'VAT (0%)',
-          description: 'VAT Reverse Charge - Customer liable for VAT in their jurisdiction'
-        },
-        unit_amount: 0, // 0 amount for VAT due to reverse charge
-      },
-      quantity: 1,
-    });
-
     // VAT reverse charge applies to all transactions (Polish company selling internationally)
     // Customer is always liable for VAT in their jurisdiction
     const automaticTaxConfig = {
@@ -165,14 +152,6 @@ export async function POST(req: NextRequest) {
                 : serviceType === 'reset' 
                   ? "3-5 business days" 
                   : "5-7 business days"
-            },
-            {
-              name: "VAT Information",
-              value: "VAT Reverse Charge - Customer liable for VAT in their jurisdiction (Polish company selling internationally)"
-            },
-            {
-              name: "Seller VAT ID",
-              value: "PL6782978644"
             }
           ],
           footer: "Thank you for choosing MapWipers. Service will begin immediately after payment confirmation. VAT reverse charge applies - customer is responsible for VAT calculation and payment in their jurisdiction. Seller: MapWipers (NIP: PL6782978644).",
