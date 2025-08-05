@@ -108,11 +108,21 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // VAT reverse charge applies to all transactions (Polish company selling internationally)
+    // Customer is always liable for VAT in their jurisdiction
+    const automaticTaxConfig = {
+      enabled: true,
+      liability: {
+        type: 'self' as const // Reverse charge - customer is liable for VAT
+      }
+    };
+
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
       mode: 'payment',
       line_items: lineItems,
+      automatic_tax: automaticTaxConfig,
       success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/payment/success?session_id={CHECKOUT_SESSION_ID}&success=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/?canceled=true`,
       metadata: {
@@ -141,12 +151,19 @@ export async function POST(req: NextRequest) {
                 : serviceType === 'reset' 
                   ? "3-5 business days" 
                   : "5-7 business days"
+            },
+            {
+              name: "VAT Information",
+              value: "VAT Reverse Charge - Customer liable for VAT in their jurisdiction (Polish company selling internationally)"
             }
           ],
-          footer: "Thank you for choosing MapWipers. Service will begin immediately after payment confirmation.",
+          footer: "Thank you for choosing MapWipers. Service will begin immediately after payment confirmation. VAT reverse charge applies - customer is responsible for VAT calculation and payment in their jurisdiction.",
           metadata: {
             orderId: `ORDER_${Date.now()}`,
-            businessPlaceId: orderData.selectedBusiness.place_id || ''
+            businessPlaceId: orderData.selectedBusiness.place_id || '',
+            vatReverseCharge: 'true',
+            customerCountry: formData.companyCountry || 'US',
+            customerTaxId: formData.companyTaxId || ''
           }
         }
       },
@@ -154,7 +171,9 @@ export async function POST(req: NextRequest) {
         metadata: {
           orderId: `ORDER_${Date.now()}`,
           businessName: orderData.selectedBusiness.name,
-          serviceType: serviceType
+          serviceType: serviceType,
+          vatReverseCharge: 'true',
+          customerCountry: formData.companyCountry || 'US'
         }
       }
     });
@@ -164,7 +183,9 @@ export async function POST(req: NextRequest) {
       customerId: customer.id,
       business: orderData.selectedBusiness.name,
       service: serviceType,
-      amount: totalPrice
+      amount: totalPrice,
+      vatReverseCharge: true,
+      customerCountry: formData.companyCountry || 'US'
     });
 
     // Get request info for logging
