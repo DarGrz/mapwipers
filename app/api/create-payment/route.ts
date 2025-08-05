@@ -136,6 +136,10 @@ export async function POST(req: NextRequest) {
       mode: 'payment',
       line_items: lineItems,
       automatic_tax: automaticTaxConfig,
+      customer_update: {
+        address: 'auto', // Automatically save address entered in checkout
+        shipping: 'auto' // Automatically save shipping info if provided
+      },
       success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/payment/success?session_id={CHECKOUT_SESSION_ID}&success=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/?canceled=true`,
       metadata: {
