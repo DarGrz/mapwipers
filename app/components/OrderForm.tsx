@@ -45,12 +45,12 @@ const OrderForm: React.FC<OrderFormProps> = ({
     phone: '',
     comments: '',
     agreeToTerms: false,
-    isCompany: false,
+    isCompany: true, // Always true for business-only service
     companyName: '',
     companyAddress: '',
     companyCity: '',
     companyZip: '',
-    companyCountry: 'Poland',
+    companyCountry: 'United States',
     companyTaxId: ''
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof OrderFormData, string>>>({});
@@ -123,23 +123,21 @@ const OrderForm: React.FC<OrderFormProps> = ({
       errors.agreeToTerms = "You must agree to the terms and conditions";
     }
     
-    // Company validation when isCompany is true
-    if (formData.isCompany) {
-      if (!formData.companyName.trim()) {
-        errors.companyName = "Company name is required";
-      }
-      if (!formData.companyAddress.trim()) {
-        errors.companyAddress = "Company address is required";
-      }
-      if (!formData.companyCity.trim()) {
-        errors.companyCity = "City is required";
-      }
-      if (!formData.companyZip.trim()) {
-        errors.companyZip = "ZIP code is required";
-      }
-      if (!formData.companyCountry.trim()) {
-        errors.companyCountry = "Country is required";
-      }
+    // Company validation - always required since it's business-only
+    if (!formData.companyName.trim()) {
+      errors.companyName = "Company name is required";
+    }
+    if (!formData.companyAddress.trim()) {
+      errors.companyAddress = "Company address is required";
+    }
+    if (!formData.companyCity.trim()) {
+      errors.companyCity = "City is required";
+    }
+    if (!formData.companyZip.trim()) {
+      errors.companyZip = "ZIP code is required";
+    }
+    if (!formData.companyCountry.trim()) {
+      errors.companyCountry = "Country is required";
     }
     
     setFormErrors(errors);
@@ -187,46 +185,22 @@ const OrderForm: React.FC<OrderFormProps> = ({
           <div className="mt-4 md:mt-0 text-right">
             <p className="text-gray-600 font-medium">Total Price:</p>
             <p className="text-2xl font-bold text-[#0D2959]">{servicePrice} PLN</p>
-            <p className="text-sm text-gray-500">Pay after completion</p>
+            <p className="text-sm text-gray-500">Payment required upfront</p>
           </div>
         </div>
       </div>
 
-      {/* Service Type Notice */}
-      <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6">
+      {/* Business Only Notice */}
+      <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
         <div className="flex items-start">
-          <svg className="w-5 h-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg className="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
           <div>
-            <h3 className="font-semibold text-amber-800 mb-2">Service Information</h3>
-            <p className="text-sm text-amber-700 mb-4">
-              This service is primarily designed for businesses and companies. However, we also accept orders from individuals who need assistance with Google Business Profile management.
+            <h3 className="font-semibold text-blue-800 mb-2">Business Service Only</h3>
+            <p className="text-sm text-blue-700">
+              This service is exclusively available for businesses and companies. Please provide your company information below to proceed with your order.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                type="button"
-                onClick={() => setFormData(prev => ({ ...prev, isCompany: true }))}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  formData.isCompany 
-                    ? 'bg-[#0D2959] text-white' 
-                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                I&apos;m ordering as a Company
-              </button>
-              <button
-                type="button"
-                onClick={() => setFormData(prev => ({ ...prev, isCompany: false }))}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  !formData.isCompany 
-                    ? 'bg-[#0D2959] text-white' 
-                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                I&apos;m an Individual
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -298,10 +272,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
           </div>
         </div>
         
-        {/* Company Information Section */}
-        {formData.isCompany && (
-          <div className="border border-gray-200 rounded-lg p-4">
-            <h3 className="text-lg font-medium text-gray-700 mb-4">Company Information</h3>
+        {/* Company Information Section - Always shown since it's business-only */}
+        <div className="border border-gray-200 rounded-lg p-4">
+          <h3 className="text-lg font-medium text-gray-700 mb-4">Company Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -377,7 +350,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                   onChange={handleInputChange}
                   className={`w-full p-2 border ${formErrors.companyCountry ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
                 >
-                  <option value="Poland">Poland</option>
+                  <option value="United States">United States</option>
                   <option value="Germany">Germany</option>
                   <option value="United Kingdom">United Kingdom</option>
                   <option value="France">France</option>
@@ -406,7 +379,6 @@ const OrderForm: React.FC<OrderFormProps> = ({
               </div>
             </div>
           </div>
-        )}
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -477,7 +449,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
         <div className="bg-blue-50 p-4 rounded-lg">
           <h3 className="font-semibold mb-2 text-[#0D2959]">Important Information</h3>
           <ul className="text-sm text-gray-600 space-y-1 mb-4">
-            <li>• You will only be charged after the service has been successfully completed</li>
+            <li>• Payment is required upfront before service begins</li>
             <li>• We&apos;ll keep you updated on the progress of your request</li>
             <li>• You&apos;ll receive all information at the email address provided above</li>
           </ul>
