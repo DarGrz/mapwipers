@@ -100,7 +100,7 @@ export default function VisitorsPage() {
               href="/admin/analytics"
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              ← Back to Analytics
+              Back to Analytics
             </Link>
           </div>
           <div className="text-center py-12">
@@ -122,7 +122,7 @@ export default function VisitorsPage() {
               href="/admin/analytics"
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              ← Back to Analytics
+              Back to Analytics
             </Link>
           </div>
           <div className="bg-red-50 border border-red-200 rounded-md p-4">
@@ -149,7 +149,7 @@ export default function VisitorsPage() {
             href="/admin/analytics"
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            ← Back to Analytics
+            Back to Analytics
           </Link>
         </div>
 
