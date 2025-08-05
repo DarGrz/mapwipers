@@ -354,10 +354,10 @@ export default function Home() {
                   </span>
                 </div>
                 <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
-                  Done
+                  Results
                 </h3>
                 <p className="text-[#0D2959]/70">
-                  Pay only after the profile or review is removed
+                  Get guaranteed removal within 7-14 days with full updates
                 </p>
               </div>
             </div>
@@ -1286,7 +1286,7 @@ export default function Home() {
       {/* Service Selection Modal */}
       {showServiceModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-lg w-full h-[500px] shadow-2xl border border-gray-100 transform transition-all animate-in slide-in-from-bottom-4 flex flex-col">
+          <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] shadow-2xl border border-gray-100 transform transition-all animate-in slide-in-from-bottom-4 flex flex-col">
             <div className="p-4 border-b border-gray-100 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div>
@@ -1317,9 +1317,9 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <div className="flex-1 flex items-center justify-center p-8">
-              <div className="w-full max-w-md mx-auto">
-                <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+              <div className="w-full">
+                <div className="bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-100">
                   <GoogleProfileSearch 
                     onSelectionChange={handleModalGmbSelection} 
                     isModal={true} 

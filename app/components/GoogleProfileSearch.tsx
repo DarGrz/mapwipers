@@ -502,7 +502,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                 onChange={handleSearchChange}
                 className={`w-full border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 ${
                   isModal 
-                    ? 'px-6 py-4 text-lg placeholder:text-gray-400' 
+                    ? 'px-3 sm:px-6 py-3 sm:py-4 text-base sm:text-lg placeholder:text-gray-400' 
                     : 'px-4 py-3'
                 } ${
                   showResults && locations.length > 0 ? 'border-[#F17313]' : ''
@@ -511,8 +511,8 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
               <button
                 type="button"
                 onClick={() => searchQuery.length >= 2 && searchLocations(searchQuery)}
-                className={`absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#F17313] text-white rounded-md hover:opacity-90 transition ${
-                  isModal ? 'px-6 py-2 text-base' : 'px-4 py-1'
+                className={`absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 bg-[#F17313] text-white rounded-md hover:opacity-90 transition ${
+                  isModal ? 'px-3 sm:px-6 py-1.5 sm:py-2 text-sm sm:text-base' : 'px-4 py-1'
                 }`}
               >
                 Search
