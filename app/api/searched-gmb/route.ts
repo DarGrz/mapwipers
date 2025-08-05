@@ -1,6 +1,133 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logGmbFromPlaceDetails, getRequestInfo, generateSessionId } from '@/lib/logging';
+import { supabaseServiceRole } from '@/lib/supabase';
 import { PlaceDetails } from '@/app/types';
+
+export async function GET(request: NextRequest) {
+  try {
+    // Check admin authentication
+    const adminSession = request.cookies.get('admin_session');
+    
+    if (!adminSession || adminSession.value !== 'authenticated') {
+      return NextResponse.json(
+        { error: 'Unauthorized access' },
+        { status: 401 }
+      );
+    }
+
+    const searchParams = request.nextUrl.searchParams;
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const search = searchParams.get('search') || '';
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+    const exportFormat = searchParams.get('export');
+    
+    const offset = (page - 1) * limit;
+
+    // Build the query
+    let query = supabaseServiceRole
+      .from('searched_gmbs')
+      .select('*', { count: 'exact' });
+
+    // Apply filters
+    if (search) {
+      query = query.or(`place_name.ilike.%${search}%,search_query.ilike.%${search}%,place_address.ilike.%${search}%`);
+    }
+
+    if (startDate) {
+      query = query.gte('created_at', startDate);
+    }
+
+    if (endDate) {
+      query = query.lte('created_at', endDate);
+    }
+
+    // Apply pagination and ordering (skip pagination for export)
+    query = query.order('created_at', { ascending: false });
+    
+    if (exportFormat !== 'csv') {
+      query = query.range(offset, offset + limit - 1);
+    }
+
+    const { data, error, count } = await query;
+
+    if (error) {
+      console.error('Error fetching searched GMBs:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch searched GMBs' },
+        { status: 500 }
+      );
+    }
+
+    // Handle CSV export
+    if (exportFormat === 'csv') {
+      const csvHeaders = [
+        'Business Name',
+        'Address', 
+        'Phone',
+        'Website',
+        'Rating',
+        'Review Count',
+        'Business Status',
+        'Search Query',
+        'Location',
+        'IP Address',
+        'User Agent',
+        'Session ID',
+        'Created Date'
+      ];
+
+      const csvRows = (data || []).map(item => [
+        item.place_name || '',
+        item.place_address || '',
+        item.place_phone || '',
+        item.place_website || '',
+        item.place_rating || '',
+        item.place_rating_count || '',
+        item.place_business_status || '',
+        item.search_query || '',
+        item.location || '',
+        item.ip_address || '',
+        item.user_agent || '',
+        item.session_id || '',
+        new Date(item.created_at).toLocaleString()
+      ]);
+
+      const csvContent = [
+        csvHeaders.join(','),
+        ...csvRows.map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
+      ].join('\n');
+
+      return new NextResponse(csvContent, {
+        headers: {
+          'Content-Type': 'text/csv',
+          'Content-Disposition': `attachment; filename="searched-gmbs-${new Date().toISOString().split('T')[0]}.csv"`
+        }
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: data || [],
+      pagination: {
+        page,
+        limit,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limit),
+        hasNext: offset + limit < (count || 0),
+        hasPrev: page > 1
+      }
+    });
+
+  } catch (error) {
+    console.error('Error in searched-gmb GET API:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {

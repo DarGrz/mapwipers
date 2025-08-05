@@ -26,8 +26,18 @@ export interface OrderLog {
   payment_status?: string
   payment_intent_id?: string
   stripe_session_id?: string
+  // GMB/Business information
+  business_place_id?: string
+  business_name?: string
+  business_address?: string
+  business_phone?: string
+  business_website?: string
+  business_rating?: number
+  business_google_url?: string
+  // Request tracking
   ip_address?: string
   user_agent?: string
+  referer?: string
 }
 
 export interface SearchedGmbLog {

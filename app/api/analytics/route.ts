@@ -5,6 +5,8 @@ interface AnalyticsResponse {
   visitors?: Record<string, unknown>[];
   orders?: Record<string, unknown>[];
   searches?: Record<string, unknown>[];
+  recentOrders?: Record<string, unknown>[];
+  recentSearches?: Record<string, unknown>[];
   analytics?: {
     totalVisitors: number;
     uniqueIps: number;
@@ -62,6 +64,11 @@ export async function GET(request: NextRequest) {
       const orderResult = await getOrderStats(startDate || undefined, endDate || undefined);
       console.log('Analytics API - Order result:', orderResult);
       response.orders = orderResult.success ? orderResult.data : [];
+      
+      // Also fetch recent orders (last 10) regardless of date filter for dashboard display
+      console.log('Analytics API - Fetching recent orders...');
+      const recentOrdersResult = await getOrderStats();
+      response.recentOrders = recentOrdersResult.success ? recentOrdersResult.data?.slice(0, 10) : [];
     }
 
     if (type === 'searches' || type === 'all' || !type) {
@@ -69,6 +76,11 @@ export async function GET(request: NextRequest) {
       const searchResult = await getSearchStats(startDate || undefined, endDate || undefined);
       console.log('Analytics API - Search result:', searchResult);
       response.searches = searchResult.success ? searchResult.data : [];
+      
+      // Also fetch recent searches (last 10) regardless of date filter for dashboard display
+      console.log('Analytics API - Fetching recent searches...');
+      const recentSearchesResult = await getSearchStats();
+      response.recentSearches = recentSearchesResult.success ? recentSearchesResult.data?.slice(0, 10) : [];
     }
 
     // Calculate some basic analytics

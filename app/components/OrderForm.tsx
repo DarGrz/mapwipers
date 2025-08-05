@@ -191,6 +191,45 @@ const OrderForm: React.FC<OrderFormProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Service Type Notice */}
+      <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6">
+        <div className="flex items-start">
+          <svg className="w-5 h-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <h3 className="font-semibold text-amber-800 mb-2">Service Information</h3>
+            <p className="text-sm text-amber-700 mb-4">
+              This service is primarily designed for businesses and companies. However, we also accept orders from individuals who need assistance with Google Business Profile management.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, isCompany: true }))}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  formData.isCompany 
+                    ? 'bg-[#0D2959] text-white' 
+                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                I&apos;m ordering as a Company
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, isCompany: false }))}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  !formData.isCompany 
+                    ? 'bg-[#0D2959] text-white' 
+                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                I&apos;m an Individual
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -260,23 +299,10 @@ const OrderForm: React.FC<OrderFormProps> = ({
         </div>
         
         {/* Company Information Section */}
-        <div className="border border-gray-200 rounded-lg p-4">
-          <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              id="isCompany"
-              name="isCompany"
-              checked={formData.isCompany}
-              onChange={handleCheckboxChange}
-              className="mr-3"
-            />
-            <label htmlFor="isCompany" className="text-sm font-medium text-gray-700">
-              I am ordering as a company (for invoice purposes)
-            </label>
-          </div>
-          
-          {formData.isCompany && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        {formData.isCompany && (
+          <div className="border border-gray-200 rounded-lg p-4">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">Company Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Company Name*
@@ -379,8 +405,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 />
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">

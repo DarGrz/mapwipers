@@ -6,6 +6,18 @@ interface AnalyticsData {
   visitors?: Record<string, unknown>[];
   orders?: Record<string, unknown>[];
   searches?: Record<string, unknown>[];
+  recentOrders?: {
+    customer_email?: string;
+    customer_name?: string;
+    service_type?: string;
+    total_amount?: number;
+    payment_status?: string;
+    created_at?: string;
+    business_name?: string;
+    business_rating?: number;
+    [key: string]: unknown;
+  }[];
+  recentSearches?: Record<string, unknown>[];
   analytics?: {
     totalVisitors: number;
     uniqueIps: number;
@@ -148,7 +160,7 @@ export default function AnalyticsDashboard() {
         </div>
 
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-sm font-medium text-gray-500">Total Visitors</h3>
             <p className="text-2xl font-bold text-gray-900">{data?.analytics?.totalVisitors || 0}</p>
@@ -157,6 +169,11 @@ export default function AnalyticsDashboard() {
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-sm font-medium text-gray-500">Unique IPs</h3>
             <p className="text-2xl font-bold text-gray-900">{data?.analytics?.uniqueIps || 0}</p>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-500">GMB Searches</h3>
+            <p className="text-2xl font-bold text-gray-900">{data?.searchAnalytics?.totalSearches || 0}</p>
           </div>
           
           <div className="bg-white rounded-lg shadow p-6">
@@ -242,16 +259,115 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
+        {/* Searched GMB Businesses */}
+        <div className="bg-white rounded-lg shadow mb-8">
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900">Recent Searched GMB Businesses</h3>
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-500">
+                  {data?.recentSearches?.length || 0} recent searches
+                </span>
+                <a
+                  href="/admin/searched-gmbs"
+                  className="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 border border-blue-300 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  View All GMBs
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Search Query</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {data?.recentSearches?.slice(0, 10).map((search, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {String(search.place_name || 'N/A')}
+                        </div>
+                        {String(search.place_phone || '') && (
+                          <div className="text-xs text-gray-500">
+                            {String(search.place_phone)}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900 max-w-xs truncate">
+                          {String(search.place_address || 'N/A')}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          {search.place_rating ? (
+                            <>
+                              <span className="text-sm font-medium text-gray-900">
+                                {String(search.place_rating)}
+                              </span>
+                              <span className="text-yellow-400 ml-1">★</span>
+                            </>
+                          ) : (
+                            <span className="text-sm text-gray-500">N/A</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900 max-w-xs truncate">
+                          {String(search.search_query || 'Direct search')}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {String(search.ip_address || 'N/A')}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(String(search.created_at)).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+            {(data?.recentSearches?.length || 0) === 0 && (
+              <div className="text-center py-8">
+                <p className="text-gray-500">No recent GMB searches found.</p>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Recent Activity */}
         <div className="bg-white rounded-lg shadow">
           <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-500">
+                  {data?.recentOrders?.length || 0} recent orders
+                </span>
+                <a
+                  href="/admin/orders"
+                  className="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 border border-blue-300 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  View All Orders
+                </a>
+              </div>
+            </div>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -259,10 +375,20 @@ export default function AnalyticsDashboard() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {data?.orders?.slice(0, 10).map((order, index) => (
+                {data?.recentOrders?.slice(0, 10).map((order, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {String(order.customer_email)}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      <div className="font-medium max-w-xs truncate">
+                        {String(order.business_name || 'N/A')}
+                      </div>
+                      {order.business_rating && (
+                        <div className="text-xs text-gray-500">
+                          ⭐ {String(order.business_rating)}/5
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 capitalize">
                       {String(order.service_type)}

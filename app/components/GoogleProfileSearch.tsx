@@ -13,9 +13,11 @@ interface GoogleProfileSearchProps {
     expressService: boolean;
     totalPrice: number;
   }) => void;
+  isModal?: boolean;
+  resetTrigger?: number; // Add a reset trigger prop
 }
 
-const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder }: GoogleProfileSearchProps) => {
+const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = false, resetTrigger }: GoogleProfileSearchProps) => {
   // Pricing hook
   const { 
     loading: pricingLoading, 
@@ -102,6 +104,42 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder }: GoogleProf
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
+
+  // Reset component state when resetTrigger changes
+  useEffect(() => {
+    if (resetTrigger && resetTrigger > 0) {
+      // Reset all state to initial values
+      setSearchQuery("");
+      setLocations([]);
+      setIsSearching(false);
+      setShowResults(false);
+      setErrorMessage(null);
+      setSelectedPlaceDetails(null);
+      setIsLoadingDetails(false);
+      setShowSearch(true);
+      setHeadingText("Find your business");
+      setRemovals([{ companyName: '', nip: '' }]);
+      setServiceType(null);
+      setYearProtection(false);
+      setExpressService(false);
+      setAnimationState('idle');
+      setShowModal(false);
+      setModalContent(null);
+      
+      // Also clear localStorage
+      localStorage.removeItem('selectedBusinessData');
+      localStorage.removeItem('profileOperationMode');
+      localStorage.removeItem('serviceDescription');
+      localStorage.removeItem('yearProtection');
+      localStorage.removeItem('expressService');
+      localStorage.removeItem('totalPrice');
+      
+      // Notify parent that selection has been cleared
+      if (onSelectionChange) {
+        onSelectionChange(false);
+      }
+    }
+  }, [resetTrigger, onSelectionChange]);
 
   // Search for GMB locations
   const searchLocations = async (query: string) => {
@@ -365,15 +403,17 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder }: GoogleProf
     }, 600);
   };  return (
     <div className="w-full max-w-6xl mx-auto">
-      {/* Hero Section with Main Heading */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-6xl font-bold text-[#0D2959] mb-6 leading-tight">
-          Google Maps Business Profile Removal
-        </h1>
-        <p className="text-xl md:text-2xl text-[#0D2959]/70 max-w-4xl mx-auto leading-relaxed">
-          Remove your business profile or reset reviews. We effectively eliminate unwanted content from Google Maps.
-        </p>
-      </div>
+      {/* Hero Section with Main Heading - Hidden in modal */}
+      {!isModal && (
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-6xl font-bold text-[#0D2959] mb-6 leading-tight">
+            Google Maps Business Profile Removal
+          </h1>
+          <p className="text-xl md:text-2xl text-[#0D2959]/70 max-w-4xl mx-auto leading-relaxed">
+            Remove your business profile or reset reviews. We effectively eliminate unwanted content from Google Maps.
+          </p>
+        </div>
+      )}
 
       
       
@@ -460,14 +500,20 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder }: GoogleProf
                 placeholder="Search for business name..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className={`w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 ${
+                className={`w-full border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 ${
+                  isModal 
+                    ? 'px-6 py-4 text-lg placeholder:text-gray-400' 
+                    : 'px-4 py-3'
+                } ${
                   showResults && locations.length > 0 ? 'border-[#F17313]' : ''
                 }`}
               />
               <button
                 type="button"
                 onClick={() => searchQuery.length >= 2 && searchLocations(searchQuery)}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1 bg-[#F17313] text-white rounded-md hover:opacity-90 transition"
+                className={`absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#F17313] text-white rounded-md hover:opacity-90 transition ${
+                  isModal ? 'px-6 py-2 text-base' : 'px-4 py-1'
+                }`}
               >
                 Search
               </button>

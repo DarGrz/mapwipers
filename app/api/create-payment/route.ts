@@ -189,6 +189,14 @@ export async function POST(req: NextRequest) {
       currency: 'USD',
       payment_status: 'pending',
       stripe_session_id: session.id,
+      // GMB/Business information
+      business_place_id: orderData.selectedBusiness.id,
+      business_name: orderData.selectedBusiness.name,
+      business_address: orderData.selectedBusiness.formatted_address || orderData.selectedBusiness.address,
+      business_phone: orderData.selectedBusiness.formatted_phone_number || orderData.selectedBusiness.phoneNumber,
+      business_website: orderData.selectedBusiness.website,
+      business_rating: orderData.selectedBusiness.rating,
+      business_google_url: orderData.selectedBusiness.googleMapsUrl,
       ...requestInfo
     });
 

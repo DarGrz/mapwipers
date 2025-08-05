@@ -4,12 +4,14 @@ import GoogleProfileSearch from "./components/GoogleProfileSearch";
 import OrderForm, { OrderFormData } from "./components/OrderForm";
 import { useState } from "react";
 import { PlaceDetails } from "./types";
+import Link from "next/link";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [gmbSelected, setGmbSelected] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [selectedService, setSelectedService] = useState<'remove' | 'reset' | null>(null);
+  const [resetTrigger, setResetTrigger] = useState(0); // Add reset trigger state
   
   // Order flow state
   const [showOrderForm, setShowOrderForm] = useState(false);
@@ -30,6 +32,16 @@ export default function Home() {
   const handleServiceSelect = (service: 'remove' | 'reset') => {
     setSelectedService(service);
     setShowServiceModal(true);
+  };
+
+  // Function to handle Start button click
+  const handleStartClick = () => {
+    setSelectedService(null); // Don't pre-select a service
+    setResetTrigger(prev => prev + 1); // Trigger reset of GoogleProfileSearch component
+    setGmbSelected(false); // Reset GMB selection state
+    setOrderData(null); // Clear any existing order data
+    setShowOrderForm(false); // Hide order form if it's showing
+    setShowServiceModal(true); // Show the modal
   };
 
   // Function to handle modal GMB selection
@@ -98,41 +110,44 @@ export default function Home() {
       {/* Modern Minimalist Navbar */}
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-[#0D2959] flex items-center justify-center">
+          <div className="">
+           <Link href="/" className="flex items-center gap-2"> <div className="h-8 w-8 rounded-full bg-[#0D2959] flex items-center justify-center">
               <span className="text-white font-bold text-xs">MW</span>
             </div>
-            <span className="font-semibold text-[#0D2959]">MapWipers</span>
+            <span className="font-semibold text-[#0D2959]">MapWipers</span></Link>
           </div>
 
           <div className="hidden md:flex items-center gap-8">
             <a
-              href="#"
+              href="#how-it-works"
               className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
             >
               How it Works
             </a>
             <a
-              href="#"
+              href="#pricing"
               className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
             >
               Pricing
             </a>
             <a
-              href="#"
+              href="#faq"
               className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
             >
               FAQ
             </a>
-            <a
-              href="#"
+            <Link
+              href="/contact"
               className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
             >
               Contact
-            </a>
+            </Link>
           </div>
 
-          <button className="hidden md:block px-6 py-2 bg-[#F17313] hover:bg-[#F17313]/90 text-white text-sm font-medium rounded-full transition-all">
+          <button 
+            onClick={handleStartClick}
+            className="hidden md:block px-6 py-2 bg-[#F17313] hover:bg-[#F17313]/90 text-white text-sm font-medium rounded-full transition-all"
+          >
             Start
           </button>
 
@@ -180,30 +195,33 @@ export default function Home() {
           <div className="md:hidden bg-white border-t border-gray-100 py-4">
             <div className="container mx-auto px-4 space-y-3">
               <a
-                href="#"
+                href="#how-it-works"
                 className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               >
                 How it Works
               </a>
               <a
-                href="#"
+                href="#pricing"
                 className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               >
                 Pricing
               </a>
               <a
-                href="#"
+                href="#faq"
                 className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               >
                 FAQ
               </a>
-              <a
-                href="#"
+              <Link
+                href="/contact"
                 className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               >
                 Contact
-              </a>
-              <button className="mt-4 w-full px-4 py-2 bg-[#F17313] text-white text-sm font-medium rounded-full">
+              </Link>
+              <button 
+                onClick={handleStartClick}
+                className="mt-4 w-full px-4 py-2 bg-[#F17313] text-white text-sm font-medium rounded-full"
+              >
                 Start
               </button>
             </div>
@@ -235,6 +253,7 @@ export default function Home() {
             <GoogleProfileSearch 
               onSelectionChange={handleGmbSelectionChange}
               onProceedToOrder={handleProceedToOrder}
+              resetTrigger={resetTrigger}
             />
           </div>
         ) : (
@@ -245,6 +264,7 @@ export default function Home() {
               <GoogleProfileSearch
                 onSelectionChange={handleGmbSelectionChange}
                 onProceedToOrder={handleProceedToOrder}
+                resetTrigger={resetTrigger}
               />
             </div>
           </div>
@@ -252,7 +272,7 @@ export default function Home() {
       </div>
 
       {!gmbSelected && !showOrderForm && (
-        <main className="container mx-auto px-4 py-16 max-w-7xl">
+        <main id="how-it-works" className="container mx-auto px-4 py-16 max-w-7xl">
           {/* Section divider */}
           <div className="w-20 h-1 bg-[#F17313] mx-auto mb-24"></div>
 
@@ -715,7 +735,10 @@ export default function Home() {
                     <p className="text-sm opacity-90 mb-4">
                       Every day with poor ratings means losing potential customers to competitors with better scores.
                     </p>
-                    <button className="bg-white text-[#0D2959] px-6 py-2 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors">
+                    <button 
+                      onClick={handleStartClick}
+                      className="bg-white text-[#0D2959] px-6 py-2 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors"
+                    >
                       Improve My Rating Now
                     </button>
                   </div>
@@ -859,7 +882,10 @@ export default function Home() {
                   <p className="text-lg mb-6 opacity-90">
                     Let our advanced technology and proven expertise solve your GMB profile problems quickly and permanently.
                   </p>
-                  <button className="bg-white text-[#0D2959] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                  <button 
+                    onClick={handleStartClick}
+                    className="bg-white text-[#0D2959] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors"
+                  >
                     Start Your Case Today
                   </button>
                 </div>
@@ -998,7 +1024,7 @@ export default function Home() {
             </div>
 
             {/* Pricing Section */}
-            <div className="max-w-6xl mx-auto mb-24">
+            <div id="pricing" className="max-w-6xl mx-auto mb-24">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4 text-[#0D2959]">
                   Choose Your Service
@@ -1203,7 +1229,7 @@ export default function Home() {
             </div>
 
             {/* FAQ Section */}
-            <div className="max-w-6xl mx-auto mb-24">
+            <div id="faq" className="max-w-6xl mx-auto mb-24">
               <h2 className="text-3xl font-bold text-center mb-12 text-[#0D2959]">
                 Frequently Asked Questions
               </h2>
@@ -1260,34 +1286,47 @@ export default function Home() {
       {/* Service Selection Modal */}
       {showServiceModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-md w-full shadow-2xl border border-gray-100 transform transition-all animate-in slide-in-from-bottom-4">
-            <div className="p-5 border-b border-gray-100">
+          <div className="bg-white rounded-xl max-w-lg w-full h-[500px] shadow-2xl border border-gray-100 transform transition-all animate-in slide-in-from-bottom-4 flex flex-col">
+            <div className="p-4 border-b border-gray-100 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-[#0D2959] flex items-center gap-2">
-                    <div className="w-8 h-8 bg-[#F17313]/10 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-[#F17313]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <h2 className="text-base font-bold text-[#0D2959] flex items-center gap-2">
+                    <div className="w-6 h-6 bg-[#F17313]/10 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-[#F17313]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
                     </div>
                     Find Your Business
                   </h2>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {selectedService === 'remove' ? 'Complete profile removal' : 'Reset to clean state'}
+                  <p className="text-xs text-gray-500 mt-1">
+                    {selectedService === 'remove' 
+                      ? 'Complete profile removal' 
+                      : selectedService === 'reset' 
+                        ? 'Reset to clean state'
+                        : 'First, search for your business profile'
+                    }
                   </p>
                 </div>
                 <button
                   onClick={() => setShowServiceModal(false)}
                   className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-full"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
             </div>
-            <div className="p-5">
-              <GoogleProfileSearch onSelectionChange={handleModalGmbSelection} />
+            <div className="flex-1 flex items-center justify-center p-8">
+              <div className="w-full max-w-md mx-auto">
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                  <GoogleProfileSearch 
+                    onSelectionChange={handleModalGmbSelection} 
+                    isModal={true} 
+                    resetTrigger={resetTrigger}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1376,7 +1415,7 @@ export default function Home() {
             <div>
               <h3 className="font-medium mb-4 text-[#0D2959]">Contact</h3>
               <p className="text-sm text-[#0D2959]/70 mb-2">
-                contact@mapwipers.com
+                removal@mapwipers.com
               </p>
               <p className="text-sm text-[#0D2959]/70">+48 123 456 789</p>
             </div>

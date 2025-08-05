@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import AnalyticsDashboard from '@/app/components/AnalyticsDashboard';
+import SearchedGMBsList from '@/app/components/SearchedGMBsList';
 
-export default function AdminAnalyticsPage() {
+export default function AdminSearchedGMBsPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -94,7 +94,7 @@ export default function AdminAnalyticsPage() {
               Admin Access Required
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Please enter your admin credentials to access analytics
+              Please enter your admin credentials to access searched GMBs
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleLogin}>
@@ -151,7 +151,7 @@ export default function AdminAnalyticsPage() {
                     Authenticating...
                   </div>
                 ) : (
-                  'Access Analytics'
+                  'Access Searched GMBs'
                 )}
               </button>
             </div>
@@ -162,17 +162,17 @@ export default function AdminAnalyticsPage() {
   }
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-lg font-semibold text-gray-900">Analytics Dashboard</h1>
+            <h1 className="text-lg font-semibold text-gray-900">Searched GMB Businesses</h1>
             <div className="flex space-x-4">
               <a
-                href="/admin/searched-gmbs"
-                className="px-4 py-2 text-sm font-medium text-green-700 bg-green-100 border border-green-300 rounded-md hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                href="/admin/analytics"
+                className="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 border border-blue-300 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Searched GMBs
+                Analytics Dashboard
               </a>
               <a
                 href="/admin/pricing"
@@ -190,7 +190,10 @@ export default function AdminAnalyticsPage() {
           </div>
         </div>
       </div>
-      <AnalyticsDashboard />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <SearchedGMBsList showFilters={true} />
+      </div>
     </div>
   );
 }
