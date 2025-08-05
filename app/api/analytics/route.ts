@@ -7,6 +7,8 @@ interface AnalyticsResponse {
   searches?: Record<string, unknown>[];
   recentOrders?: Record<string, unknown>[];
   recentSearches?: Record<string, unknown>[];
+  recentVisitors?: Record<string, unknown>[]; // Recent visitors (last 10) regardless of date filter
+  allVisitors?: Record<string, unknown>[]; // All visitor records with detailed data
   analytics?: {
     totalVisitors: number;
     uniqueIps: number;
@@ -50,18 +52,37 @@ export async function GET(request: NextRequest) {
     const endDate = searchParams.get('endDate');
     const type = searchParams.get('type'); // 'visitors', 'orders', 'searches', or 'all'
 
+    // Convert endDate to include the full day (add 23:59:59)
+    const adjustedEndDate = endDate ? `${endDate}T23:59:59.999Z` : undefined;
+    const adjustedStartDate = startDate ? `${startDate}T00:00:00.000Z` : undefined;
+
+    console.log('Analytics API - Date range:', { 
+      startDate, 
+      endDate, 
+      adjustedStartDate, 
+      adjustedEndDate 
+    });
+
     const response: AnalyticsResponse = {};
 
     if (type === 'visitors' || type === 'all' || !type) {
       console.log('Analytics API - Fetching visitor stats...');
-      const visitorResult = await getVisitorStats(startDate || undefined, endDate || undefined);
+      const visitorResult = await getVisitorStats(adjustedStartDate, adjustedEndDate);
       console.log('Analytics API - Visitor result:', visitorResult);
       response.visitors = visitorResult.success ? visitorResult.data : [];
+      
+      // Also store all visitor data for detailed admin view
+      response.allVisitors = response.visitors;
+      
+      // Also fetch recent visitors (last 10) regardless of date filter for dashboard display
+      console.log('Analytics API - Fetching recent visitors...');
+      const recentVisitorsResult = await getVisitorStats();
+      response.recentVisitors = recentVisitorsResult.success ? recentVisitorsResult.data?.slice(0, 10) : [];
     }
 
     if (type === 'orders' || type === 'all' || !type) {
       console.log('Analytics API - Fetching order stats...');
-      const orderResult = await getOrderStats(startDate || undefined, endDate || undefined);
+      const orderResult = await getOrderStats(adjustedStartDate, adjustedEndDate);
       console.log('Analytics API - Order result:', orderResult);
       response.orders = orderResult.success ? orderResult.data : [];
       
@@ -73,7 +94,7 @@ export async function GET(request: NextRequest) {
 
     if (type === 'searches' || type === 'all' || !type) {
       console.log('Analytics API - Fetching search stats...');
-      const searchResult = await getSearchStats(startDate || undefined, endDate || undefined);
+      const searchResult = await getSearchStats(adjustedStartDate, adjustedEndDate);
       console.log('Analytics API - Search result:', searchResult);
       response.searches = searchResult.success ? searchResult.data : [];
       

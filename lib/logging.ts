@@ -248,12 +248,16 @@ export async function getVisitorStats(startDate?: string, endDate?: string) {
       query = query.lte('created_at', endDate)
     }
     
+    console.log('getVisitorStats query:', { startDate, endDate });
+    
     const { data, error } = await query.order('created_at', { ascending: false })
     
     if (error) {
       console.error('Error getting visitor stats:', error)
       return { success: false, error }
     }
+    
+    console.log('getVisitorStats result count:', data?.length || 0);
     
     return { success: true, data }
   } catch (error) {

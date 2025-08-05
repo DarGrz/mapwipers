@@ -18,6 +18,8 @@ interface AnalyticsData {
     [key: string]: unknown;
   }[];
   recentSearches?: Record<string, unknown>[];
+  recentVisitors?: Record<string, unknown>[]; // Recent visitors (last 10) regardless of date filter
+  allVisitors?: Record<string, unknown>[]; // All visitor records with detailed data
   analytics?: {
     totalVisitors: number;
     uniqueIps: number;
@@ -414,6 +416,87 @@ export default function AnalyticsDashboard() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* Recent Visitors */}
+        <div className="bg-white rounded-lg shadow mt-8">
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900">Recent Visitors</h3>
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-500">
+                  {data?.allVisitors?.length || 0} total visitors
+                </span>
+                <a
+                  href="/admin/visitors"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                >
+                  View All Visitors →
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    IP Address
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Page Path
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    User Agent
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Referer
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Country
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Timestamp
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {data?.recentVisitors?.slice(0, 10).map((visitor, index) => (
+                  <tr key={index} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {String(visitor.ip_address || 'N/A')}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      <div className="max-w-xs truncate" title={String(visitor.page_path)}>
+                        {String(visitor.page_path || '/')}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      <div className="max-w-xs truncate" title={String(visitor.user_agent)}>
+                        {String(visitor.user_agent || 'N/A')}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      <div className="max-w-xs truncate" title={String(visitor.referer)}>
+                        {String(visitor.referer || 'Direct')}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {String(visitor.country || 'N/A')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(String(visitor.created_at)).toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {(data?.recentVisitors?.length || 0) === 0 && (
+              <div className="text-center py-8">
+                <p className="text-gray-500">No recent visitors found.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
