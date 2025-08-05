@@ -139,6 +139,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
     if (!formData.companyCountry.trim()) {
       errors.companyCountry = "Country is required";
     }
+    if (!formData.companyTaxId.trim()) {
+      errors.companyTaxId = "Tax ID / VAT Number is required";
+    }
     
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -366,7 +369,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tax ID / VAT Number (Optional)
+                  Tax ID / VAT Number*
                 </label>
                 <input
                   type="text"
@@ -374,8 +377,11 @@ const OrderForm: React.FC<OrderFormProps> = ({
                   value={formData.companyTaxId}
                   onChange={handleInputChange}
                   placeholder="e.g., PL1234567890"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]"
+                  className={`w-full p-2 border ${formErrors.companyTaxId ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
                 />
+                {formErrors.companyTaxId && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.companyTaxId}</p>
+                )}
               </div>
             </div>
           </div>
