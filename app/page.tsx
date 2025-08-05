@@ -1360,7 +1360,7 @@ export default function Home() {
                     href="#"
                     className="text-[#0D2959]/70 hover:text-[#F17313]"
                   >
-                    Review Removal
+                    GMB Removal
                   </a>
                 </li>
                 <li>
@@ -1415,9 +1415,9 @@ export default function Home() {
             <div>
               <h3 className="font-medium mb-4 text-[#0D2959]">Contact</h3>
               <p className="text-sm text-[#0D2959]/70 mb-2">
-                removal@mapwipers.com
+                support@mapwipers.com
               </p>
-              <p className="text-sm text-[#0D2959]/70">+48 123 456 789</p>
+              {/* <p className="text-sm text-[#0D2959]/70">+48 571 767 999</p> */}
             </div>
           </div>
 
@@ -1427,13 +1427,13 @@ export default function Home() {
             </p>
             <div className="flex gap-4 mt-4 sm:mt-0">
               <a
-                href="#"
+                href="/privacy"
                 className="text-xs text-[#0D2959]/70 hover:text-[#F17313]"
               >
                 Privacy Policy
               </a>
               <a
-                href="#"
+                href="/terms"
                 className="text-xs text-[#0D2959]/70 hover:text-[#F17313]"
               >
                 Terms of Service
