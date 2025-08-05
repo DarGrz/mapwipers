@@ -430,9 +430,9 @@ export default function AnalyticsDashboard() {
                 </span>
                 <a
                   href="/admin/visitors"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                  className="px-4 py-2 bg-blue-300 text-white rounded-md hover:bg-blue-700 text-sm"
                 >
-                  View All Visitors →
+                  View All Visitors
                 </a>
               </div>
             </div>
