@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { logVisitor, getRequestInfo, generateSessionId } from './lib/logging'
+import { logVisitor, getRequestInfo, generateSessionId, extractUtmAndGtmParams } from './lib/logging'
 
 export function middleware(request: NextRequest) {
   // Only log on actual page visits, not API calls or static assets
@@ -19,6 +19,9 @@ export function middleware(request: NextRequest) {
   // Get request info
   const requestInfo = getRequestInfo(request)
   
+  // Extract UTM parameters and gtm_from from URL
+  const utmAndGtmParams = extractUtmAndGtmParams(request.url)
+  
   // Get or create session ID from cookies
   let sessionId = request.cookies.get('session_id')?.value
   if (!sessionId) {
@@ -28,6 +31,7 @@ export function middleware(request: NextRequest) {
   // Log the visitor (don't await to avoid blocking the response)
   logVisitor({
     ...requestInfo,
+    ...utmAndGtmParams,
     page_path: pathname,
     session_id: sessionId,
     referer: requestInfo.referer

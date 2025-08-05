@@ -91,6 +91,12 @@ async function setupWithDirectSQL() {
             country VARCHAR(100),
             city VARCHAR(100),
             session_id VARCHAR(255),
+            utm_source VARCHAR(255),
+            utm_medium VARCHAR(255),
+            utm_campaign VARCHAR(255),
+            utm_term VARCHAR(255),
+            utm_content VARCHAR(255),
+            gtm_from VARCHAR(255),
             created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
           );
         `

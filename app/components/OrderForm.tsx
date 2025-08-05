@@ -470,7 +470,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
               className="mt-1 mr-2"
             />
             <label htmlFor="agreeToTerms" className="text-sm">
-              I agree to the <a href="#" className="text-[#0D2959] hover:underline">Terms and Conditions</a> and <a href="#" className="text-[#0D2959] hover:underline">Privacy Policy</a>*
+              I agree to the <a href="/terms" className="text-[#0D2959] hover:underline" target="_blank" rel="noopener noreferrer">Terms and Conditions</a> and <a href="/privacy" className="text-[#0D2959] hover:underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a>*
             </label>
           </div>
           {formErrors.agreeToTerms && (

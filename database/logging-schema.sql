@@ -11,6 +11,12 @@ CREATE TABLE IF NOT EXISTS visitors (
   country VARCHAR(100),
   city VARCHAR(100),
   session_id VARCHAR(255),
+  utm_source VARCHAR(255),
+  utm_medium VARCHAR(255),
+  utm_campaign VARCHAR(255),
+  utm_term VARCHAR(255),
+  utm_content VARCHAR(255),
+  gtm_from VARCHAR(255),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
 
@@ -64,6 +70,10 @@ CREATE INDEX IF NOT EXISTS idx_visitors_ip ON visitors(ip_address);
 CREATE INDEX IF NOT EXISTS idx_visitors_session ON visitors(session_id);
 CREATE INDEX IF NOT EXISTS idx_visitors_created_at ON visitors(created_at);
 CREATE INDEX IF NOT EXISTS idx_visitors_page_path ON visitors(page_path);
+CREATE INDEX IF NOT EXISTS idx_visitors_utm_source ON visitors(utm_source);
+CREATE INDEX IF NOT EXISTS idx_visitors_utm_medium ON visitors(utm_medium);
+CREATE INDEX IF NOT EXISTS idx_visitors_utm_campaign ON visitors(utm_campaign);
+CREATE INDEX IF NOT EXISTS idx_visitors_gtm_from ON visitors(gtm_from);
 
 CREATE INDEX IF NOT EXISTS idx_orders_session ON orders(session_id);
 CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email);
