@@ -2,7 +2,6 @@
 
 import GoogleProfileSearch from "./components/GoogleProfileSearch";
 import OrderForm, { OrderFormData } from "./components/OrderForm";
-import Footer from "./components/Footer";
 import { useState } from "react";
 import { PlaceDetails } from "./types";
 
@@ -1208,8 +1207,6 @@ export default function Home() {
           </div>
         </div>
       )}
-    
-      <Footer className={gmbSelected ? "mt-0" : "mt-12"} />
     </div>
   );
 }
