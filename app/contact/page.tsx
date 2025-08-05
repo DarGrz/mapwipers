@@ -58,26 +58,7 @@ export default function Contact() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-white text-black font-[family-name:var(--font-geist-sans)]">
-        {/* Navigation */}
-        <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
-          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-[#0D2959] flex items-center justify-center">
-                <span className="text-white font-bold text-xs">MW</span>
-              </div>
-              <span className="font-semibold text-[#0D2959]">MapWipers</span>
-            </div>
-            <Link
-              href="/"
-              className="px-6 py-2 bg-[#F17313] hover:bg-[#F17313]/90 text-white text-sm font-medium rounded-full transition-all"
-            >
-              Back to Home
-            </Link>
-          </div>
-        </nav>
-
-        {/* Success Message */}
+      <div className="bg-white text-black font-[family-name:var(--font-geist-sans)]">
         <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
           <div className="bg-green-50 border border-green-200 rounded-2xl p-8">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -108,25 +89,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black font-[family-name:var(--font-geist-sans)]">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-[#0D2959] flex items-center justify-center">
-              <span className="text-white font-bold text-xs">MW</span>
-            </div>
-            <span className="font-semibold text-[#0D2959]">MapWipers</span>
-          </div>
-          <Link
-            href="/"
-            className="px-6 py-2 bg-[#F17313] hover:bg-[#F17313]/90 text-white text-sm font-medium rounded-full transition-all"
-          >
-            Back to Home
-          </Link>
-        </div>
-      </nav>
-
+    <div className="bg-white text-black font-[family-name:var(--font-geist-sans)]">
       <div className="container mx-auto px-4 py-12 md:py-16 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12">

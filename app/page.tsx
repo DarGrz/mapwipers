@@ -2,13 +2,11 @@
 
 import GoogleProfileSearch from "./components/GoogleProfileSearch";
 import OrderForm, { OrderFormData } from "./components/OrderForm";
+import Footer from "./components/Footer";
 import { useState } from "react";
 import { PlaceDetails } from "./types";
-import Link from "next/link";
-import Image from "next/image";
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [gmbSelected, setGmbSelected] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [selectedService, setSelectedService] = useState<'remove' | 'reset' | null>(null);
@@ -108,133 +106,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-black font-[family-name:var(--font-geist-sans)]">
-      {/* Modern Minimalist Navbar */}
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="">
-           <Link href="/" className="flex items-center gap-2">
-            <Image 
-              src="/mapwipers_logo-horizontal.png" 
-              alt="MapWipers Logo" 
-              width={140} 
-              height={40}
-              className="h-10 w-auto"
-            />
-           </Link>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8">
-            <a
-              href="#how-it-works"
-              className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
-            >
-              How it Works
-            </a>
-            <a
-              href="#pricing"
-              className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
-            >
-              Pricing
-            </a>
-            <a
-              href="#faq"
-              className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
-            >
-              FAQ
-            </a>
-            <Link
-              href="/contact"
-              className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
-            >
-              Contact
-            </Link>
-          </div>
-
-          <button 
-            onClick={handleStartClick}
-            className="hidden md:block px-6 py-2 bg-[#F17313] hover:bg-[#F17313]/90 text-white text-sm font-medium rounded-full transition-all"
-          >
-            Start
-          </button>
-
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden text-[#0D2959] focus:outline-none"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            )}
-          </button>
-        </div>
-
-        {/* Mobile menu */}
-        {menuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 py-4">
-            <div className="container mx-auto px-4 space-y-3">
-              <a
-                href="#how-it-works"
-                className="block text-[#0D2959]/70 hover:text-[#0D2959]"
-              >
-                How it Works
-              </a>
-              <a
-                href="#pricing"
-                className="block text-[#0D2959]/70 hover:text-[#0D2959]"
-              >
-                Pricing
-              </a>
-              <a
-                href="#faq"
-                className="block text-[#0D2959]/70 hover:text-[#0D2959]"
-              >
-                FAQ
-              </a>
-              <Link
-                href="/contact"
-                className="block text-[#0D2959]/70 hover:text-[#0D2959]"
-              >
-                Contact
-              </Link>
-              <button 
-                onClick={handleStartClick}
-                className="mt-4 w-full px-4 py-2 bg-[#F17313] text-white text-sm font-medium rounded-full"
-              >
-                Start
-              </button>
-            </div>
-          </div>
-        )}
-      </nav>
-
       <div className="container mx-auto px-4 py-12 md:py-16">
         {showOrderForm && orderData ? (
           // Show order form
@@ -1337,120 +1208,8 @@ export default function Home() {
           </div>
         </div>
       )}
-
-      <footer
-        className={`bg-[#0D2959]/5 border-t border-[#0D2959]/10 py-12 ${
-          gmbSelected ? "mt-0" : "mt-12"
-        }`}
-      >
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Image 
-                  src="/mapwipers_logo-horizontal.png" 
-                  alt="MapWipers Logo" 
-                  width={120} 
-                  height={35}
-                  className="h-8 w-auto"
-                />
-              </div>
-              <p className="text-sm text-[#0D2959]/70">
-                Professional removal of harmful reviews and profiles from the
-                internet.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-medium mb-4 text-[#0D2959]">Services</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a
-                    href="#"
-                    className="text-[#0D2959]/70 hover:text-[#F17313]"
-                  >
-                    GMB Removal
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-[#0D2959]/70 hover:text-[#F17313]"
-                  >
-                    Profile Removal
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-[#0D2959]/70 hover:text-[#F17313]"
-                  >
-                    Reputation Monitoring
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-medium mb-4 text-[#0D2959]">Company</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a
-                    href="#"
-                    className="text-[#0D2959]/70 hover:text-[#F17313]"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-[#0D2959]/70 hover:text-[#F17313]"
-                  >
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-[#0D2959]/70 hover:text-[#F17313]"
-                  >
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-medium mb-4 text-[#0D2959]">Contact</h3>
-              <p className="text-sm text-[#0D2959]/70 mb-2">
-                support@mapwipers.com
-              </p>
-              {/* <p className="text-sm text-[#0D2959]/70">+48 571 767 999</p> */}
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-[#0D2959]/10 flex flex-col sm:flex-row justify-between items-center">
-            <p className="text-xs text-[#0D2959]/70">
-              © {new Date().getFullYear()} Map Wipers. All rights reserved.
-            </p>
-            <div className="flex gap-4 mt-4 sm:mt-0">
-              <a
-                href="/privacy"
-                className="text-xs text-[#0D2959]/70 hover:text-[#F17313]"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="/terms"
-                className="text-xs text-[#0D2959]/70 hover:text-[#F17313]"
-              >
-                Terms of Service
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+    
+      <Footer className={gmbSelected ? "mt-0" : "mt-12"} />
     </div>
   );
 }
