@@ -693,7 +693,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                   ) : (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                       {/* Remove Profile Card */}
-                      <div className={`border rounded-lg p-3 cursor-pointer transition-all duration-300 min-h-[80px] ${serviceType === 'remove' ? 'border-[#F17313] bg-[#F17313]/5 shadow-md' : 'border-[#0D2959]/20 hover:border-[#F17313] hover:shadow-sm'}`}
+                      <div className={`border rounded-lg p-3 cursor-pointer  min-h-[80px] ${serviceType === 'remove' ? 'border-[#F17313] bg-[#F17313]/5 shadow-md' : 'border-[#0D2959]/20 hover:border-[#F17313] hover:shadow-sm'}`}
                            onClick={() => setServiceType('remove')}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center min-w-0 flex-1">
