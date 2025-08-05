@@ -138,6 +138,26 @@ async function handleSuccessfulPayment(session: Stripe.Checkout.Session) {
       console.error('Database error updating order:', dbError);
     }
 
+    // Automatically send invoice after successful payment
+    try {
+      if (session.invoice) {
+        const invoiceId = typeof session.invoice === 'string' ? session.invoice : session.invoice.id;
+        
+        if (invoiceId) {
+          const invoice = await stripe.invoices.retrieve(invoiceId);
+          
+          // Send the invoice if it hasn't been sent yet
+          if (invoice.status === 'draft' || invoice.status === 'open') {
+            await stripe.invoices.sendInvoice(invoiceId);
+            console.log('Invoice automatically sent:', invoiceId);
+          }
+        }
+      }
+    } catch (invoiceError) {
+      console.error('Error sending invoice automatically:', invoiceError);
+      // Don't fail the webhook if invoice sending fails
+    }
+
     // TODO: Implement additional business logic:
     
     // 1. Save order to database

@@ -148,14 +148,11 @@ export async function POST(req: NextRequest) {
         enabled: true,
         invoice_data: {
           description: `Google Maps ${serviceType === 'remove' ? 'Profile Removal' : 'Profile Reset'} Service`,
+          // Invoice will be automatically sent via webhook after successful payment (see /api/stripe/webhook/route.ts)
           custom_fields: [
             {
-              name: "Business Name",
-              value: orderData.selectedBusiness.name
-            },
-            {
-              name: "Service Type",
-              value: serviceType === 'remove' ? 'Complete Profile Removal' : 'Profile Reset (Reviews Only)'
+              name: "Business & Service",
+              value: `${orderData.selectedBusiness.name} - ${serviceType === 'remove' ? 'Complete Profile Removal' : 'Profile Reset (Reviews Only)'}`
             },
             {
               name: "Processing Time",
