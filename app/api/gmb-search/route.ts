@@ -93,7 +93,12 @@ export async function GET(request: NextRequest) {
       name: result.name,
       address: result.formatted_address,
       placeId: result.place_id,
-    }));    return NextResponse.json({ locations });
+    }));
+
+    // Note: We DON'T log search results here anymore
+    // Logging only happens when user actually selects a business for order in searched-gmb API
+
+    return NextResponse.json({ locations });
   } catch (error: unknown) {
     console.error('Error in GMB search API:', error instanceof Error ? error.message : error);
     return NextResponse.json(

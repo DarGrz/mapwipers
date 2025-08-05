@@ -20,6 +20,14 @@ export interface OrderFormData {
   comments: string;
   attachmentUrl?: string;
   agreeToTerms: boolean;
+  // Company information for invoice
+  isCompany: boolean;
+  companyName: string;
+  companyAddress: string;
+  companyCity: string;
+  companyZip: string;
+  companyCountry: string;
+  companyTaxId: string; // VAT number or tax ID
 }
 
 const OrderForm: React.FC<OrderFormProps> = ({
@@ -36,12 +44,19 @@ const OrderForm: React.FC<OrderFormProps> = ({
     email: '',
     phone: '',
     comments: '',
-    agreeToTerms: false
+    agreeToTerms: false,
+    isCompany: false,
+    companyName: '',
+    companyAddress: '',
+    companyCity: '',
+    companyZip: '',
+    companyCountry: 'Poland',
+    companyTaxId: ''
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof OrderFormData, string>>>({});
   const [isUploading, setIsUploading] = useState(false);
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
@@ -106,6 +121,25 @@ const OrderForm: React.FC<OrderFormProps> = ({
     
     if (!formData.agreeToTerms) {
       errors.agreeToTerms = "You must agree to the terms and conditions";
+    }
+    
+    // Company validation when isCompany is true
+    if (formData.isCompany) {
+      if (!formData.companyName.trim()) {
+        errors.companyName = "Company name is required";
+      }
+      if (!formData.companyAddress.trim()) {
+        errors.companyAddress = "Company address is required";
+      }
+      if (!formData.companyCity.trim()) {
+        errors.companyCity = "City is required";
+      }
+      if (!formData.companyZip.trim()) {
+        errors.companyZip = "ZIP code is required";
+      }
+      if (!formData.companyCountry.trim()) {
+        errors.companyCountry = "Country is required";
+      }
     }
     
     setFormErrors(errors);
@@ -223,6 +257,129 @@ const OrderForm: React.FC<OrderFormProps> = ({
               <p className="mt-1 text-sm text-red-600">{formErrors.phone}</p>
             )}
           </div>
+        </div>
+        
+        {/* Company Information Section */}
+        <div className="border border-gray-200 rounded-lg p-4">
+          <div className="flex items-center mb-4">
+            <input
+              type="checkbox"
+              id="isCompany"
+              name="isCompany"
+              checked={formData.isCompany}
+              onChange={handleCheckboxChange}
+              className="mr-3"
+            />
+            <label htmlFor="isCompany" className="text-sm font-medium text-gray-700">
+              I am ordering as a company (for invoice purposes)
+            </label>
+          </div>
+          
+          {formData.isCompany && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Company Name*
+                </label>
+                <input
+                  type="text"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleInputChange}
+                  className={`w-full p-2 border ${formErrors.companyName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+                />
+                {formErrors.companyName && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.companyName}</p>
+                )}
+              </div>
+              
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Company Address*
+                </label>
+                <input
+                  type="text"
+                  name="companyAddress"
+                  value={formData.companyAddress}
+                  onChange={handleInputChange}
+                  className={`w-full p-2 border ${formErrors.companyAddress ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+                />
+                {formErrors.companyAddress && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.companyAddress}</p>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  City*
+                </label>
+                <input
+                  type="text"
+                  name="companyCity"
+                  value={formData.companyCity}
+                  onChange={handleInputChange}
+                  className={`w-full p-2 border ${formErrors.companyCity ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+                />
+                {formErrors.companyCity && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.companyCity}</p>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ZIP Code*
+                </label>
+                <input
+                  type="text"
+                  name="companyZip"
+                  value={formData.companyZip}
+                  onChange={handleInputChange}
+                  className={`w-full p-2 border ${formErrors.companyZip ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+                />
+                {formErrors.companyZip && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.companyZip}</p>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Country*
+                </label>
+                <select
+                  name="companyCountry"
+                  value={formData.companyCountry}
+                  onChange={handleInputChange}
+                  className={`w-full p-2 border ${formErrors.companyCountry ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+                >
+                  <option value="Poland">Poland</option>
+                  <option value="Germany">Germany</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="France">France</option>
+                  <option value="Spain">Spain</option>
+                  <option value="Italy">Italy</option>
+                  <option value="Netherlands">Netherlands</option>
+                  <option value="Other">Other</option>
+                </select>
+                {formErrors.companyCountry && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.companyCountry}</p>
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tax ID / VAT Number (Optional)
+                </label>
+                <input
+                  type="text"
+                  name="companyTaxId"
+                  value={formData.companyTaxId}
+                  onChange={handleInputChange}
+                  placeholder="e.g., PL1234567890"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]"
+                />
+              </div>
+            </div>
+          )}
         </div>
         
         <div>

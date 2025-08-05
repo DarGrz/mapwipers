@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,formatted_phone_number,international_phone_number,website,url,business_status,types,rating,user_ratings_total,geometry,photos&key=${apiKey}`;
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=place_id,name,formatted_address,formatted_phone_number,international_phone_number,website,url,business_status,types,rating,user_ratings_total,geometry,photos&key=${apiKey}`;
 
     const response = await fetch(url);
     
@@ -116,7 +116,12 @@ export async function GET(request: NextRequest) {
       rating: result.rating,
       user_ratings_total: result.user_ratings_total,
       geometry: result.geometry
-    };    return NextResponse.json({ details: placeDetails });
+    };
+
+    // Note: We don't log place details lookup here anymore
+    // Logging only happens when user actually proceeds to order in searched-gmb API
+
+    return NextResponse.json({ details: placeDetails });
   } catch (error: unknown) {
     console.error('Error in Places Details API:', error instanceof Error ? error.message : error);
     return NextResponse.json(

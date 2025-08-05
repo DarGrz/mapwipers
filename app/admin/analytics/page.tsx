@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import PricingAdmin from '../../components/PricingAdmin';
+import AnalyticsDashboard from '@/app/components/AnalyticsDashboard';
 
-export default function AdminPricingPage() {
+export default function AdminAnalyticsPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +15,9 @@ export default function AdminPricingPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/admin/auth');
+        const response = await fetch('/api/admin/auth', {
+          credentials: 'include'
+        });
         if (response.ok) {
           const data = await response.json();
           if (data.authenticated) {
@@ -43,6 +45,7 @@ export default function AdminPricingPage() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
 
@@ -91,7 +94,7 @@ export default function AdminPricingPage() {
               Admin Access Required
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Please enter your admin credentials to access pricing management
+              Please enter your admin credentials to access analytics
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleLogin}>
@@ -148,7 +151,7 @@ export default function AdminPricingPage() {
                     Authenticating...
                   </div>
                 ) : (
-                  'Access Pricing Admin'
+                  'Access Analytics'
                 )}
               </button>
             </div>
@@ -159,17 +162,17 @@ export default function AdminPricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-lg font-semibold text-gray-900">Pricing Admin</h1>
+            <h1 className="text-lg font-semibold text-gray-900">Analytics Dashboard</h1>
             <div className="flex space-x-4">
               <a
-                href="/admin/analytics"
+                href="/admin/pricing"
                 className="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 border border-blue-300 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Analytics
+                Pricing Admin
               </a>
               <button
                 onClick={handleLogout}
@@ -181,7 +184,7 @@ export default function AdminPricingPage() {
           </div>
         </div>
       </div>
-      <PricingAdmin />
+      <AnalyticsDashboard />
     </div>
   );
 }

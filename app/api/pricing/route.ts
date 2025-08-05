@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Setup Supabase client
@@ -63,8 +63,18 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // Check admin authentication
+    const adminSession = request.cookies.get('admin_session');
+    
+    if (!adminSession || adminSession.value !== 'authenticated') {
+      return NextResponse.json(
+        { error: 'Unauthorized access' },
+        { status: 401 }
+      );
+    }
+
     const data = await request.json();
     
     // Walidacja danych
@@ -109,8 +119,18 @@ export async function POST(request: Request) {
   }
 }
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
   try {
+    // Check admin authentication
+    const adminSession = request.cookies.get('admin_session');
+    
+    if (!adminSession || adminSession.value !== 'authenticated') {
+      return NextResponse.json(
+        { error: 'Unauthorized access' },
+        { status: 401 }
+      );
+    }
+
     const data = await request.json();
     
     if (!data.id) {
