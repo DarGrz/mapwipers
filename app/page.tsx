@@ -5,6 +5,7 @@ import OrderForm, { OrderFormData } from "./components/OrderForm";
 import { useState } from "react";
 import { PlaceDetails } from "./types";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -111,10 +112,15 @@ export default function Home() {
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="">
-           <Link href="/" className="flex items-center gap-2"> <div className="h-8 w-8 rounded-full bg-[#0D2959] flex items-center justify-center">
-              <span className="text-white font-bold text-xs">MW</span>
-            </div>
-            <span className="font-semibold text-[#0D2959]">MapWipers</span></Link>
+           <Link href="/" className="flex items-center gap-2">
+            <Image 
+              src="/mapwipers_logo-horizontal.png" 
+              alt="MapWipers Logo" 
+              width={140} 
+              height={40}
+              className="h-10 w-auto"
+            />
+           </Link>
           </div>
 
           <div className="hidden md:flex items-center gap-8">
@@ -1341,10 +1347,13 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="h-8 w-8 rounded-full bg-[#0D2959] flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">MW</span>
-                </div>
-                <span className="font-semibold text-[#0D2959]">MapWipers</span>
+                <Image 
+                  src="/mapwipers_logo-horizontal.png" 
+                  alt="MapWipers Logo" 
+                  width={120} 
+                  height={35}
+                  className="h-8 w-auto"
+                />
               </div>
               <p className="text-sm text-[#0D2959]/70">
                 Professional removal of harmful reviews and profiles from the
