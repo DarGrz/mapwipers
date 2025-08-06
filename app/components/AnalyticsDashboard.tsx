@@ -303,6 +303,18 @@ export default function AnalyticsDashboard() {
                             {String(search.place_phone)}
                           </div>
                         )}
+                        {String(search.google_maps_url || '') && (
+                          <div className="text-xs">
+                            <a 
+                              href={String(search.google_maps_url)} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-green-600 hover:text-green-800 font-medium"
+                            >
+                              📍 Google Maps
+                            </a>
+                          </div>
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900 max-w-xs truncate">

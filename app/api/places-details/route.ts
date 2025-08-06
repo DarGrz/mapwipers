@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
       international_phone_number: result.international_phone_number,
       phoneNumber: result.formatted_phone_number || result.international_phone_number,
       website: result.website,
-      googleMapsUrl: result.url,
+      googleMapsUrl: result.url || `https://maps.google.com/maps?place_id=${result.place_id}`,
       photos: photos,
       businessStatus: result.business_status,
       types: result.types,

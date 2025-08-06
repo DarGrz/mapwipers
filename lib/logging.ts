@@ -55,6 +55,7 @@ export interface SearchedGmbLog {
   place_address?: string
   place_phone?: string
   place_website?: string
+  google_maps_url?: string
   place_rating?: number
   place_rating_count?: number
   place_business_status?: string
@@ -220,6 +221,7 @@ export async function logGmbFromPlaceDetails(
     place_address: placeDetails.formatted_address || placeDetails.address,
     place_phone: placeDetails.formatted_phone_number || placeDetails.phoneNumber,
     place_website: placeDetails.website,
+    google_maps_url: placeDetails.googleMapsUrl,
     place_rating: placeDetails.rating,
     place_rating_count: placeDetails.user_ratings_total,
     place_business_status: placeDetails.businessStatus,

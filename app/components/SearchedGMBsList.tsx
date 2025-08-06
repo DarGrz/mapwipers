@@ -12,6 +12,7 @@ interface SearchedGMB {
   place_address?: string;
   place_phone?: string;
   place_website?: string;
+  google_maps_url?: string;
   place_rating?: number;
   place_rating_count?: number;
   place_business_status?: string;
@@ -276,6 +277,18 @@ export default function SearchedGMBsList({ initialData, showFilters = true }: Se
                         className="text-blue-600 hover:text-blue-800 truncate block max-w-xs"
                       >
                         {item.place_website}
+                      </a>
+                    </div>
+                  )}
+                  {item.google_maps_url && (
+                    <div className="text-xs">
+                      <a 
+                        href={item.google_maps_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-green-600 hover:text-green-800 truncate block max-w-xs font-medium"
+                      >
+                        📍 View on Google Maps
                       </a>
                     </div>
                   )}
