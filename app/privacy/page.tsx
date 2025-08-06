@@ -13,7 +13,7 @@ export default function PrivacyPolicy() {
             when you use services provided by:
           </p>
           <div className="bg-gray-50 p-4 rounded-lg mt-2">
-            <p><strong>Company:</strong> Dariusz Grzegorczyj</p>
+            <p><strong>Company:</strong> Dariusz Grzegorczyk</p>
             <p><strong>Address:</strong> Osiedle Oświecenia 57, 31-636 Kraków, Polska</p>
             <p><strong>Email:</strong> support@mapwipers.com</p>
           </div>
