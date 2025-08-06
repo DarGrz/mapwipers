@@ -23,24 +23,24 @@ export default function Header() {
         </div>
 
         <div className="hidden md:flex items-center gap-8">
-          <a
+          <Link
             href="/#how-it-works"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
             How it Works
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#pricing"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
             Pricing
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#faq"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
             FAQ
-          </a>
+          </Link>
           <Link
             href="/contact"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
@@ -92,27 +92,27 @@ export default function Header() {
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 py-4">
           <div className="container mx-auto px-4 space-y-3">
-            <a
+            <Link
               href="/#how-it-works"
               className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               onClick={() => setMenuOpen(false)}
             >
               How it Works
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#pricing"
               className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               onClick={() => setMenuOpen(false)}
             >
               Pricing
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#faq"
               className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               onClick={() => setMenuOpen(false)}
             >
               FAQ
-            </a>
+            </Link>
             <Link
               href="/contact"
               className="block text-[#0D2959]/70 hover:text-[#0D2959]"
