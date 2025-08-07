@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-    // Wysyłanie maila do administratora
+    // Sending email to administrator
     try {
       const emailResult = await sendContactEmail({
         name,
@@ -46,17 +46,17 @@ export async function POST(request: NextRequest) {
       });
 
       if (!emailResult.success) {
-        console.error('❌ Błąd wysyłania maila do administratora:', emailResult.error);
-        // Kontynuujemy mimo błędu - nie chcemy blokować użytkownika
+        console.error('❌ Error sending email to administrator:', emailResult.error);
+        // Continue despite error - we don't want to block the user
       } else {
-        console.log('✅ Mail do administratora wysłany pomyślnie');
+        console.log('✅ Email to administrator sent successfully');
       }
     } catch (emailError) {
-      console.error('❌ Wyjątek podczas wysyłania maila do administratora:', emailError);
-      // Kontynuujemy mimo błędu
+      console.error('❌ Exception during admin email sending:', emailError);
+      // Continue despite error
     }
 
-    // Wysyłanie automatycznej odpowiedzi do klienta
+    // Sending automatic reply to client
     try {
       const autoReplyResult = await sendAutoReply({
         name,
@@ -65,14 +65,14 @@ export async function POST(request: NextRequest) {
       });
 
       if (!autoReplyResult.success) {
-        console.error('❌ Błąd wysyłania automatycznej odpowiedzi:', autoReplyResult.error);
-        // Kontynuujemy mimo błędu
+        console.error('❌ Error sending auto-reply:', autoReplyResult.error);
+        // Continue despite error
       } else {
-        console.log('✅ Automatyczna odpowiedź wysłana pomyślnie');
+        console.log('✅ Auto-reply sent successfully');
       }
     } catch (autoReplyError) {
-      console.error('❌ Wyjątek podczas wysyłania automatycznej odpowiedzi:', autoReplyError);
-      // Kontynuujemy mimo błędu
+      console.error('❌ Exception during auto-reply sending:', autoReplyError);
+      // Continue despite error
     }
 
     return NextResponse.json(
