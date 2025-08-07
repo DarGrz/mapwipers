@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { sendContactEmail, sendAutoReply } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,14 +23,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Here you would typically:
-    // 1. Send an email notification to your support team
-    // 2. Store the message in a database
-    // 3. Send an auto-reply to the customer
-    // 4. Log the inquiry for tracking purposes
-
-    // For now, we'll just log the data and return success
-    console.log('Contact form submission:', {
+    // Log the contact form submission
+    console.log('📧 Contact form submission:', {
       name,
       email,
       subject,
@@ -39,11 +34,46 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-    // In a real implementation, you might want to:
-    // - Send email using a service like Resend, SendGrid, or AWS SES
-    // - Store in a database like Supabase (which you already have set up)
-    // - Send Slack/Discord notifications for urgent inquiries
-    // - Create a ticket in your support system
+    // Wysyłanie maila do administratora
+    try {
+      const emailResult = await sendContactEmail({
+        name,
+        email,
+        subject,
+        message,
+        businessName,
+        urgency: urgency || 'normal'
+      });
+
+      if (!emailResult.success) {
+        console.error('❌ Błąd wysyłania maila do administratora:', emailResult.error);
+        // Kontynuujemy mimo błędu - nie chcemy blokować użytkownika
+      } else {
+        console.log('✅ Mail do administratora wysłany pomyślnie');
+      }
+    } catch (emailError) {
+      console.error('❌ Wyjątek podczas wysyłania maila do administratora:', emailError);
+      // Kontynuujemy mimo błędu
+    }
+
+    // Wysyłanie automatycznej odpowiedzi do klienta
+    try {
+      const autoReplyResult = await sendAutoReply({
+        name,
+        email,
+        urgency: urgency || 'normal'
+      });
+
+      if (!autoReplyResult.success) {
+        console.error('❌ Błąd wysyłania automatycznej odpowiedzi:', autoReplyResult.error);
+        // Kontynuujemy mimo błędu
+      } else {
+        console.log('✅ Automatyczna odpowiedź wysłana pomyślnie');
+      }
+    } catch (autoReplyError) {
+      console.error('❌ Wyjątek podczas wysyłania automatycznej odpowiedzi:', autoReplyError);
+      // Kontynuujemy mimo błędu
+    }
 
     return NextResponse.json(
       { 
