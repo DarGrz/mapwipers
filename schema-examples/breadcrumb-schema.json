@@ -1,0 +1,24 @@
+{
+  "@context": "https://schema.org/",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.your-website.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Category",
+      "item": "https://www.your-website.com/category/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Current Page Title",
+      "item": "https://www.your-website.com/current-page/"
+    }
+  ]
+}

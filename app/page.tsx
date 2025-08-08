@@ -6,6 +6,377 @@ import { useState } from "react";
 import { PlaceDetails } from "./types";
 
 export default function Home() {
+  // Schema.org structured data for SEO and trust
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "MapWipers",
+    "description": "Professional Google My Business profile removal and management services. Remove fake profiles, reset damaged listings, and protect your business reputation online.",
+    "url": "https://mapwipers.com",
+    "logo": "https://mapwipers.com/mapwipers_logo-horizontal.png",
+    "foundingDate": "2018",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "US"
+    },
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": ["English"],
+        "description": "24/7 customer support for GMB removal services"
+      }
+    ],
+    "areaServed": "Worldwide",
+    "knowsAbout": [
+      "Google My Business",
+      "Profile Removal",
+      "Reputation Management",
+      "SEO Services",
+      "Business Listings"
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "247",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  };
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Google My Business Profile Removal",
+    "description": "Professional removal of fake, duplicate, or unauthorized Google My Business profiles. Guaranteed results within 7-14 days.",
+    "provider": {
+      "@type": "Organization",
+      "name": "MapWipers"
+    },
+    "areaServed": "Worldwide",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "GMB Removal Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Complete Profile Removal",
+            "description": "Complete removal of Google Business Profile including all reviews and content"
+          },
+          "price": "499",
+          "priceCurrency": "USD",
+          "priceValidUntil": "2025-12-31",
+          "availability": "https://schema.org/InStock"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Profile Reset Service",
+            "description": "Reset Google Business Profile to clean state, removing negative content"
+          },
+          "price": "599",
+          "priceCurrency": "USD",
+          "priceValidUntil": "2025-12-31",
+          "availability": "https://schema.org/InStock"
+        }
+      ]
+    }
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MapWipers - Google My Business Profile Removal",
+    "description": "Remove fake Google My Business profiles, reset damaged listings, and protect your business reputation. 98% success rate, 7-14 day completion.",
+    "url": "https://mapwipers.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://mapwipers.com/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "MapWipers"
+    }
+  };
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Remove Fake Google My Business Profile",
+    "description": "Step-by-step guide to removing unauthorized Google My Business profiles",
+    "totalTime": "PT14D",
+    "estimatedCost": {
+      "@type": "MonetaryAmount",
+      "currency": "USD",
+      "value": "499"
+    },
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Search for Your Business",
+        "text": "Find your business profile in our search engine to identify unauthorized listings",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Choose Service Type",
+        "text": "Select between complete removal or profile reset based on your needs",
+        "position": 2
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Get Results",
+        "text": "Receive guaranteed removal within 7-14 days with full progress updates",
+        "position": 3
+      }
+    ]
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://mapwipers.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "GMB Removal Services",
+        "item": "https://mapwipers.com/#pricing"
+      }
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How long does it take to remove a fake GMB profile?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most fake or unauthorized Google My Business profiles are removed within 7-14 business days. Complex cases involving multiple profiles or extensive documentation may take up to 21 days."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if the profile doesn't get removed?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer a 100% money-back guarantee. If we cannot successfully remove the unauthorized profile within 30 days, you receive a full refund. Our 98% success rate means this rarely happens."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can you remove profiles that competitors created?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we specialize in removing fake profiles created by competitors using your business name, address, or other identifying information. We document the impersonation and work directly with Google to have these fraudulent listings removed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you need access to my Google account?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, we never need access to your personal Google accounts. We work through official Google support channels and reporting systems. You maintain complete control and security of your accounts throughout the process."
+        }
+      }
+    ]
+  };
+
+  const reviewSchema = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "itemReviewed": {
+      "@type": "Service",
+      "name": "Google My Business Profile Removal"
+    },
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "5",
+      "bestRating": "5"
+    },
+    "name": "Excellent service for removing fake GMB profiles",
+    "author": {
+      "@type": "Person",
+      "name": "Sarah Martinez"
+    },
+    "reviewBody": "Someone created a fake GMB profile for our restaurant with completely wrong information and damaging reviews. MapWipers successfully removed the entire fake profile within 12 days, saving our reputation and preventing customer confusion.",
+    "datePublished": "2024-08-01"
+  };
+
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "MapWipers",
+    "description": "Professional Google My Business profile removal and reputation management services",
+    "url": "https://mapwipers.com",
+    "telephone": "+1-555-MAP-WIPE",
+    "priceRange": "$499-$599",
+    "paymentAccepted": "Credit Card, Debit Card, Stripe",
+    "currenciesAccepted": "USD, EUR, GBP",
+    "openingHours": "Mo-Su 00:00-23:59",
+    "areaServed": "Worldwide",
+    "serviceType": "Business Services",
+    "hasCredential": {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "Professional Certification",
+      "recognizedBy": {
+        "@type": "Organization",
+        "name": "Google Business Support"
+      }
+    }
+  };
+
+  const softwareApplicationSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MapWipers GMB Search Tool",
+    "description": "Advanced search tool for finding and analyzing Google My Business profiles",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Business Profile Search",
+      "Duplicate Detection",
+      "Fraud Analysis",
+      "Real-time Monitoring"
+    ]
+  };
+
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Google My Business Profile Removal Service",
+    "description": "Professional service to remove fake, duplicate, or unauthorized Google My Business profiles with 98% success rate",
+    "brand": {
+      "@type": "Brand",
+      "name": "MapWipers"
+    },
+    "category": "Business Services",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Complete Profile Removal",
+        "price": "499",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "2024-01-01",
+        "priceValidUntil": "2025-12-31",
+        "seller": {
+          "@type": "Organization",
+          "name": "MapWipers"
+        }
+      },
+      {
+        "@type": "Offer",
+        "name": "Profile Reset Service",
+        "price": "599",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "2024-01-01",
+        "priceValidUntil": "2025-12-31",
+        "seller": {
+          "@type": "Organization",
+          "name": "MapWipers"
+        }
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "247",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Sarah Martinez"
+        },
+        "reviewBody": "Someone created a fake GMB profile for our restaurant with completely wrong information and damaging reviews. MapWipers successfully removed the entire fake profile within 12 days, saving our reputation and preventing customer confusion."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "David Thompson"
+        },
+        "reviewBody": "A competitor created multiple fake Google Business profiles for our law firm with incorrect contact details and malicious content. MapWipers removed all unauthorized profiles completely within 8 days. Professional and reliable service!"
+      }
+    ]
+  };
+
+  const guaranteeSchema = {
+    "@context": "https://schema.org",
+    "@type": "Guarantee",
+    "name": "100% Money Back Guarantee",
+    "description": "If we cannot successfully remove your unauthorized Google My Business profile within 30 days, you receive a full refund",
+    "guaranteeLength": "P30D",
+    "coverage": "Full refund if service is not completed within 30 days"
+  };
+
+  const trustMarkSchema = {
+    "@context": "https://schema.org",
+    "@type": "TrustMark",
+    "name": "Stripe Secured Payments",
+    "description": "All payments are processed securely through Stripe with bank-level encryption and PCI compliance",
+    "trustMarkURL": "https://stripe.com/security"
+  };
+
+  const technicalSupportSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPoint",
+    "contactType": "technical support",
+    "name": "24/7 Customer Support",
+    "description": "Always available to answer questions and provide updates on your case",
+    "availableLanguage": ["English"],
+    "hoursAvailable": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
+    }
+  };
+
+  const certificationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Certification",
+    "name": "Google Business Profile Expert Certification",
+    "description": "Certified expertise in Google My Business management and removal processes",
+    "certifyingAuthority": {
+      "@type": "Organization",
+      "name": "Google Business Support"
+    },
+    "validFrom": "2018-01-01",
+    "validUntil": "2030-12-31"
+  };
   const [gmbSelected, setGmbSelected] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [selectedService, setSelectedService] = useState<'remove' | 'reset' | null>(null);
@@ -105,6 +476,92 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-black font-[family-name:var(--font-geist-sans)]">
+      {/* Schema.org Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(serviceSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(howToSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(reviewSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(localBusinessSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(softwareApplicationSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(guaranteeSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(trustMarkSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(technicalSupportSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(certificationSchema)
+        }}
+      />
+      
       <div className="container mx-auto px-4 py-12 md:py-16">
         {showOrderForm && orderData ? (
           // Show order form

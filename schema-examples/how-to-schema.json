@@ -1,0 +1,33 @@
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@language": "en",
+  "name": "How to [Process Name]",
+  "description": "Step-by-step guide to [process description]",
+  "estimatedCost": {
+    "@type": "MonetaryAmount",
+    "currency": "USD",
+    "value": "0"
+  },
+  "totalTime": "PT30M",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Step 1: [Step Name]",
+      "text": "Detailed description of step 1",
+      "url": "https://yourwebsite.com/how-to-guide#step1"
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Step 2: [Step Name]",
+      "text": "Detailed description of step 2",
+      "url": "https://yourwebsite.com/how-to-guide#step2"
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Step 3: [Step Name]",
+      "text": "Detailed description of step 3",
+      "url": "https://yourwebsite.com/how-to-guide#step3"
+    }
+  ]
+}

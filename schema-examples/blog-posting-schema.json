@@ -1,0 +1,33 @@
+{
+  "@context": "https://schema.org/",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.your-website.com/blog-post-url/"
+  },
+  "headline": "Your Blog Post Headline",
+  "description": "Brief description of your blog post content",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://www.your-website.com/blog-image.jpg",
+    "width": "1200",
+    "height": "630"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Your Company Name",
+    "url": "https://www.your-company.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Your Company Name",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.your-company.com/logo.png",
+      "width": "300",
+      "height": "100"
+    }
+  },
+  "datePublished": "2025-01-01T00:00:00+0000",
+  "dateModified": "2025-01-01T00:00:00+0000"
+}

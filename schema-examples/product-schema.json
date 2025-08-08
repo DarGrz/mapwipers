@@ -1,0 +1,12 @@
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "Your Product Name",
+  "image": "https://www.your-company.com/product-image.png",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.5",
+    "reviewCount": 100,
+    "bestRating": 5
+  }
+}

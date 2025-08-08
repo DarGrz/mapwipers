@@ -1,0 +1,46 @@
+{
+  "@context": "https://schema.org/",
+  "@type": "Service",
+  "name": "Your Service Name",
+  "description": "Description of your service and what you provide",
+  "provider": {
+    "@type": "Organization",
+    "name": "Your Company Name",
+    "logo": "https://www.your-company.com/logo.jpg",
+    "url": "https://www.your-company.com",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "email": "support@your-company.com",
+      "telephone": "+1234567890",
+      "hoursAvailable": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "17:00",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Your City",
+            "addressCountry": "US",
+            "streetAddress": "123 Main Street",
+            "postalCode": "12345"
+          }
+        }
+      ]
+    }
+  },
+  "areaServed": {
+    "@type": "Place",
+    "name": "Worldwide"
+  },
+  "serviceType": "Your Service Category",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://www.your-company.com/order",
+    "priceCurrency": "USD",
+    "price": "99",
+    "itemCondition": "https://schema.org/NewCondition",
+    "availability": "https://schema.org/InStock"
+  }
+}

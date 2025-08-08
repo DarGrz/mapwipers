@@ -1,0 +1,31 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@language": "en",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Your first question?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Answer to your first question with detailed information."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Your second question?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Answer to your second question with detailed information."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Your third question?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Answer to your third question with detailed information."
+      }
+    }
+  ]
+}
