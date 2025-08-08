@@ -581,7 +581,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       
       {showSearch ? (
         // Search form with animated heading and results
-        <div className={`mb-8 max-w-4xl mx-auto mt-5 relative px-4 ${animationState === 'exiting' ? 'slide-out-left' : animationState === 'entering' ? 'slide-in-right' : ''}`}>
+        <div className={`mb-8 max-w-4xl mx-auto mt-5 relative ${animationState === 'exiting' ? 'slide-out-left' : animationState === 'entering' ? 'slide-in-right' : ''}`}>
           {/* Animated heading that slides up when results appear */}          <h1 
             className={`hidden text-2xl md:text-xl font-bold  mt-10 transition-all duration-300 ease-in-out  ${
               showResults && locations.length > 0 
