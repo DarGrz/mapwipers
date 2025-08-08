@@ -1,12 +1,73 @@
 {
   "@context": "https://schema.org/",
   "@type": "Product",
-  "name": "Your Product Name",
-  "image": "https://www.your-company.com/product-image.png",
+  "name": "Google My Business Profile Removal Service",
+  "description": "Professional service to remove fake, duplicate, or unauthorized Google My Business profiles with 98% success rate",
+  "image": "https://mapwipers.com/mapwipers_logo-horizontal.png",
+  "brand": {
+    "@type": "Brand",
+    "name": "MapWipers"
+  },
+  "category": "Business Services",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Complete Profile Removal",
+      "price": "499",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "validFrom": "2024-01-01",
+      "priceValidUntil": "2025-12-31",
+      "seller": {
+        "@type": "Organization",
+        "name": "MapWipers"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "USD"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": "7",
+            "maxValue": "14",
+            "unitCode": "DAY"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "US",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": "30",
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      }
+    }
+  ],
   "aggregateRating": {
     "@type": "AggregateRating",
-    "ratingValue": "4.5",
-    "reviewCount": 100,
-    "bestRating": 5
-  }
+    "ratingValue": "4.9",
+    "reviewCount": "247",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "review": [
+    {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Sarah Martinez"
+      },
+      "reviewBody": "Someone created a fake GMB profile for our restaurant with completely wrong information and damaging reviews. MapWipers successfully removed the entire fake profile within 12 days, saving our reputation and preventing customer confusion."
+    }
+  ]
 }

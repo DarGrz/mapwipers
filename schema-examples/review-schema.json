@@ -2,18 +2,20 @@
   "@context": "https://schema.org/",
   "@type": "Review",
   "author": {
-    "@type": "Organization",
-    "name": "Review Platform Name"
+    "@type": "Person",
+    "name": "Sarah Martinez"
   },
   "reviewRating": {
     "@type": "Rating",
-    "ratingValue": "5.0"
+    "ratingValue": "5",
+    "bestRating": "5"
   },
-  "reviewBody": "Description of where the ratings come from",
+  "name": "Excellent service for removing fake GMB profiles",
+  "reviewBody": "Someone created a fake GMB profile for our restaurant with completely wrong information and damaging reviews. MapWipers successfully removed the entire fake profile within 12 days, saving our reputation and preventing customer confusion.",
+  "datePublished": "2024-08-01",
   "itemReviewed": {
     "@type": "Organization",
-    "name": "Your Company Name",
-    "url": "https://www.your-company.com"
-  },
-  "url": "https://www.review-platform.com/your-company"
+    "name": "MapWipers",
+    "url": "https://mapwipers.com"
+  }
 }

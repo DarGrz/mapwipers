@@ -198,8 +198,9 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "Review",
     "itemReviewed": {
-      "@type": "Service",
-      "name": "Google My Business Profile Removal"
+      "@type": "Organization",
+      "name": "MapWipers",
+      "url": "https://mapwipers.com"
     },
     "reviewRating": {
       "@type": "Rating",
@@ -263,6 +264,7 @@ export default function Home() {
     "@type": "Product",
     "name": "Google My Business Profile Removal Service",
     "description": "Professional service to remove fake, duplicate, or unauthorized Google My Business profiles with 98% success rate",
+    "image": "https://mapwipers.com/mapwipers_logo-horizontal.png",
     "brand": {
       "@type": "Brand",
       "name": "MapWipers"
@@ -280,6 +282,31 @@ export default function Home() {
         "seller": {
           "@type": "Organization",
           "name": "MapWipers"
+        },
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": "0",
+            "currency": "USD"
+          },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": "7",
+              "maxValue": "14",
+              "unitCode": "DAY"
+            }
+          }
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "US",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": "30",
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn"
         }
       },
       {
@@ -293,6 +320,31 @@ export default function Home() {
         "seller": {
           "@type": "Organization",
           "name": "MapWipers"
+        },
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": "0",
+            "currency": "USD"
+          },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": "7",
+              "maxValue": "14",
+              "unitCode": "DAY"
+            }
+          }
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "US",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": "30",
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn"
         }
       }
     ],
