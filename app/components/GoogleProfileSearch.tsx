@@ -478,6 +478,35 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         .slide-out-left {
           animation: slideOutToLeft 0.3s ease-in forwards;
         }
+
+        @keyframes shine {
+          0% {
+            transform: translateX(-100%) skewX(-15deg);
+          }
+          20% {
+            transform: translateX(200%) skewX(-15deg);
+          }
+          100% {
+            transform: translateX(200%) skewX(-15deg);
+          }
+        }
+        
+        .shine-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+          );
+          animation: shine 5s ease-in-out infinite;
+          transform: translateX(-100%) skewX(-15deg);
+        }
       `}</style>
       
       {showSearch ? (
@@ -494,16 +523,16 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
           </h1>
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="relative">
+            <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="Search for business name..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className={`w-full border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 ${
+                className={`flex-1 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 ${
                   isModal 
                     ? 'px-3 sm:px-6 py-3 sm:py-4 text-base sm:text-lg placeholder:text-gray-400' 
-                    : 'px-4 py-3'
+                    : 'px-4 py-4'
                 } ${
                   showResults && locations.length > 0 ? 'border-[#F17313]' : ''
                 }`}
@@ -511,11 +540,16 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
               <button
                 type="button"
                 onClick={() => searchQuery.length >= 2 && searchLocations(searchQuery)}
-                className={`absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 bg-[#F17313] text-white rounded-md hover:opacity-90 transition ${
-                  isModal ? 'px-3 sm:px-6 py-1.5 sm:py-2 text-sm sm:text-base' : 'px-4 py-1'
+                className={`bg-[#F17313] text-white rounded-lg hover:opacity-90 transition flex-shrink-0 relative overflow-hidden shine-button ${
+                  isModal ? 'px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg' : 'px-6 py-4'
                 }`}
               >
-                Search
+                <span className="relative z-10 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  Search
+                </span>
               </button>
             </div>
           </form>
