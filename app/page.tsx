@@ -2,86 +2,10 @@
 
 import GoogleProfileSearch from "./components/GoogleProfileSearch";
 import OrderForm, { OrderFormData } from "./components/OrderForm";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PlaceDetails } from "./types";
 
 export default function Home() {
-  // Set page-specific meta tags
-  useEffect(() => {
-    // Update title
-    document.title = "MapWipers - Remove Fake Google My Business Profiles | 98% Success Rate";
-    
-    // Update or add meta description
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'Professional Google My Business profile removal service. Remove fake, duplicate, or unauthorized GMB profiles with 98% success rate. Guaranteed results in 7-14 days.');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'Professional Google My Business profile removal service. Remove fake, duplicate, or unauthorized GMB profiles with 98% success rate. Guaranteed results in 7-14 days.';
-      document.head.appendChild(meta);
-    }
-
-    // Add canonical URL
-    const canonicalLink = document.querySelector('link[rel="canonical"]');
-    if (canonicalLink) {
-      canonicalLink.setAttribute('href', 'https://mapwipers.com/');
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://mapwipers.com/';
-      document.head.appendChild(link);
-    }
-
-    // Add keywords meta tag
-    const metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (!metaKeywords) {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'Google My Business removal, fake GMB profile, remove Google Business Profile, business reputation management, unauthorized GMB listing, duplicate Google listing';
-      document.head.appendChild(meta);
-    }
-
-    // Add Open Graph tags
-    const addOrUpdateOGTag = (property: string, content: string) => {
-      const ogTag = document.querySelector(`meta[property="${property}"]`);
-      if (ogTag) {
-        ogTag.setAttribute('content', content);
-      } else {
-        const meta = document.createElement('meta');
-        meta.setAttribute('property', property);
-        meta.content = content;
-        document.head.appendChild(meta);
-      }
-    };
-
-    addOrUpdateOGTag('og:title', 'MapWipers - Remove Fake Google My Business Profiles');
-    addOrUpdateOGTag('og:description', 'Professional Google My Business profile removal service with 98% success rate. Remove fake, duplicate, or unauthorized GMB profiles in 7-14 days.');
-    addOrUpdateOGTag('og:url', 'https://mapwipers.com/');
-    addOrUpdateOGTag('og:type', 'website');
-    addOrUpdateOGTag('og:image', 'https://mapwipers.com/mapwipers_logo-horizontal.png');
-    addOrUpdateOGTag('og:site_name', 'MapWipers');
-
-    // Add Twitter Card tags
-    const addOrUpdateTwitterTag = (name: string, content: string) => {
-      const twitterTag = document.querySelector(`meta[name="${name}"]`);
-      if (twitterTag) {
-        twitterTag.setAttribute('content', content);
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = name;
-        meta.content = content;
-        document.head.appendChild(meta);
-      }
-    };
-
-    addOrUpdateTwitterTag('twitter:card', 'summary_large_image');
-    addOrUpdateTwitterTag('twitter:title', 'MapWipers - Remove Fake Google My Business Profiles');
-    addOrUpdateTwitterTag('twitter:description', 'Professional Google My Business profile removal service with 98% success rate.');
-    addOrUpdateTwitterTag('twitter:image', 'https://mapwipers.com/mapwipers_logo-horizontal.png');
-
-  }, []);
-
   // Schema.org structured data for SEO and trust
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -700,7 +624,7 @@ export default function Home() {
         }}
       />
       
-      <div className="container mx-auto px-4 py-12 md:py-16">
+      <div className="container mx-auto px-4 py-12 md:py-16 mt-10">
         {showOrderForm && orderData ? (
           // Show order form
           <div className="max-w-4xl mx-auto">
