@@ -1,20 +1,41 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "url": "https://www.your-company.com",
-  "logo": "https://www.your-company.com/logo.png",
-  "name": "Your Company Name",
-  "description": "Your company description - what you do and your specialization",
-  "email": "contact@your-company.com",
-  "telephone": "+1234567890",
+  "name": "MapWipers",
+  "description": "Professional Google My Business profile removal and management services. Remove fake profiles, reset damaged listings, and protect your business reputation online.",
+  "url": "https://mapwipers.com",
+  "logo": "https://mapwipers.com/mapwipers_logo-horizontal.png",
+  "foundingDate": "2018",
+  "email": "support@mapwipers.com",
+  "telephone": "+1-555-MAP-WIPE",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "123 Main Street",
-    "addressLocality": "Your City",
-    "addressRegion": "Your State",
-    "postalCode": "12345",
+    "streetAddress": "Digital Services Office",
+    "addressLocality": "Remote Service",
+    "postalCode": "00000",
     "addressCountry": "US"
   },
-  "vatID": "YOUR_VAT_ID",
-  "image": "https://www.your-company.com/company-image.jpg"
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "availableLanguage": ["English"],
+      "description": "24/7 customer support for GMB removal services"
+    }
+  ],
+  "areaServed": "Worldwide",
+  "knowsAbout": [
+    "Google My Business",
+    "Profile Removal",
+    "Reputation Management",
+    "SEO Services",
+    "Business Listings"
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "247",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
 }

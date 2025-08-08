@@ -17,7 +17,10 @@ export default function Home() {
     "foundingDate": "2018",
     "address": {
       "@type": "PostalAddress",
-      "addressCountry": "US"
+      "addressCountry": "US",
+      "addressLocality": "Remote Service",
+      "streetAddress": "Digital Services Office",
+      "postalCode": "00000"
     },
     "contactPoint": [
       {
@@ -223,6 +226,13 @@ export default function Home() {
     "description": "Professional Google My Business profile removal and reputation management services",
     "url": "https://mapwipers.com",
     "telephone": "+1-555-MAP-WIPE",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "US",
+      "addressLocality": "Remote Service",
+      "streetAddress": "Digital Services Office",
+      "postalCode": "00000"
+    },
     "priceRange": "$499-$599",
     "paymentAccepted": "Credit Card, Debit Card, Stripe",
     "currenciesAccepted": "USD, EUR, GBP",
