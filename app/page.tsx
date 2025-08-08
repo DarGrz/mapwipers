@@ -624,7 +624,7 @@ export default function Home() {
         }}
       />
       
-      <div className="container mx-auto px-4 py-12 md:py-16 mt-10">
+      <div className="container mx-auto px-4 py-12 md:py-16 mt-10 overflow-hidden">
         {showOrderForm && orderData ? (
           // Show order form
           <div className="max-w-4xl mx-auto">

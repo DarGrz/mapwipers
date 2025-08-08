@@ -581,7 +581,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       
       {showSearch ? (
         // Search form with animated heading and results
-        <div className={`mb-8 max-w-4xl mx-auto mt-5 relative ${animationState === 'exiting' ? 'slide-out-left' : animationState === 'entering' ? 'slide-in-right' : ''}`}>
+        <div className={`mb-8 max-w-4xl mx-auto mt-5 relative px-4 ${animationState === 'exiting' ? 'slide-out-left' : animationState === 'entering' ? 'slide-in-right' : ''}`}>
           {/* Animated heading that slides up when results appear */}          <h1 
             className={`hidden text-2xl md:text-xl font-bold  mt-10 transition-all duration-300 ease-in-out  ${
               showResults && locations.length > 0 
@@ -592,17 +592,17 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
             {headingText}
           </h1>
           
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex gap-2">
+          <form onSubmit={handleSubmit} className="space-y-4 w-full">
+            <div className="flex flex-col sm:flex-row gap-2 w-full landscape:gap-1">
               <input
                 type="text"
                 placeholder={`${currentPlaceholder}${showCursor ? '|' : ''}`}
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className={`flex-1 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 placeholder:transition-all placeholder:duration-300 ${
+                className={`flex-1 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 placeholder:transition-all placeholder:duration-300 w-full min-w-0 ${
                   isModal 
-                    ? 'px-3 sm:px-6 py-3 sm:py-4 text-lg sm:text-xl placeholder:text-gray-400 placeholder:text-lg sm:placeholder:text-xl' 
-                    : 'px-4 py-4 text-lg placeholder:text-lg'
+                    ? 'px-3 sm:px-6 py-3 sm:py-4 text-lg sm:text-xl placeholder:text-gray-400 placeholder:text-lg sm:placeholder:text-xl landscape:py-2 landscape:text-base landscape:placeholder:text-base' 
+                    : 'px-4 py-4 text-lg placeholder:text-lg landscape:py-3 landscape:text-base landscape:placeholder:text-base'
                 } ${
                   showResults && locations.length > 0 ? 'border-[#F17313]' : ''
                 }`}
@@ -610,12 +610,12 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
               <button
                 type="button"
                 onClick={() => searchQuery.length >= 2 && searchLocations(searchQuery)}
-                className={`bg-[#F17313] text-white rounded-lg hover:opacity-90 transition flex-shrink-0 relative overflow-hidden shine-button ${
-                  isModal ? 'px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg' : 'px-6 py-4'
+                className={`bg-[#F17313] text-white rounded-lg hover:opacity-90 transition flex-shrink-0 relative overflow-hidden shine-button w-full sm:w-auto ${
+                  isModal ? 'px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg landscape:py-2 landscape:text-sm landscape:px-3' : 'px-6 py-4 landscape:py-3 landscape:px-4'
                 }`}
               >
-                <span className="relative z-10 flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 landscape:h-4 landscape:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                   Search
