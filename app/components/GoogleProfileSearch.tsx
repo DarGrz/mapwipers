@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { GmbLocation, PlaceDetails, Removal } from "../types";
 import { usePricing } from "../hooks/usePricing";
 
@@ -53,6 +53,24 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
   // Track search context for logging
   const [lastSearchQuery, setLastSearchQuery] = useState<string>("");
   const [lastSearchResultsCount, setLastSearchResultsCount] = useState<number>(0);
+  
+  // Animated placeholder state
+  const [currentPlaceholder, setCurrentPlaceholder] = useState<string>("Search for business name...");
+  const [showCursor, setShowCursor] = useState<boolean>(true);
+  
+  // Placeholder phrases
+  const placeholderPhrases = useMemo(() => [
+    "Search for your business name...",
+    "Try 'Pizza Restaurant NYC'...",
+    "Enter your company name...",
+    "Find 'Hair Salon Los Angeles'...",
+    "Search your Google listing...",
+    "Type 'Dentist Miami Beach'...",
+    "Find your business profile...",
+    "Search 'Coffee Shop Seattle'...",
+    "Enter business + location...",
+    "Try 'Auto Repair Chicago'..."
+  ], []);
 
   // Check localStorage for previously selected business on component mount
   useEffect(() => {
@@ -140,6 +158,58 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       }
     }
   }, [resetTrigger, onSelectionChange]);
+
+  // Animated placeholder effect with typing
+  useEffect(() => {
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    
+    const typeText = () => {
+      const currentPhrase = placeholderPhrases[phraseIndex];
+      
+      if (isDeleting) {
+        // Deleting characters
+        setCurrentPlaceholder(currentPhrase.substring(0, charIndex));
+        charIndex--;
+        
+        if (charIndex < 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % placeholderPhrases.length;
+          charIndex = 0;
+          setTimeout(typeText, 500); // Pause before typing new phrase
+          return;
+        }
+      } else {
+        // Typing characters
+        setCurrentPlaceholder(currentPhrase.substring(0, charIndex + 1));
+        charIndex++;
+        
+        if (charIndex === currentPhrase.length) {
+          setTimeout(() => {
+            isDeleting = true;
+            typeText();
+          }, 2000); // Pause when phrase is complete
+          return;
+        }
+      }
+      
+      setTimeout(typeText, isDeleting ? 50 : 100); // Faster deleting than typing
+    };
+    
+    const timer = setTimeout(typeText, 1000); // Initial delay
+    
+    return () => clearTimeout(timer);
+  }, [placeholderPhrases]);
+
+  // Cursor blinking effect
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+
+    return () => clearInterval(cursorInterval);
+  }, []);
 
   // Search for GMB locations
   const searchLocations = async (query: string) => {
@@ -526,13 +596,13 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Search for business name..."
+                placeholder={`${currentPlaceholder}${showCursor ? '|' : ''}`}
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className={`flex-1 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 ${
+                className={`flex-1 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 placeholder:transition-all placeholder:duration-300 ${
                   isModal 
-                    ? 'px-3 sm:px-6 py-3 sm:py-4 text-base sm:text-lg placeholder:text-gray-400' 
-                    : 'px-4 py-4'
+                    ? 'px-3 sm:px-6 py-3 sm:py-4 text-lg sm:text-xl placeholder:text-gray-400 placeholder:text-lg sm:placeholder:text-xl' 
+                    : 'px-4 py-4 text-lg placeholder:text-lg'
                 } ${
                   showResults && locations.length > 0 ? 'border-[#F17313]' : ''
                 }`}
