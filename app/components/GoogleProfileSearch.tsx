@@ -211,6 +211,43 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
     return () => clearInterval(cursorInterval);
   }, []);
 
+  // Mobile keyboard handling - scroll page up when input is focused
+  useEffect(() => {
+    const handleInputFocus = () => {
+      // Check if device is mobile
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        setTimeout(() => {
+          // Scroll to top of the page to avoid keyboard hiding input
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        }, 300); // Delay to allow keyboard to appear
+      }
+    };
+
+    const handleInputBlur = () => {
+      // Optional: could restore scroll position on blur if needed
+    };
+
+    // Add event listeners to all input fields in the component
+    const inputs = document.querySelectorAll('input[type="text"]');
+    inputs.forEach(input => {
+      input.addEventListener('focus', handleInputFocus);
+      input.addEventListener('blur', handleInputBlur);
+    });
+
+    return () => {
+      // Cleanup event listeners
+      inputs.forEach(input => {
+        input.removeEventListener('focus', handleInputFocus);
+        input.removeEventListener('blur', handleInputBlur);
+      });
+    };
+  }, []);
+
   // Search for GMB locations
   const searchLocations = async (query: string) => {
     setIsSearching(true);
@@ -612,8 +649,8 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                 onClick={() => searchQuery.length >= 2 && searchLocations(searchQuery)}
                 className={`bg-[#F17313] text-white rounded-lg hover:opacity-90 transition flex-shrink-0 relative overflow-hidden shine-button ${
                   isModal 
-                    ? 'px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg landscape:py-2 landscape:text-sm landscape:px-3' 
-                    : 'px-4 sm:px-6 py-4 landscape:py-3 landscape:px-4'
+                    ? 'px-5 sm:px-6 py-3 sm:py-4 text-base sm:text-lg landscape:py-2 landscape:text-sm landscape:px-4' 
+                    : 'px-6 sm:px-6 py-4 landscape:py-3 landscape:px-5'
                 }`}
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
