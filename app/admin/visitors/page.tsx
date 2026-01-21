@@ -45,15 +45,19 @@ export default function VisitorsPage() {
         page: currentPage.toString(),
         limit: itemsPerPage.toString()
       });
-      
+
       const response = await fetch(`/api/visitors?${params}`, {
         credentials: 'include'
       });
-      
+
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/admin';
+          return;
+        }
         throw new Error('Failed to fetch visitors data');
       }
-      
+
       const data = await response.json();
       setVisitors(data.visitors || []);
       setTotalPages(data.pagination?.totalPages || 1);
@@ -71,22 +75,22 @@ export default function VisitorsPage() {
 
   const formatUserAgent = (userAgent: string) => {
     if (!userAgent) return 'N/A';
-    
+
     // Extract browser info
     let browser = 'Unknown';
     let os = 'Unknown';
-    
+
     if (userAgent.includes('Chrome')) browser = 'Chrome';
     else if (userAgent.includes('Firefox')) browser = 'Firefox';
     else if (userAgent.includes('Safari')) browser = 'Safari';
     else if (userAgent.includes('Edge')) browser = 'Edge';
-    
+
     if (userAgent.includes('Windows')) os = 'Windows';
     else if (userAgent.includes('Mac')) os = 'macOS';
     else if (userAgent.includes('Linux')) os = 'Linux';
     else if (userAgent.includes('Android')) os = 'Android';
     else if (userAgent.includes('iPhone') || userAgent.includes('iPad')) os = 'iOS';
-    
+
     return `${browser} on ${os}`;
   };
 
@@ -127,7 +131,7 @@ export default function VisitorsPage() {
           </div>
           <div className="bg-red-50 border border-red-200 rounded-md p-4">
             <p className="text-red-800">Error: {error}</p>
-            <button 
+            <button
               onClick={fetchVisitors}
               className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
             >
@@ -230,7 +234,7 @@ export default function VisitorsPage() {
               </div>
             </div>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -285,9 +289,9 @@ export default function VisitorsPage() {
                     <td className="px-6 py-4 text-sm text-gray-900">
                       <div className="max-w-xs truncate" title={visitor.referer || 'Direct'}>
                         {visitor.referer ? (
-                          <a 
-                            href={visitor.referer} 
-                            target="_blank" 
+                          <a
+                            href={visitor.referer}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:text-blue-800"
                           >
@@ -320,7 +324,7 @@ export default function VisitorsPage() {
                 ))}
               </tbody>
             </table>
-            
+
             {visitors.length === 0 && (
               <div className="text-center py-8">
                 <p className="text-gray-500">
@@ -341,24 +345,23 @@ export default function VisitorsPage() {
                 >
                   Previous
                 </button>
-                
+
                 {Array.from({ length: Math.min(totalPages, 10) }, (_, i) => {
                   const page = i + 1;
                   return (
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`px-3 py-1 border rounded-md text-sm ${
-                        currentPage === page
+                      className={`px-3 py-1 border rounded-md text-sm ${currentPage === page
                           ? 'bg-blue-600 text-white border-blue-600'
                           : 'border-gray-300 hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       {page}
                     </button>
                   );
                 })}
-                
+
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}

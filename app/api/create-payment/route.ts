@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { logOrder, getRequestInfo } from '@/lib/logging';
+import { getLocaleFromHostname, convertPrice } from '@/lib/i18n';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-07-30.basil',
+  apiVersion: '2025-08-27.basil',
 });
 
 export async function POST(req: NextRequest) {
@@ -13,7 +14,8 @@ export async function POST(req: NextRequest) {
       orderData, 
       formData,
       totalPrice,
-      serviceType 
+      serviceType,
+      locale 
     } = body;
 
     if (!orderData || !formData || !totalPrice || !serviceType) {
@@ -22,6 +24,12 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Determine locale from request or use default
+    const hostname = req.headers.get('host') || '';
+    const detectedLocale = locale || getLocaleFromHostname(hostname);
+    const currency = detectedLocale === 'pl' ? 'pln' : 'usd';
+    const finalPrice = detectedLocale === 'pl' ? convertPrice(totalPrice, 'pl') : totalPrice;
 
     // Create or retrieve Stripe customer
     const customerData: Stripe.CustomerCreateParams = {
@@ -64,7 +72,7 @@ export async function POST(req: NextRequest) {
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [
       {
         price_data: {
-          currency: 'usd',
+          currency: currency,
           product_data: {
             name: `Google Maps ${serviceType === 'remove' ? 'Profile Removal' : 'Profile Reset'} Service`,
             description: `${serviceType === 'remove' ? 'Complete removal' : 'Reset reviews'} for ${orderData.selectedBusiness.name}`,
@@ -73,7 +81,7 @@ export async function POST(req: NextRequest) {
               serviceType: serviceType
             }
           },
-          unit_amount: Math.round(totalPrice * 100), // Convert to cents
+          unit_amount: Math.round(finalPrice * 100), // Convert to cents/grosze
         },
         quantity: 1,
       }
@@ -81,28 +89,30 @@ export async function POST(req: NextRequest) {
 
     // Add addon line items if selected
     if (orderData.yearProtection) {
+      const protectionPrice = detectedLocale === 'pl' ? convertPrice(199, 'pl') : 199;
       lineItems.push({
         price_data: {
-          currency: 'usd',
+          currency: currency,
           product_data: {
             name: '1-Year Protection',
             description: 'Protection against future negative reviews for 1 year'
           },
-          unit_amount: Math.round(199 * 100), // Assuming $199 for year protection
+          unit_amount: Math.round(protectionPrice * 100),
         },
         quantity: 1,
       });
     }
 
     if (orderData.expressService) {
+      const expressPrice = detectedLocale === 'pl' ? convertPrice(99, 'pl') : 99;
       lineItems.push({
         price_data: {
-          currency: 'usd',
+          currency: currency,
           product_data: {
             name: 'Express Service',
             description: 'Priority processing within 24-48 hours'
           },
-          unit_amount: Math.round(99 * 100), // Assuming $99 for express service
+          unit_amount: Math.round(expressPrice * 100),
         },
         quantity: 1,
       });
@@ -204,7 +214,7 @@ export async function POST(req: NextRequest) {
       service_type: serviceType,
       addons: addons,
       total_amount: totalPrice,
-      currency: 'USD',
+      currency: currency.toUpperCase(),
       payment_status: 'pending',
       stripe_session_id: session.id,
       // GMB/Business information

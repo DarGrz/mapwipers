@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { GmbLocation, PlaceDetails, Removal } from "../types";
 import { usePricing } from "../hooks/usePricing";
+import { useLocaleContext } from "../context/LocaleContext";
 
 interface GoogleProfileSearchProps {
   onSelectionChange?: (isSelected: boolean) => void;
@@ -18,6 +19,8 @@ interface GoogleProfileSearchProps {
 }
 
 const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = false, resetTrigger }: GoogleProfileSearchProps) => {
+  const { t, locale } = useLocaleContext();
+  
   // Pricing hook
   const { 
     loading: pricingLoading, 
@@ -39,7 +42,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
   const [selectedPlaceDetails, setSelectedPlaceDetails] = useState<PlaceDetails | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState<boolean>(true);
-  const [headingText, setHeadingText] = useState<string>("Find your business");
+  const [headingText, setHeadingText] = useState<string>(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
   const [removals, setRemovals] = useState<Removal[]>([
     { companyName: '', nip: '' }
   ]);
@@ -55,22 +58,36 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
   const [lastSearchResultsCount, setLastSearchResultsCount] = useState<number>(0);
   
   // Animated placeholder state
-  const [currentPlaceholder, setCurrentPlaceholder] = useState<string>("Search for business name...");
+  const [currentPlaceholder, setCurrentPlaceholder] = useState<string>(
+    locale === 'pl' ? "Wyszukaj nazwę firmy..." : "Search for business name..."
+  );
   const [showCursor, setShowCursor] = useState<boolean>(true);
   
   // Placeholder phrases
-  const placeholderPhrases = useMemo(() => [
-    "Search for your business name...",
-    "Try 'Pizza Restaurant NYC'...",
-    "Enter your company name...",
-    "Find 'Hair Salon Los Angeles'...",
-    "Search your Google listing...",
-    "Type 'Dentist Miami Beach'...",
-    "Find your business profile...",
-    "Search 'Coffee Shop Seattle'...",
-    "Enter business + location...",
-    "Try 'Auto Repair Chicago'..."
-  ], []);
+  const placeholderPhrases = useMemo(() => 
+    locale === 'pl' ? [
+      "Wyszukaj nazwę swojej firmy...",
+      "Spróbuj 'Pizzeria Kraków'...",
+      "Wpisz nazwę firmy...",
+      "Znajdź 'Fryzjer Warszawa'...",
+      "Szukaj swojego wpisu Google...",
+      "Wpisz 'Dentysta Wrocław'...",
+      "Znajdź profil swojej firmy...",
+      "Szukaj 'Kawiarnia Gdańsk'...",
+      "Wpisz firmę + lokalizację...",
+      "Spróbuj 'Mechanik Poznań'..."
+    ] : [
+      "Search for your business name...",
+      "Try 'Pizza Restaurant NYC'...",
+      "Enter your company name...",
+      "Find 'Hair Salon Los Angeles'...",
+      "Search your Google listing...",
+      "Type 'Dentist Miami Beach'...",
+      "Find your business profile...",
+      "Search 'Coffee Shop Seattle'...",
+      "Enter business + location...",
+      "Try 'Auto Repair Chicago'..."
+    ], [locale]);
 
   // Check localStorage for previously selected business on component mount
   useEffect(() => {
@@ -135,7 +152,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       setSelectedPlaceDetails(null);
       setIsLoadingDetails(false);
       setShowSearch(true);
-      setHeadingText("Find your business");
+      setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
       setRemovals([{ companyName: '', nip: '' }]);
       setServiceType(null);
       setYearProtection(false);
@@ -272,13 +289,13 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         if (!data.locations || data.locations.length === 0) {
         setErrorMessage('No results found. Please try a different search term.');
         setLocations([]);
-        setHeadingText("Find your business");
+        setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
         setLastSearchQuery("");
         setLastSearchResultsCount(0);
       } else {
         setLocations(data.locations);
         setShowResults(true);
-        setHeadingText(`Results for "${query}"`);
+        setHeadingText(locale === 'pl' ? `Wyniki dla "${query}"` : `Results for "${query}"`);
         // Store search context for later use when business is selected
         setLastSearchQuery(query);
         setLastSearchResultsCount(data.locations.length);
@@ -487,7 +504,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       setYearProtection(false);
       setExpressService(false);
       setShowSearch(true);
-      setHeadingText("Find your business");
+      setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
       setAnimationState('entering');
       
       // Clear localStorage
@@ -514,10 +531,16 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       {!isModal && (
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-[#0D2959] mb-6 leading-tight">
-            Google Maps Business Profile Removal
+            {locale === 'pl' 
+              ? 'Usuwanie Profilu Firmowego Google Maps'
+              : 'Google Maps Business Profile Removal'
+            }
           </h1>
           <p className="text-xl md:text-2xl text-[#0D2959]/70 max-w-4xl mx-auto leading-relaxed">
-            Remove your business profile or reset reviews. We effectively eliminate unwanted content from Google Maps.
+            {locale === 'pl'
+              ? 'Usuń profil firmy lub zresetuj opinie. Skutecznie eliminujemy niechciane treści z Google Maps.'
+              : 'Remove your business profile or reset reviews. We effectively eliminate unwanted content from Google Maps.'
+            }
           </p>
         </div>
       )}
@@ -657,7 +680,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 landscape:h-4 landscape:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  <span className="hidden sm:inline">Search</span>
+                  <span className="hidden sm:inline">{locale === 'pl' ? 'Szukaj' : 'Search'}</span>
                 </span>
               </button>
             </div>

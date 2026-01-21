@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { PlaceDetails } from '../types';
+import { useLocale } from '../hooks/useLocale';
+import { convertPrice } from '@/lib/i18n';
 
 interface ServiceSelectionProps {
   selectedBusiness: PlaceDetails;
@@ -14,6 +16,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
   onSelectService,
   onBack
 }) => {
+  const { locale, t } = useLocale();
   const [selectedService, setSelectedService] = useState<'remove' | 'reset' | null>(null);
   
   const handleServiceSelect = (service: 'remove' | 'reset') => {

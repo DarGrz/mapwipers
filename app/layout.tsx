@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import LocaleDebug from "./components/LocaleDebug";
+import { LocaleProvider } from "./context/LocaleContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -118,11 +120,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           strategy="beforeInteractive"
         />
         <div className="min-h-screen flex flex-col overflow-x-hidden">
-          <Header />
-          <main className="flex-1 overflow-x-hidden">
-            {children}
-          </main>
-          <Footer />
+          <LocaleProvider>
+            <Header />
+            <main className="flex-1 overflow-x-hidden">
+              {children}
+            </main>
+            <Footer />
+            <LocaleDebug />
+          </LocaleProvider>
         </div>
       </body>
     </html>

@@ -3,10 +3,9 @@ import type { NextRequest } from 'next/server'
 import { logVisitor, getRequestInfo, generateSessionId, extractUtmAndGtmParams } from './lib/logging'
 
 export function middleware(request: NextRequest) {
-  // Only log on actual page visits, not API calls or static assets
   const { pathname } = request.nextUrl
   
-  // Skip logging for API routes, static files, and Next.js internals
+  // Skip middleware for API routes, static files, and Next.js internals
   if (
     pathname.startsWith('/api/') ||
     pathname.startsWith('/_next/') ||
@@ -14,6 +13,15 @@ export function middleware(request: NextRequest) {
     pathname.includes('.') // Skip files with extensions
   ) {
     return NextResponse.next()
+  }
+
+  // Detect Polish users and redirect to /pl if not already there
+  const country = request.geo?.country || request.headers.get('cf-ipcountry') || ''
+  
+  if (country === 'PL' && !pathname.startsWith('/pl') && pathname === '/') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/pl'
+    return NextResponse.redirect(url)
   }
 
   // Get request info

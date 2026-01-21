@@ -3,15 +3,25 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { useLocaleContext } from '../context/LocaleContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t, locale } = useLocaleContext();
+  const pathname = usePathname();
+  
+  // Get base path with locale prefix if needed
+  const getLocalizedPath = (path: string) => {
+    return locale === 'pl' ? `/pl${path}` : path;
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href={getLocalizedPath('/')} className="flex items-center gap-2">
             <Image 
               src="/mapwipers_logo-horizontal.png" 
               alt="MapWipers Logo" 
@@ -24,29 +34,30 @@ export default function Header() {
 
         <div className="hidden md:flex items-center gap-8">
           <Link
-            href="/#how-it-works"
+            href={getLocalizedPath('/#how-it-works')}
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            How it Works
+            {t.nav.howItWorks}
           </Link>
           <Link
-            href="/#pricing"
+            href={getLocalizedPath('/#pricing')}
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            Pricing
+            {t.nav.pricing}
           </Link>
           <Link
-            href="/#faq"
+            href={getLocalizedPath('/#faq')}
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            FAQ
+            {t.nav.faq}
           </Link>
           <Link
-            href="/contact"
+            href={getLocalizedPath('/contact')}
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            Contact
+            {t.nav.contact}
           </Link>
+          <LanguageSwitcher />
         </div>
 
         {/* Mobile menu button */}

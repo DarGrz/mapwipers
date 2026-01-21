@@ -1,11 +1,20 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLocaleContext } from '../context/LocaleContext';
 
 interface FooterProps {
   className?: string;
 }
 
 export default function Footer({ className = "" }: FooterProps) {
+  const { t, locale } = useLocaleContext();
+  
+  // Get base path with locale prefix if needed
+  const getLocalizedPath = (path: string) => {
+    return locale === 'pl' ? `/pl${path}` : path;
+  };
   return (
     <footer className={`bg-[#0D2959]/5 border-t border-[#0D2959]/10 py-12 ${className}`}>
       <div className="container mx-auto px-4">
@@ -77,10 +86,10 @@ export default function Footer({ className = "" }: FooterProps) {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href={getLocalizedPath('/contact')}
                   className="text-[#0D2959]/70 hover:text-[#F17313]"
                 >
-                  Contact
+                  {t.footer.contact}
                 </Link>
               </li>
             </ul>
@@ -97,20 +106,20 @@ export default function Footer({ className = "" }: FooterProps) {
 
         <div className="pt-8 border-t border-[#0D2959]/10 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-xs text-[#0D2959]/70">
-            © {new Date().getFullYear()} Map Wipers. All rights reserved.
+            © {new Date().getFullYear()} Map Wipers. {t.footer.rights}
           </p>
           <div className="flex gap-4 mt-4 sm:mt-0">
             <Link
-              href="/privacy"
+              href={getLocalizedPath('/privacy')}
               className="text-xs text-[#0D2959]/70 hover:text-[#F17313]"
             >
-              Privacy Policy
+              {t.footer.privacy}
             </Link>
             <Link
-              href="/terms"
+              href={getLocalizedPath('/terms')}
               className="text-xs text-[#0D2959]/70 hover:text-[#F17313]"
             >
-              Terms of Service
+              {t.footer.terms}
             </Link>
           </div>
         </div>
