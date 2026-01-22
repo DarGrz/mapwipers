@@ -24,13 +24,13 @@ export default function Header() {
 
         <div className="hidden md:flex items-center gap-8">
           <Link
-            href="/#how-it-works"
+            href="/about"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            How it Works
+            About Us
           </Link>
           <Link
-            href="/#pricing"
+            href="/pricing"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
             Pricing
@@ -93,14 +93,14 @@ export default function Header() {
         <div className="md:hidden bg-white border-t border-gray-100 py-4">
           <div className="container mx-auto px-4 space-y-3">
             <Link
-              href="/#how-it-works"
+              href="/about"
               className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               onClick={() => setMenuOpen(false)}
             >
-              How it Works
+              About Us
             </Link>
             <Link
-              href="/#pricing"
+              href="/pricing"
               className="block text-[#0D2959]/70 hover:text-[#0D2959]"
               onClick={() => setMenuOpen(false)}
             >

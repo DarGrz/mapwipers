@@ -4,7 +4,10 @@ import GoogleProfileSearch from "./components/GoogleProfileSearch";
 import OrderForm, { OrderFormData } from "./components/OrderForm";
 import { useState } from "react";
 import { PlaceDetails } from "./types";
+import { usePricing } from "./hooks/usePricing";
+
 export default function Home() {
+  const { getServicePrice, getAddonPrice } = usePricing();
   const formatPrice = (priceUSD: number) => `$${priceUSD}`;
 
   // Schema.org structured data for SEO and trust
@@ -69,7 +72,7 @@ export default function Home() {
             "name": "Complete Profile Removal",
             "description": "Complete removal of Google Business Profile including all reviews and content"
           },
-          "price": "499",
+          "price": getServicePrice('remove').toString() || "499",
           "priceCurrency": "USD",
           "priceValidUntil": "2025-12-31",
           "availability": "https://schema.org/InStock"
@@ -81,7 +84,7 @@ export default function Home() {
             "name": "Profile Reset Service",
             "description": "Reset Google Business Profile to clean state, removing negative content"
           },
-          "price": "599",
+          "price": getServicePrice('reset').toString() || "599",
           "priceCurrency": "USD",
           "priceValidUntil": "2025-12-31",
           "availability": "https://schema.org/InStock"
@@ -116,7 +119,7 @@ export default function Home() {
     "estimatedCost": {
       "@type": "MonetaryAmount",
       "currency": "USD",
-      "value": "499"
+      "value": getServicePrice('remove').toString() || "499"
     },
     "step": [
       {
@@ -1546,7 +1549,7 @@ export default function Home() {
                 </div>
                 <div className="text-center mb-6">
                   <div className="text-4xl font-bold text-[#0D2959] mb-2">
-                    {formatPrice(499)}
+                    {formatPrice(getServicePrice('remove') || 499)}
                   </div>
                   <p className="text-sm text-gray-600">
                     One-time payment
@@ -1598,7 +1601,7 @@ export default function Home() {
                 </div>
                 <div className="text-center mb-6">
                   <div className="text-4xl font-bold text-[#0D2959] mb-2">
-                    {formatPrice(599)}
+                    {formatPrice(getServicePrice('reset') || 599)}
                   </div>
                   <p className="text-sm text-gray-600">
                     One-time payment
@@ -1652,7 +1655,7 @@ export default function Home() {
                       1-Year Protection
                     </h4>
                     <span className="text-2xl font-bold text-[#F17313]">
-                      {formatPrice(199)}
+                      {formatPrice(getAddonPrice('yearProtection') || 199)}
                     </span>
                   </div>
                   <p className="text-gray-700 text-sm mb-4">
@@ -1687,7 +1690,7 @@ export default function Home() {
                       Express Service
                     </h4>
                     <span className="text-2xl font-bold text-[#F17313]">
-                      {formatPrice(99)}
+                      {formatPrice(getAddonPrice('expressService') || 99)}
                     </span>
                   </div>
                   <p className="text-gray-700 text-sm mb-4">

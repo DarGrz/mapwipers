@@ -33,7 +33,7 @@ CREATE POLICY "Allow update for authenticated users" ON pricing
 -- Wstawianie domyślnych cen
 INSERT INTO pricing (name, code, price, type, description) VALUES 
   ('Remove Profile', 'remove', 499.00, 'service', 'Complete removal of Google Business Profile'),
-  ('Reset Profile', 'reset', 299.00, 'service', 'Reset Google Business Profile to clean state'),
+  ('Reset Profile', 'reset', 599.00, 'service', 'Reset Google Business Profile to clean state'),
   ('1-Year Protection', 'yearProtection', 199.00, 'addon', 'Prevents reappearance for 12 months'),
   ('Express Service', 'expressService', 99.00, 'addon', 'Priority processing within 24-48 hours')
 ON CONFLICT (code) DO NOTHING;

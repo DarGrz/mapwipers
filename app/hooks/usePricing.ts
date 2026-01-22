@@ -10,20 +10,20 @@ export const usePricing = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch('/api/pricing');
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       setPricing(data.pricing);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch pricing';
       setError(errorMessage);
       console.error('Error fetching pricing:', err);
-      
+
       // Fallback pricing w przypadku błędu
       setPricing({
         services: {
@@ -34,7 +34,7 @@ export const usePricing = () => {
           },
           reset: {
             name: 'Reset Profile',
-            price: 299,
+            price: 599,
             description: 'Reset Google Business Profile to clean state'
           }
         },
@@ -66,17 +66,17 @@ export const usePricing = () => {
     expressService: boolean
   ): number => {
     if (!pricing || !serviceType) return 0;
-    
+
     let total = pricing.services[serviceType]?.price || 0;
-    
+
     if (yearProtection) {
       total += pricing.addons.yearProtection?.price || 0;
     }
-    
+
     if (expressService) {
       total += pricing.addons.expressService?.price || 0;
     }
-    
+
     return total;
   };
 

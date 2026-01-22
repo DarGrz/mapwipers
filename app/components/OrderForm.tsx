@@ -55,11 +55,11 @@ const OrderForm: React.FC<OrderFormProps> = ({
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof OrderFormData, string>>>({});
   const [isUploading, setIsUploading] = useState(false);
-  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (formErrors[name as keyof OrderFormData]) {
       setFormErrors(prev => {
@@ -69,11 +69,11 @@ const OrderForm: React.FC<OrderFormProps> = ({
       });
     }
   };
-  
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setFormData(prev => ({ ...prev, [name]: checked }));
-    
+
     // Clear error when user checks the box
     if (formErrors[name as keyof OrderFormData]) {
       setFormErrors(prev => {
@@ -83,46 +83,46 @@ const OrderForm: React.FC<OrderFormProps> = ({
       });
     }
   };
-  
+
   const handleUpload = () => {
     // This would normally connect to a file upload service
     setIsUploading(true);
-    
+
     // Simulate upload delay
     setTimeout(() => {
       setIsUploading(false);
-      setFormData(prev => ({ 
-        ...prev, 
-        attachmentUrl: "https://storage.example.com/documents/sample-attachment.pdf" 
+      setFormData(prev => ({
+        ...prev,
+        attachmentUrl: "https://storage.example.com/documents/sample-attachment.pdf"
       }));
     }, 1500);
   };
-  
+
   const validateForm = (): boolean => {
     const errors: Partial<Record<keyof OrderFormData, string>> = {};
-    
+
     if (!formData.firstName.trim()) {
       errors.firstName = "First name is required";
     }
-    
+
     if (!formData.lastName.trim()) {
       errors.lastName = "Last name is required";
     }
-    
+
     if (!formData.email.trim()) {
       errors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errors.email = "Please enter a valid email address";
     }
-    
+
     if (!formData.phone.trim()) {
       errors.phone = "Phone number is required";
     }
-    
+
     if (!formData.agreeToTerms) {
       errors.agreeToTerms = "You must agree to the terms and conditions";
     }
-    
+
     // Company validation - always required since it's business-only
     if (!formData.companyName.trim()) {
       errors.companyName = "Company name is required";
@@ -142,23 +142,23 @@ const OrderForm: React.FC<OrderFormProps> = ({
     if (!formData.companyTaxId.trim()) {
       errors.companyTaxId = "Tax ID / VAT Number is required";
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
-  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       onSubmit(formData);
     }
   };
-  
+
   return (
     <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 border border-gray-200">
       <div className="mb-6">
-        <button 
+        <button
           onClick={onBack}
           className="flex items-center text-[#0D2959] hover:underline"
         >
@@ -168,9 +168,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
           Back to Service Selection
         </button>
       </div>
-      
+
       <h2 className="text-2xl font-bold mb-6 text-center">Complete Your Order</h2>
-      
+
       <div className="bg-gray-50 p-4 rounded-lg mb-6">
         <h3 className="font-semibold mb-2">Order Summary</h3>
         <div className="flex flex-col md:flex-row justify-between">
@@ -187,7 +187,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
           </div>
           <div className="mt-4 md:mt-0 text-right">
             <p className="text-gray-600 font-medium">Total Price:</p>
-            <p className="text-2xl font-bold text-[#0D2959]">{servicePrice} PLN</p>
+            <p className="text-2xl font-bold text-[#0D2959]">${servicePrice}</p>
             <p className="text-sm text-gray-500">Payment required upfront</p>
           </div>
         </div>
@@ -207,7 +207,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
           </div>
         </div>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -225,7 +225,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
               <p className="mt-1 text-sm text-red-600">{formErrors.firstName}</p>
             )}
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Last Name*
@@ -241,7 +241,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
               <p className="mt-1 text-sm text-red-600">{formErrors.lastName}</p>
             )}
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email Address*
@@ -257,7 +257,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
               <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>
             )}
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Phone Number*
@@ -274,118 +274,118 @@ const OrderForm: React.FC<OrderFormProps> = ({
             )}
           </div>
         </div>
-        
+
         {/* Company Information Section - Always shown since it's business-only */}
         <div className="border border-gray-200 rounded-lg p-4">
           <h3 className="text-lg font-medium text-gray-700 mb-4">Company Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Company Name*
-                </label>
-                <input
-                  type="text"
-                  name="companyName"
-                  value={formData.companyName}
-                  onChange={handleInputChange}
-                  className={`w-full p-2 border ${formErrors.companyName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
-                />
-                {formErrors.companyName && (
-                  <p className="mt-1 text-sm text-red-600">{formErrors.companyName}</p>
-                )}
-              </div>
-              
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Company Address*
-                </label>
-                <input
-                  type="text"
-                  name="companyAddress"
-                  value={formData.companyAddress}
-                  onChange={handleInputChange}
-                  className={`w-full p-2 border ${formErrors.companyAddress ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
-                />
-                {formErrors.companyAddress && (
-                  <p className="mt-1 text-sm text-red-600">{formErrors.companyAddress}</p>
-                )}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  City*
-                </label>
-                <input
-                  type="text"
-                  name="companyCity"
-                  value={formData.companyCity}
-                  onChange={handleInputChange}
-                  className={`w-full p-2 border ${formErrors.companyCity ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
-                />
-                {formErrors.companyCity && (
-                  <p className="mt-1 text-sm text-red-600">{formErrors.companyCity}</p>
-                )}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  ZIP Code*
-                </label>
-                <input
-                  type="text"
-                  name="companyZip"
-                  value={formData.companyZip}
-                  onChange={handleInputChange}
-                  className={`w-full p-2 border ${formErrors.companyZip ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
-                />
-                {formErrors.companyZip && (
-                  <p className="mt-1 text-sm text-red-600">{formErrors.companyZip}</p>
-                )}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Country*
-                </label>
-                <select
-                  name="companyCountry"
-                  value={formData.companyCountry}
-                  onChange={handleInputChange}
-                  className={`w-full p-2 border ${formErrors.companyCountry ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
-                >
-                  <option value="United States">United States</option>
-                  <option value="Germany">Germany</option>
-                  <option value="United Kingdom">United Kingdom</option>
-                  <option value="France">France</option>
-                  <option value="Spain">Spain</option>
-                  <option value="Italy">Italy</option>
-                  <option value="Netherlands">Netherlands</option>
-                  <option value="Other">Other</option>
-                </select>
-                {formErrors.companyCountry && (
-                  <p className="mt-1 text-sm text-red-600">{formErrors.companyCountry}</p>
-                )}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tax ID / VAT Number*
-                </label>
-                <input
-                  type="text"
-                  name="companyTaxId"
-                  value={formData.companyTaxId}
-                  onChange={handleInputChange}
-                  placeholder="e.g., PL1234567890"
-                  className={`w-full p-2 border ${formErrors.companyTaxId ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
-                />
-                {formErrors.companyTaxId && (
-                  <p className="mt-1 text-sm text-red-600">{formErrors.companyTaxId}</p>
-                )}
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Company Name*
+              </label>
+              <input
+                type="text"
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleInputChange}
+                className={`w-full p-2 border ${formErrors.companyName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+              />
+              {formErrors.companyName && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.companyName}</p>
+              )}
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Company Address*
+              </label>
+              <input
+                type="text"
+                name="companyAddress"
+                value={formData.companyAddress}
+                onChange={handleInputChange}
+                className={`w-full p-2 border ${formErrors.companyAddress ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+              />
+              {formErrors.companyAddress && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.companyAddress}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                City*
+              </label>
+              <input
+                type="text"
+                name="companyCity"
+                value={formData.companyCity}
+                onChange={handleInputChange}
+                className={`w-full p-2 border ${formErrors.companyCity ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+              />
+              {formErrors.companyCity && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.companyCity}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                ZIP Code*
+              </label>
+              <input
+                type="text"
+                name="companyZip"
+                value={formData.companyZip}
+                onChange={handleInputChange}
+                className={`w-full p-2 border ${formErrors.companyZip ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+              />
+              {formErrors.companyZip && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.companyZip}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Country*
+              </label>
+              <select
+                name="companyCountry"
+                value={formData.companyCountry}
+                onChange={handleInputChange}
+                className={`w-full p-2 border ${formErrors.companyCountry ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+              >
+                <option value="United States">United States</option>
+                <option value="Germany">Germany</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="France">France</option>
+                <option value="Spain">Spain</option>
+                <option value="Italy">Italy</option>
+                <option value="Netherlands">Netherlands</option>
+                <option value="Other">Other</option>
+              </select>
+              {formErrors.companyCountry && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.companyCountry}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Tax ID / VAT Number*
+              </label>
+              <input
+                type="text"
+                name="companyTaxId"
+                value={formData.companyTaxId}
+                onChange={handleInputChange}
+                placeholder="e.g., PL1234567890"
+                className={`w-full p-2 border ${formErrors.companyTaxId ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-[#0D2959] focus:border-[#0D2959]`}
+              />
+              {formErrors.companyTaxId && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.companyTaxId}</p>
+              )}
             </div>
           </div>
-        
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Additional Comments (Optional)
@@ -399,7 +399,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
             placeholder="Any additional information we should know..."
           />
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Attachment (Optional)
@@ -451,7 +451,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
             Attach any relevant documents (PDF, JPG, PNG). Max 5MB.
           </p>
         </div>
-        
+
         <div className="bg-blue-50 p-4 rounded-lg">
           <h3 className="font-semibold mb-2 text-[#0D2959]">Important Information</h3>
           <ul className="text-sm text-gray-600 space-y-1 mb-4">
@@ -459,7 +459,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
             <li>• We&apos;ll keep you updated on the progress of your request</li>
             <li>• You&apos;ll receive all information at the email address provided above</li>
           </ul>
-          
+
           <div className={`flex items-start ${formErrors.agreeToTerms ? 'border-l-4 border-red-500 pl-2' : ''}`}>
             <input
               type="checkbox"
@@ -477,7 +477,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
             <p className="mt-1 text-sm text-red-600">{formErrors.agreeToTerms}</p>
           )}
         </div>
-        
+
         <div className="flex justify-between">
           <button
             type="button"
@@ -486,7 +486,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
           >
             Back
           </button>
-          
+
           <button
             type="submit"
             className="px-6 py-2 bg-[#0D2959] hover:bg-opacity-90 text-white rounded-md shadow-sm"

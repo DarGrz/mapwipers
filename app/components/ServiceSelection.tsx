@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { PlaceDetails } from '../types';
+import { usePricing } from '../hooks/usePricing';
 
 interface ServiceSelectionProps {
   selectedBusiness: PlaceDetails;
@@ -14,6 +15,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
   onSelectService,
   onBack
 }) => {
+  const { getServicePrice } = usePricing();
   const [selectedService, setSelectedService] = useState<'remove' | 'reset' | null>(null);
 
   const handleServiceSelect = (service: 'remove' | 'reset') => {
@@ -26,14 +28,9 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
     }
   };
 
-  // Calculate prices based on ratings and reviews
-  const removePrice = selectedBusiness.user_ratings_total
-    ? Math.max(499, 499 + Math.floor(selectedBusiness.user_ratings_total / 10) * 50)
-    : 499;
-
-  const resetPrice = selectedBusiness.user_ratings_total
-    ? Math.max(799, 799 + Math.floor(selectedBusiness.user_ratings_total / 5) * 50)
-    : 799;
+  // Get prices from pricing hook
+  const removePrice = getServicePrice('remove') || 499;
+  const resetPrice = getServicePrice('reset') || 599;
 
   // Estimate completion time based on complexity
   const removeTime = selectedBusiness.user_ratings_total && selectedBusiness.user_ratings_total > 50
@@ -64,8 +61,8 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
         {/* Remove Service Option */}
         <div
           className={`flex-1 border rounded-lg p-6 cursor-pointer transition-all ${selectedService === 'remove'
-              ? 'border-[#0D2959] bg-blue-50 shadow-md'
-              : 'border-gray-200 hover:border-blue-300'
+            ? 'border-[#0D2959] bg-blue-50 shadow-md'
+            : 'border-gray-200 hover:border-blue-300'
             }`}
           onClick={() => handleServiceSelect('remove')}
         >
@@ -76,7 +73,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
               </svg>
             </div>
             <div className="text-right">
-              <span className="text-lg font-bold text-[#0D2959]">{removePrice} PLN</span>
+              <span className="text-lg font-bold text-[#0D2959]">${removePrice}</span>
               <p className="text-sm text-gray-500">Est. {removeTime}</p>
             </div>
           </div>
@@ -112,8 +109,8 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
         {/* Reset Service Option */}
         <div
           className={`flex-1 border rounded-lg p-6 cursor-pointer transition-all ${selectedService === 'reset'
-              ? 'border-[#0D2959] bg-blue-50 shadow-md'
-              : 'border-gray-200 hover:border-blue-300'
+            ? 'border-[#0D2959] bg-blue-50 shadow-md'
+            : 'border-gray-200 hover:border-blue-300'
             }`}
           onClick={() => handleServiceSelect('reset')}
         >
@@ -124,7 +121,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
               </svg>
             </div>
             <div className="text-right">
-              <span className="text-lg font-bold text-[#0D2959]">{resetPrice} PLN</span>
+              <span className="text-lg font-bold text-[#0D2959]">${resetPrice}</span>
               <p className="text-sm text-gray-500">Est. {resetTime}</p>
             </div>
           </div>
@@ -184,8 +181,8 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
           onClick={handleContinue}
           disabled={!selectedService}
           className={`px-6 py-2 rounded-md shadow-sm ${selectedService
-              ? 'bg-[#0D2959] hover:bg-opacity-90 text-white'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            ? 'bg-[#0D2959] hover:bg-opacity-90 text-white'
+            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
         >
           Continue to Order Details

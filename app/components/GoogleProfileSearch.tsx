@@ -849,7 +849,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                       </button>
                       <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
                         <span className="text-lg font-black text-[#0D2959]">
-                          {getServicePrice('remove')} PLN
+                          ${getServicePrice('remove')}
                         </span>
                       </div>
                     </div>
@@ -884,7 +884,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                       </button>
                       <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
                         <span className="text-lg font-black text-[#0D2959]">
-                          {getServicePrice('reset')} PLN
+                          ${getServicePrice('reset')}
                         </span>
                       </div>
                     </div>
@@ -916,7 +916,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                           <p className="text-xs text-[#0D2959]/60">{getAddonDescription('yearProtection')}</p>
                         </div>
                       </div>
-                      <span className="font-bold text-[#0D2959]">+{getAddonPrice('yearProtection')} PLN</span>
+                      <span className="font-bold text-[#0D2959]">+${getAddonPrice('yearProtection')}</span>
                     </div>
 
                     {/* Express Service */}
@@ -939,7 +939,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                           <p className="text-xs text-[#0D2959]/60">{getAddonDescription('expressService')}</p>
                         </div>
                       </div>
-                      <span className="font-bold text-[#0D2959]">+{getAddonPrice('expressService')} PLN</span>
+                      <span className="font-bold text-[#0D2959]">+${getAddonPrice('expressService')}</span>
                     </div>
                   </div>
 
@@ -956,7 +956,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                         Total amount:
                       </span>
                       <span className="text-3xl font-black text-[#0D2959]">
-                        {serviceType ? calculateTotal(serviceType, yearProtection, expressService) : 0} PLN
+                        ${serviceType ? calculateTotal(serviceType, yearProtection, expressService) : 0}
                       </span>
                     </div>
 
@@ -991,7 +991,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="text-2xl font-bold text-[#0D2959]">{getServiceName(modalContent)}</h3>
-                  <p className="text-[#F17313] font-bold">{getServicePrice(modalContent)} PLN</p>
+                  <p className="text-[#F17313] font-bold">${getServicePrice(modalContent)}</p>
                 </div>
                 <button
                   onClick={closeModal}

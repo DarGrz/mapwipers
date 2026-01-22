@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check admin authentication
     const adminSession = request.cookies.get('admin_session');
-    
+
     if (!adminSession || adminSession.value !== 'authenticated') {
       return NextResponse.json(
         { error: 'Unauthorized access' },
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await request.json();
-    
+
     // Walidacja danych
     if (!data.name || !data.code || !data.price || !data.type) {
       return NextResponse.json(
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'Pricing created successfully',
       data: insertedData[0]
     });
@@ -123,7 +123,7 @@ export async function PUT(request: NextRequest) {
   try {
     // Check admin authentication
     const adminSession = request.cookies.get('admin_session');
-    
+
     if (!adminSession || adminSession.value !== 'authenticated') {
       return NextResponse.json(
         { error: 'Unauthorized access' },
@@ -132,7 +132,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const data = await request.json();
-    
+
     if (!data.id) {
       return NextResponse.json(
         { error: 'Missing pricing ID' },
@@ -140,7 +140,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Aktualizuj cenę w bazie danych
+    // Aktualizuj cenę w bazie danych za pomocą unikalnego kodu
     const { data: updatedData, error } = await supabase
       .from('pricing')
       .update({
@@ -149,7 +149,7 @@ export async function PUT(request: NextRequest) {
         description: data.description,
         is_active: data.is_active
       })
-      .eq('id', data.id)
+      .eq('code', data.code || data.id)
       .select();
 
     if (error) {
@@ -160,7 +160,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'Pricing updated successfully',
       data: updatedData[0]
     });

@@ -62,20 +62,20 @@ export default function Footer({ className = "" }: FooterProps) {
             <h3 className="font-medium mb-4 text-[#0D2959]">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/about"
                   className="text-[#0D2959]/70 hover:text-[#F17313]"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/pricing"
                   className="text-[#0D2959]/70 hover:text-[#F17313]"
                 >
                   Pricing
-                </a>
+                </Link>
               </li>
               <li>
                 <Link

@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS orders (
   service_type VARCHAR(100) NOT NULL, -- 'remove' or 'reset'
   addons JSONB DEFAULT '[]'::jsonb, -- Array of addon codes
   total_amount DECIMAL(10,2) NOT NULL,
-  currency VARCHAR(3) DEFAULT 'PLN',
+  currency VARCHAR(3) DEFAULT 'USD',
   payment_status VARCHAR(50) DEFAULT 'pending', -- pending, completed, failed, cancelled
   payment_intent_id VARCHAR(255),
   stripe_session_id VARCHAR(255),

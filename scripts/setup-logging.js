@@ -16,35 +16,35 @@ const __dirname = dirname(__filename);
 async function setupLoggingTables() {
   try {
     console.log('🚀 Setting up logging tables in Supabase...');
-    
+
     // Read the SQL schema file
     const schemaPath = join(__dirname, '../database/logging-schema.sql');
     const schema = readFileSync(schemaPath, 'utf8');
-    
+
     // Execute the schema
     const { error } = await supabaseServiceRole.rpc('exec_sql', {
       sql: schema
     });
-    
+
     if (error) {
       console.error('❌ Error setting up logging tables:', error);
       process.exit(1);
     }
-    
+
     console.log('✅ Logging tables set up successfully!');
-    
+
     // Test the connection by trying to select from one of the tables
     const { error: testError } = await supabaseServiceRole
       .from('visitors')
       .select('count(*)')
       .limit(1);
-    
+
     if (testError) {
       console.warn('⚠️  Warning: Could not test table access:', testError.message);
     } else {
       console.log('✅ Database connection and table access verified!');
     }
-    
+
     console.log(`
 📊 Logging system is now ready!
 
@@ -65,7 +65,7 @@ Next steps:
 
 Happy tracking! 🎉
     `);
-    
+
   } catch (error) {
     console.error('❌ Setup failed:', error);
     process.exit(1);
@@ -76,7 +76,7 @@ Happy tracking! 🎉
 async function setupWithDirectSQL() {
   try {
     console.log('🔄 Trying alternative setup method...');
-    
+
     // Create tables one by one
     const tables = [
       {
@@ -115,7 +115,7 @@ async function setupWithDirectSQL() {
             service_type VARCHAR(100) NOT NULL,
             addons JSONB DEFAULT '[]'::jsonb,
             total_amount DECIMAL(10,2) NOT NULL,
-            currency VARCHAR(3) DEFAULT 'PLN',
+            currency VARCHAR(3) DEFAULT 'USD',
             payment_status VARCHAR(50) DEFAULT 'pending',
             payment_intent_id VARCHAR(255),
             stripe_session_id VARCHAR(255),
@@ -158,7 +158,7 @@ async function setupWithDirectSQL() {
       // Note: This is a simplified version - in a real setup, you'd execute this in Supabase SQL editor
       console.log(`SQL for ${table.name}:`, table.sql);
     }
-    
+
     console.log(`
 ⚠️  Manual Setup Required
 
@@ -170,7 +170,7 @@ Please run the SQL commands above in your Supabase SQL Editor:
 
 Or use the full schema file at: database/logging-schema.sql
     `);
-    
+
   } catch (error) {
     console.error('❌ Alternative setup failed:', error);
   }
