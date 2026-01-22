@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getTranslations, getLocaleFromHostname, getLocaleFromPathname, type Locale, type TranslationKeys, convertPrice } from '@/lib/i18n';
+import { getTranslations, getLocaleFromPathname, type Locale, type TranslationKeys, convertPrice } from '@/lib/i18n';
 import { usePathname } from 'next/navigation';
 
 interface LocaleContextType {

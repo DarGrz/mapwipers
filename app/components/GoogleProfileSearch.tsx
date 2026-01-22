@@ -19,13 +19,13 @@ interface GoogleProfileSearchProps {
 }
 
 const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = false, resetTrigger }: GoogleProfileSearchProps) => {
-  const { t, locale } = useLocaleContext();
-  
+  const { locale } = useLocaleContext();
+
   // Pricing hook
-  const { 
-    loading: pricingLoading, 
-    calculateTotal, 
-    getServicePrice, 
+  const {
+    loading: pricingLoading,
+    calculateTotal,
+    getServicePrice,
     getAddonPrice,
     getServiceName,
     getAddonName,
@@ -52,19 +52,19 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
   const [animationState, setAnimationState] = useState<'idle' | 'exiting' | 'entering'>('idle');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<'remove' | 'reset' | null>(null);
-  
+
   // Track search context for logging
   const [lastSearchQuery, setLastSearchQuery] = useState<string>("");
   const [lastSearchResultsCount, setLastSearchResultsCount] = useState<number>(0);
-  
+
   // Animated placeholder state
   const [currentPlaceholder, setCurrentPlaceholder] = useState<string>(
     locale === 'pl' ? "Wyszukaj nazwę firmy..." : "Search for business name..."
   );
   const [showCursor, setShowCursor] = useState<boolean>(true);
-  
+
   // Placeholder phrases
-  const placeholderPhrases = useMemo(() => 
+  const placeholderPhrases = useMemo(() =>
     locale === 'pl' ? [
       "Wyszukaj nazwę swojej firmy...",
       "Spróbuj 'Pizzeria Kraków'...",
@@ -95,14 +95,14 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
     const savedServiceType = localStorage.getItem('profileOperationMode');
     const savedYearProtection = localStorage.getItem('yearProtection');
     const savedExpressService = localStorage.getItem('expressService');
-    
+
     if (savedBusinessData) {
       try {
         const businessData = JSON.parse(savedBusinessData);
         setSelectedPlaceDetails(businessData);
         setShowSearch(false);
-        setHeadingText(businessData.name || "Selected Business");
-        
+        setHeadingText(businessData.name || (locale === 'pl' ? "Wybrana firma" : "Selected Business"));
+
         // Restore service selections if available
         if (savedServiceType) {
           setServiceType(savedServiceType as 'remove' | 'reset');
@@ -113,10 +113,10 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         if (savedExpressService) {
           setExpressService(savedExpressService === 'true');
         }
-        
+
         // Update removals with the selected business
         setRemovals([{ companyName: businessData.name || '', nip: '' }]);
-        
+
         // Notify parent that GMB is selected
         if (onSelectionChange) {
           onSelectionChange(true);
@@ -127,7 +127,51 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         localStorage.removeItem('selectedBusinessData');
       }
     }
-  }, [onSelectionChange]);
+  }, [onSelectionChange, locale]);
+
+  // Search for GMB locations
+  const searchLocations = React.useCallback(async (query: string) => {
+    setIsSearching(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch(`/api/gmb-search?query=${encodeURIComponent(query)}`);
+
+      if (response.status === 429) {
+        const retryAfter = response.headers.get('Retry-After') || '60';
+        setErrorMessage(`Rate limit exceeded. Please try again in ${retryAfter} seconds.`);
+        setLocations([]);
+        setShowResults(false);
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (!data.locations || data.locations.length === 0) {
+        setErrorMessage('No results found. Please try a different search term.');
+        setLocations([]);
+        setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
+        setLastSearchQuery("");
+        setLastSearchResultsCount(0);
+      } else {
+        setLocations(data.locations);
+        setShowResults(true);
+        setHeadingText(locale === 'pl' ? `Wyniki dla "${query}"` : `Results for "${query}"`);
+        // Store search context for later use when business is selected
+        setLastSearchQuery(query);
+        setLastSearchResultsCount(data.locations.length);
+      }
+    } catch (error: unknown) {
+      console.error('Error searching locations:', error instanceof Error ? error.message : error);
+      setErrorMessage('An error occurred while searching. Please try again.');
+      setLocations([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [locale]);
 
   // Debounced search effect
   useEffect(() => {
@@ -138,7 +182,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery]);
+  }, [searchQuery, searchLocations]);
 
   // Reset component state when resetTrigger changes
   useEffect(() => {
@@ -160,7 +204,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       setAnimationState('idle');
       setShowModal(false);
       setModalContent(null);
-      
+
       // Also clear localStorage
       localStorage.removeItem('selectedBusinessData');
       localStorage.removeItem('profileOperationMode');
@@ -168,28 +212,28 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       localStorage.removeItem('yearProtection');
       localStorage.removeItem('expressService');
       localStorage.removeItem('totalPrice');
-      
+
       // Notify parent that selection has been cleared
       if (onSelectionChange) {
         onSelectionChange(false);
       }
     }
-  }, [resetTrigger, onSelectionChange]);
+  }, [resetTrigger, onSelectionChange, locale]);
 
   // Animated placeholder effect with typing
   useEffect(() => {
     let phraseIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
-    
+
     const typeText = () => {
       const currentPhrase = placeholderPhrases[phraseIndex];
-      
+
       if (isDeleting) {
         // Deleting characters
         setCurrentPlaceholder(currentPhrase.substring(0, charIndex));
         charIndex--;
-        
+
         if (charIndex < 0) {
           isDeleting = false;
           phraseIndex = (phraseIndex + 1) % placeholderPhrases.length;
@@ -201,7 +245,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         // Typing characters
         setCurrentPlaceholder(currentPhrase.substring(0, charIndex + 1));
         charIndex++;
-        
+
         if (charIndex === currentPhrase.length) {
           setTimeout(() => {
             isDeleting = true;
@@ -210,12 +254,12 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
           return;
         }
       }
-      
+
       setTimeout(typeText, isDeleting ? 50 : 100); // Faster deleting than typing
     };
-    
+
     const timer = setTimeout(typeText, 1000); // Initial delay
-    
+
     return () => clearTimeout(timer);
   }, [placeholderPhrases]);
 
@@ -233,7 +277,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
     const handleInputFocus = () => {
       // Check if device is mobile
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
+
       if (isMobile) {
         setTimeout(() => {
           // Scroll to top of the page to avoid keyboard hiding input
@@ -265,75 +309,31 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
     };
   }, []);
 
-  // Search for GMB locations
-  const searchLocations = async (query: string) => {
-    setIsSearching(true);
-    setErrorMessage(null);
-    
-    try {
-      const response = await fetch(`/api/gmb-search?query=${encodeURIComponent(query)}`);
-      
-      if (response.status === 429) {
-        const retryAfter = response.headers.get('Retry-After') || '60';
-        setErrorMessage(`Rate limit exceeded. Please try again in ${retryAfter} seconds.`);
-        setLocations([]);
-        setShowResults(false);
-        return;
-      }
-      
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      
-      const data = await response.json();
-        if (!data.locations || data.locations.length === 0) {
-        setErrorMessage('No results found. Please try a different search term.');
-        setLocations([]);
-        setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
-        setLastSearchQuery("");
-        setLastSearchResultsCount(0);
-      } else {
-        setLocations(data.locations);
-        setShowResults(true);
-        setHeadingText(locale === 'pl' ? `Wyniki dla "${query}"` : `Results for "${query}"`);
-        // Store search context for later use when business is selected
-        setLastSearchQuery(query);
-        setLastSearchResultsCount(data.locations.length);
-      }
-    } catch (error: unknown) {
-      console.error('Error searching locations:', error instanceof Error ? error.message : error);
-      setErrorMessage('An error occurred while searching. Please try again.');
-      setLocations([]);
-    } finally {
-      setIsSearching(false);
-    }
-  };
-
   // Function to fetch place details
   const fetchPlaceDetails = async (placeId: string) => {
     setIsLoadingDetails(true);
     setErrorMessage(null);
-    
+
     try {
       const response = await fetch(`/api/places-details?placeId=${placeId}`);
-      
+
       if (response.status === 429) {
         const retryAfter = response.headers.get('Retry-After') || '60';
         setErrorMessage(`Rate limit exceeded. Please try again in ${retryAfter} seconds.`);
         return;
       }
-      
+
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-      
+
       const data = await response.json();
-      
+
       if (!data.details) {
         setErrorMessage('No details found for this place.');
         return;
       }
-      
+
       console.log('Place details received:', data.details); // Debug log
       console.log('Phone number fields:', {
         formatted_phone_number: data.details.formatted_phone_number,
@@ -341,9 +341,9 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         phoneNumber: data.details.phoneNumber,
         phone: data.details.phone
       }); // Debug phone fields
-      
+
       setSelectedPlaceDetails(data.details);
-      
+
       // Update the form with the selected place
       const newRemovals = [...removals];
       newRemovals[0] = {
@@ -351,22 +351,22 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         companyName: data.details.name
       };
       setRemovals(newRemovals);
-      
+
       // Save the selected business to database when user selects from list
       console.log('💾 DEBUG: Business selected from list, saving to database:', data.details.name);
       saveToDatabase({ details: data.details }, lastSearchQuery, lastSearchResultsCount);
-      
+
       // Save selected business to localStorage for persistence
       localStorage.setItem('selectedBusinessData', JSON.stringify(data.details));
-      
+
       // Hide search when a business is selected
       setShowSearch(false);
-      
+
       // Notify parent component that a GMB is selected
       if (onSelectionChange) {
         onSelectionChange(true);
       }
-      
+
     } catch (error: unknown) {
       console.error('Error fetching place details:', error instanceof Error ? error.message : error);
       setErrorMessage('An error occurred while fetching details. Please try again.');
@@ -382,7 +382,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       searchQuery,
       searchResultsCount
     });
-    
+
     try {
       const response = await fetch('/api/searched-gmb', {
         method: 'POST',
@@ -398,7 +398,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
           isSelected: true
         }),
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Error saving to database:', errorText);
@@ -409,6 +409,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       console.error('Error saving to database:', error instanceof Error ? error.message : error);
     }
   };
+
   // Select a location from search results
   const selectLocation = (location: GmbLocation) => {
     setAnimationState('exiting');
@@ -418,7 +419,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       setHeadingText(location.name);
       fetchPlaceDetails(location.placeId);
       setAnimationState('entering');
-      
+
       // Reset additional features when selecting a new location
       setYearProtection(false);
       setExpressService(false);
@@ -431,38 +432,44 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
     if (e.target.value.length < 2) {
       setShowResults(false);
     }
-  };  // Handle form submission
+  };
+
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('🚀 DEBUG: handleSubmit called - proceeding to order');
-    
+
     if (!serviceType) {
-      setErrorMessage("Please select a service type (Remove or Reset profile)");
+      setErrorMessage(locale === 'pl'
+        ? "Wybierz typ usługi (Usuwanie lub Reset profilu)"
+        : "Please select a service type (Remove or Reset profile)");
       return;
     }
-    
+
     if (!selectedPlaceDetails) {
-      setErrorMessage("No business selected");
+      setErrorMessage(locale === 'pl'
+        ? "Nie wybrano firmy"
+        : "No business selected");
       return;
     }
-    
+
     // Calculate total price based on selections using pricing hook
     const totalPrice = calculateTotal(serviceType, yearProtection, expressService);
-    
+
     // Save data to localStorage
     localStorage.setItem("profileOperationMode", serviceType);
-    localStorage.setItem("serviceDescription", 
-      serviceType === "remove" 
+    localStorage.setItem("serviceDescription",
+      serviceType === "remove"
         ? getServiceDescription('remove')
         : getServiceDescription('reset')
     );
     localStorage.setItem("yearProtection", yearProtection ? "true" : "false");
     localStorage.setItem("expressService", expressService ? "true" : "false");
     localStorage.setItem("totalPrice", totalPrice.toString());
-    
+
     // Business was already saved to database when user selected it from list
     console.log('🚀 DEBUG: Proceeding to order (business already saved to database)');
-    
+
     // Call the proceed callback to navigate to order form
     if (onProceedToOrder) {
       onProceedToOrder({
@@ -474,15 +481,16 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       });
     } else {
       // Fallback - here you would normally submit the form or go to the next step
-      console.log('Form submitted:', { 
-        removals, 
-        serviceType, 
-        yearProtection, 
+      console.log('Form submitted:', {
+        removals,
+        serviceType,
+        yearProtection,
         expressService,
         totalPrice
       });
     }
   };
+
   // Function to open service details modal
   const openServiceModal = (service: 'remove' | 'reset') => {
     setModalContent(service);
@@ -506,7 +514,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       setShowSearch(true);
       setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
       setAnimationState('entering');
-      
+
       // Clear localStorage
       localStorage.removeItem('selectedBusinessData');
       localStorage.removeItem('profileOperationMode');
@@ -514,24 +522,26 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       localStorage.removeItem('yearProtection');
       localStorage.removeItem('expressService');
       localStorage.removeItem('totalPrice');
-      
+
       // Notify parent component that GMB is no longer selected
       if (onSelectionChange) {
         onSelectionChange(false);
       }
     }, 300); // Match this with the animation duration
-    
+
     // After entering animation completes, set to idle
     setTimeout(() => {
       setAnimationState('idle');
     }, 600);
-  };  return (
+  };
+
+  return (
     <div className="w-full max-w-6xl mx-auto">
       {/* Hero Section with Main Heading - Hidden in modal */}
       {!isModal && (
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-[#0D2959] mb-6 leading-tight">
-            {locale === 'pl' 
+            {locale === 'pl'
               ? 'Usuwanie Profilu Firmowego Google Maps'
               : 'Google Maps Business Profile Removal'
             }
@@ -544,9 +554,6 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
           </p>
         </div>
       )}
-
-      
-      
 
       {/* Custom animation styles */}
       <style jsx>{`
@@ -638,20 +645,20 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
           transform: translateX(-100%) skewX(-15deg);
         }
       `}</style>
-      
+
       {showSearch ? (
         // Search form with animated heading and results
         <div className={`mb-8 max-w-4xl mx-auto mt-5 relative ${animationState === 'exiting' ? 'slide-out-left' : animationState === 'entering' ? 'slide-in-right' : ''}`}>
-          {/* Animated heading that slides up when results appear */}          <h1 
-            className={`hidden text-2xl md:text-xl font-bold  mt-10 transition-all duration-300 ease-in-out  ${
-              showResults && locations.length > 0 
-                ? 'transform -translate-y-4 text-md md:text-xl text-[#0D2959]' 
-                : 'text-[#0D2959]'
-            }`}
+          {/* Animated heading that slides up when results appear */}
+          <h1
+            className={`hidden text-2xl md:text-xl font-bold  mt-10 transition-all duration-300 ease-in-out  ${showResults && locations.length > 0
+              ? 'transform -translate-y-4 text-md md:text-xl text-[#0D2959]'
+              : 'text-[#0D2959]'
+              }`}
           >
             {headingText}
           </h1>
-          
+
           <form onSubmit={handleSubmit} className="space-y-4 w-full">
             <div className="flex gap-2 w-full landscape:gap-1">
               <input
@@ -659,22 +666,19 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                 placeholder={`${currentPlaceholder}${showCursor ? '|' : ''}`}
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className={`flex-1 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 placeholder:transition-all placeholder:duration-300 w-full min-w-0 ${
-                  isModal 
-                    ? 'px-3 sm:px-6 py-3 sm:py-4 text-lg sm:text-xl placeholder:text-gray-400 placeholder:text-lg sm:placeholder:text-xl landscape:py-2 landscape:text-base landscape:placeholder:text-base' 
-                    : 'px-4 py-4 text-lg placeholder:text-lg landscape:py-3 landscape:text-base landscape:placeholder:text-base'
-                } ${
-                  showResults && locations.length > 0 ? 'border-[#F17313]' : ''
-                }`}
+                className={`flex-1 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F17313] transition-all duration-300 placeholder:transition-all placeholder:duration-300 w-full min-w-0 ${isModal
+                  ? 'px-3 sm:px-6 py-3 sm:py-4 text-lg sm:text-xl placeholder:text-gray-400 placeholder:text-lg sm:placeholder:text-xl landscape:py-2 landscape:text-base landscape:placeholder:text-base'
+                  : 'px-4 py-4 text-lg placeholder:text-lg landscape:py-3 landscape:text-base landscape:placeholder:text-base'
+                  } ${showResults && locations.length > 0 ? 'border-[#F17313]' : ''
+                  }`}
               />
               <button
                 type="button"
                 onClick={() => searchQuery.length >= 2 && searchLocations(searchQuery)}
-                className={`bg-[#F17313] text-white rounded-lg hover:opacity-90 transition flex-shrink-0 relative overflow-hidden shine-button ${
-                  isModal 
-                    ? 'px-5 sm:px-6 py-3 sm:py-4 text-base sm:text-lg landscape:py-2 landscape:text-sm landscape:px-4' 
-                    : 'px-6 sm:px-6 py-4 landscape:py-3 landscape:px-5'
-                }`}
+                className={`bg-[#F17313] text-white rounded-lg hover:opacity-90 transition flex-shrink-0 relative overflow-hidden shine-button ${isModal
+                  ? 'px-5 sm:px-6 py-3 sm:py-4 text-base sm:text-lg landscape:py-2 landscape:text-sm landscape:px-4'
+                  : 'px-6 sm:px-6 py-4 landscape:py-3 landscape:px-5'
+                  }`}
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 landscape:h-4 landscape:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -685,7 +689,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
               </button>
             </div>
           </form>
-          
+
           {isSearching && (
             <div className="flex justify-center my-4">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#F17313]"></div>
@@ -699,17 +703,16 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
           )}
 
           {/* Results container with slide-in animation */}
-          <div 
-            className={`overflow-hidden transition-all duration-500 ease-in-out ${
-              showResults && locations.length > 0
-                ? 'max-h-96 opacity-100 mt-5'
-                : 'max-h-0 opacity-0'
-            }`}
+          <div
+            className={`overflow-hidden transition-all duration-500 ease-in-out ${showResults && locations.length > 0
+              ? 'max-h-96 opacity-100 mt-5'
+              : 'max-h-0 opacity-0'
+              }`}
           >
             <div className="grid gap-4">
               {locations.map((location) => (
                 <div
-                  key={location.placeId}                  
+                  key={location.placeId}
                   className="p-4 border border-gray-200 rounded-lg hover:border-[#F17313] hover:shadow-md transition cursor-pointer result-item"
                   onClick={() => selectLocation(location)}
                 >
@@ -781,9 +784,9 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Close button */}
-                  <button 
+                  <button
                     onClick={resetSelection}
                     className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-[#F17313]/10 transition"
                     aria-label="Close"
@@ -793,310 +796,215 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                     </svg>
                   </button>
                 </div>
-                
+
                 <div className="p-5 flex-shrink-0">
                   {/* Business info with accent colors */}
                   <div className="border-l-4 border-[#F17313] pl-3 mb-4">
                     <h3 className="text-xl font-bold text-[#0D2959]">{selectedPlaceDetails.name}</h3>
-                    <p className="text-[#0D2959]/70">{selectedPlaceDetails.formatted_address || selectedPlaceDetails.address}</p>
+                    <p className="text-sm text-[#0D2959]/70">{selectedPlaceDetails.formatted_address || selectedPlaceDetails.address}</p>
                   </div>
-                  
-                  <div className="mb-4 grid grid-cols-1 gap-4 text-sm">
-                    {(selectedPlaceDetails.formatted_phone_number || selectedPlaceDetails.international_phone_number || selectedPlaceDetails.phoneNumber) && (
-                      <div className="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#F17313] mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span className="text-[#0D2959]">{selectedPlaceDetails.formatted_phone_number || selectedPlaceDetails.international_phone_number || selectedPlaceDetails.phoneNumber}</span>
+
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    {selectedPlaceDetails.rating && (
+                      <div className="flex items-center gap-2 text-[#0D2959]">
+                        <div className="flex text-yellow-400">
+                          {[...Array(5)].map((_, i) => (
+                            <svg key={i} className={`w-4 h-4 ${i < Math.floor(selectedPlaceDetails.rating || 0) ? 'fill-current' : 'text-gray-300'}`} viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="font-bold">{selectedPlaceDetails.rating}</span>
+                        <span className="text-[#0D2959]/50">({selectedPlaceDetails.user_ratings_total})</span>
                       </div>
                     )}
-                    
-                    {selectedPlaceDetails.website && (
-                      <div className="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#F17313] mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                        </svg>
-                        <a href={selectedPlaceDetails.website} target="_blank" rel="noopener noreferrer" className="text-[#0D2959] hover:text-[#F17313] hover:underline truncate max-w-[16rem] transition">
-                          {new URL(selectedPlaceDetails.website).hostname}
-                        </a>
+                    {selectedPlaceDetails.businessStatus && (
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${selectedPlaceDetails.businessStatus === 'OPERATIONAL'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-red-100 text-red-700'
+                          }`}>
+                          {selectedPlaceDetails.businessStatus}
+                        </span>
                       </div>
                     )}
                   </div>
-                  
-                  {selectedPlaceDetails.rating && (
-                    <div className="flex items-center mb-4">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <svg 
-                            key={i} 
-                            className={`h-5 w-5 ${i < Math.floor(selectedPlaceDetails.rating || 0) ? 'text-[#F17313]' : 'text-[#0D2959]/20'}`} 
-                            fill="currentColor" 
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="ml-2 text-[#0D2959]">{selectedPlaceDetails.rating} ({selectedPlaceDetails.user_ratings_total} reviews)</span>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
-            
-            {/* Right column - Service options */}
+
+            {/* Right column - Service Selection Form */}
             <div className="md:w-7/12">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-[#0D2959]/10 p-5 h-full flex flex-col">
-                <h2 className="text-xl font-bold text-[#0D2959] mb-4">Select Service Options</h2>
-                
-                {/* Service type selection */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-[#0D2959] mb-3">Choose Your Service:</h4>
-                  {pricingLoading ? (
-                    <div className="flex justify-center py-4">
-                      <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-[#F17313]"></div>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                      {/* Remove Profile Card */}
-                      <div className={`border rounded-lg p-3 cursor-pointer  min-h-[80px] ${serviceType === 'remove' ? 'border-[#F17313] bg-[#F17313]/5 shadow-md' : 'border-[#0D2959]/20 hover:border-[#F17313] hover:shadow-sm'}`}
-                           onClick={() => setServiceType('remove')}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center min-w-0 flex-1">
-                            <input
-                              type="radio"
-                              name="serviceType"
-                              value="remove"
-                              checked={serviceType === 'remove'}
-                              onChange={() => setServiceType('remove')}
-                              className="h-4 w-4 text-[#F17313] focus:ring-[#F17313] mr-3 flex-shrink-0"
-                            />
-                            <div className="min-w-0 flex-1">
-                              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-2 mb-1">
-                                <h5 className="font-bold text-[#0D2959] text-sm">{getServiceName('remove')}</h5>
-                                <span className="text-lg font-bold text-[#F17313]">${getServicePrice('remove')}</span>
-                              </div>
-                              <p className="text-xs text-[#0D2959]/70 line-clamp-2">{getServiceDescription('remove')}</p>
-                            </div>
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-[#0D2959]/10">
+                <h4 className="text-xl font-bold text-[#0D2959] mb-6 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#F17313]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                  </svg>
+                  {locale === 'pl' ? 'Wybierz Usługę' : 'Select Service'}
+                </h4>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Service Type Selection */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Option 1: Remove Profile */}
+                    <div
+                      onClick={() => setServiceType('remove')}
+                      className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${serviceType === 'remove'
+                        ? 'border-[#F17313] bg-[#F17313]/5'
+                        : 'border-gray-100 bg-gray-50'
+                        }`}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <h5 className="font-bold text-[#0D2959]">{getServiceName('remove')}</h5>
+                        {serviceType === 'remove' && (
+                          <div className="text-[#F17313]">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
                           </div>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openServiceModal('remove');
-                            }}
-                            className="text-xs text-[#F17313] hover:text-[#F17313]/80 underline transition ml-3 flex-shrink-0"
-                          >
-                            Details
-                          </button>
-                        </div>
+                        )}
                       </div>
-                      
-                      {/* Reset Profile Card */}
-                      <div className={`border rounded-lg p-3 cursor-pointer transition-all duration-300 min-h-[80px] ${serviceType === 'reset' ? 'border-[#F17313] bg-[#F17313]/5 shadow-md' : 'border-[#0D2959]/20 hover:border-[#F17313] hover:shadow-sm'}`}
-                           onClick={() => setServiceType('reset')}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center min-w-0 flex-1">
-                            <input
-                              type="radio"
-                              name="serviceType"
-                              value="reset"
-                              checked={serviceType === 'reset'}
-                              onChange={() => setServiceType('reset')}
-                              className="h-4 w-4 text-[#F17313] focus:ring-[#F17313] mr-3 flex-shrink-0"
-                            />
-                            <div className="min-w-0 flex-1">
-                              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-2 mb-1">
-                                <h5 className="font-bold text-[#0D2959] text-sm">{getServiceName('reset')}</h5>
-                                <span className="text-lg font-bold text-[#F17313]">${getServicePrice('reset')}</span>
-                              </div>
-                              <p className="text-xs text-[#0D2959]/70 line-clamp-2">{getServiceDescription('reset')}</p>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openServiceModal('reset');
-                            }}
-                            className="text-xs text-[#F17313] hover:text-[#F17313]/80 underline transition ml-3 flex-shrink-0"
-                          >
-                            Details
-                          </button>
-                        </div>
+                      <p className="text-xs text-[#0D2959]/70 mb-3 leading-relaxed">
+                        {getServiceDescription('remove')}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); openServiceModal('remove'); }}
+                        className="text-xs font-semibold text-[#F17313] hover:underline"
+                      >
+                        {locale === 'pl' ? 'Szczegóły' : 'Details'}
+                      </button>
+                      <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
+                        <span className="text-lg font-black text-[#0D2959]">
+                          {getServicePrice('remove')} PLN
+                        </span>
                       </div>
                     </div>
-                  )}
-                </div>
-                
-                {/* Additional features */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-[#0D2959] mb-3">Enhance Your Service:</h4>
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                    {/* 1-Year Protection Card */}
-                    <div className={`border rounded-lg p-2 cursor-pointer transition-all duration-300 ${yearProtection ? 'border-[#F17313] bg-[#F17313]/5 shadow-sm' : 'border-[#0D2959]/20 hover:border-[#F17313]'}`}
-                         onClick={() => setYearProtection(!yearProtection)}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={yearProtection}
-                            onChange={() => setYearProtection(!yearProtection)}
-                            className="h-4 w-4 text-[#F17313] focus:ring-[#F17313] mr-3 flex-shrink-0"
-                          />
-                          <div>
-                            <h5 className="font-medium text-[#0D2959] text-sm">{getAddonName('yearProtection')}</h5>
-                            <p className="text-xs text-[#0D2959]/60 line-clamp-2">{getAddonDescription('yearProtection')}</p>
+
+                    {/* Option 2: Reset Profile */}
+                    <div
+                      onClick={() => setServiceType('reset')}
+                      className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${serviceType === 'reset'
+                        ? 'border-[#F17313] bg-[#F17313]/5'
+                        : 'border-gray-100 bg-gray-50'
+                        }`}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <h5 className="font-bold text-[#0D2959]">{getServiceName('reset')}</h5>
+                        {serviceType === 'reset' && (
+                          <div className="text-[#F17313]">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
                           </div>
-                        </div>
-                        <span className="text-sm font-bold text-[#F17313] ml-2">+${getAddonPrice('yearProtection')}</span>
+                        )}
                       </div>
-                    </div>
-                    
-                    {/* Express Service Card */}
-                    <div className={`border rounded-lg p-2 cursor-pointer transition-all duration-300 ${expressService ? 'border-[#F17313] bg-[#F17313]/5 shadow-sm' : 'border-[#0D2959]/20 hover:border-[#F17313]'}`}
-                         onClick={() => setExpressService(!expressService)}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={expressService}
-                            onChange={() => setExpressService(!expressService)}
-                            className="h-4 w-4 text-[#F17313] focus:ring-[#F17313] mr-3 flex-shrink-0"
-                          />
-                          <div>
-                            <h5 className="font-medium text-[#0D2959] text-sm">{getAddonName('expressService')}</h5>
-                            <p className="text-xs text-[#0D2959]/60 line-clamp-2">{getAddonDescription('expressService')}</p>
-                          </div>
-                        </div>
-                        <span className="text-sm font-bold text-[#F17313] ml-2">+${getAddonPrice('expressService')}</span>
+                      <p className="text-xs text-[#0D2959]/70 mb-3 leading-relaxed">
+                        {getServiceDescription('reset')}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); openServiceModal('reset'); }}
+                        className="text-xs font-semibold text-[#F17313] hover:underline"
+                      >
+                        {locale === 'pl' ? 'Szczegóły' : 'Details'}
+                      </button>
+                      <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
+                        <span className="text-lg font-black text-[#0D2959]">
+                          {getServicePrice('reset')} PLN
+                        </span>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                {/* Reserved space for pricing section - always present to maintain consistent card height */}
-                <div className="mb-6 min-h-[200px]">
-                  {serviceType && !pricingLoading ? (
-                    <div className="p-4 bg-gradient-to-r from-[#0D2959]/5 to-[#F17313]/5 rounded-lg border border-[#0D2959]/10">
-                      <div className="flex items-center justify-between mb-3">
-                        <h4 className="font-bold text-[#0D2959] flex items-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#F17313] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                          </svg>
-                          Order Summary
-                        </h4>
-                        <div className="text-right">
-                          <span className="font-bold text-[#F17313] text-xl">
-                            ${calculateTotal(serviceType, yearProtection, expressService)}
-                          </span>
-                          <p className="text-xs text-[#0D2959]/70">One-time payment</p>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between items-center">
-                          <span className="text-[#0D2959]">{getServiceName(serviceType)}</span>
-                          <span className="text-[#0D2959]">${getServicePrice(serviceType)}</span>
-                        </div>
-                        
-                        {yearProtection && (
-                          <div className="flex justify-between items-center">
-                            <span className="text-[#0D2959]">{getAddonName('yearProtection')}</span>
-                            <span className="text-[#0D2959]">${getAddonPrice('yearProtection')}</span>
-                          </div>
-                        )}
-                        
-                        {expressService && (
-                          <div className="flex justify-between items-center">
-                            <span className="text-[#0D2959]">{getAddonName('expressService')}</span>
-                            <span className="text-[#0D2959]">${getAddonPrice('expressService')}</span>
-                          </div>
-                        )}
-                        
-                        {/* Service timeline */}
-                        <div className="mt-3 pt-2 border-t border-[#0D2959]/10">
-                          <div className="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-[#F17313] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+                  {/* Add-ons Section */}
+                  <div className="space-y-3">
+                    <h5 className="text-sm font-bold text-[#0D2959] uppercase tracking-wider">
+                      {locale === 'pl' ? 'Opcje Dodatkowe' : 'Optional Upgrades'}
+                    </h5>
+
+                    {/* Year Protection */}
+                    <div
+                      onClick={() => setYearProtection(!yearProtection)}
+                      className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${yearProtection ? 'border-[#F17313] bg-[#F17313]/5' : 'border-gray-100 hover:bg-gray-50'
+                        }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded border flex items-center justify-center ${yearProtection ? 'bg-[#F17313] border-[#F17313]' : 'border-gray-300'
+                          }`}>
+                          {yearProtection && (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
-                            <span className="text-xs text-[#0D2959]/70">
-                              Timeline: {expressService 
-                                ? "24-48 hours" 
-                                : serviceType === 'reset' 
-                                  ? "3-5 business days" 
-                                  : "5-7 business days"
-                              }
-                            </span>
-                          </div>
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-[#0D2959]">{getAddonName('yearProtection')}</p>
+                          <p className="text-xs text-[#0D2959]/60">{getAddonDescription('yearProtection')}</p>
                         </div>
                       </div>
+                      <span className="font-bold text-[#0D2959]">+{getAddonPrice('yearProtection')} PLN</span>
                     </div>
-                  ) : (
-                    // Secured payments info when no service is selected
-                    <div className="p-4 bg-gradient-to-r from-[#0D2959]/5 to-[#F17313]/5 rounded-lg border border-[#0D2959]/10">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#F17313] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                          </svg>
-                          <h4 className="font-bold text-[#0D2959] text-lg">Secured Stripe Payments</h4>
+
+                    {/* Express Service */}
+                    <div
+                      onClick={() => setExpressService(!expressService)}
+                      className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${expressService ? 'border-[#F17313] bg-[#F17313]/5' : 'border-gray-100 hover:bg-gray-50'
+                        }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded border flex items-center justify-center ${expressService ? 'bg-[#F17313] border-[#F17313]' : 'border-gray-300'
+                          }`}>
+                          {expressService && (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
                         </div>
-                        
-                        <div className="space-y-3 text-sm text-[#0D2959]">
-                          <div className="flex items-center justify-center">
-                            <svg className="h-4 w-4 text-[#F17313] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            <span>256-bit SSL encryption</span>
-                          </div>
-                          
-                          <div className="flex items-center justify-center">
-                            <svg className="h-4 w-4 text-[#F17313] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            <span>PCI DSS compliant</span>
-                          </div>
-                          
-                          <div className="flex items-center justify-center">
-                            <svg className="h-4 w-4 text-[#F17313] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            <span>No card details stored</span>
-                          </div>
-                        </div>
-                        
-                        {/* Stripe logo and accepted cards */}
-                        <div className="mt-4 pt-3 border-t border-[#0D2959]/10">
-                          <div className="flex items-center justify-center space-x-2 text-xs text-[#0D2959]/70">
-                            <span>Powered by</span>
-                            <div className="font-semibold text-[#635BFF]">stripe</div>
-                          </div>
-                          <div className="flex items-center justify-center space-x-1 mt-2">
-                            <span className="text-xs text-[#0D2959]/70">Accepts:</span>
-                            <span className="text-xs text-[#0D2959]/70">Visa • Mastercard • American Express • PayPal</span>
-                          </div>
+                        <div>
+                          <p className="text-sm font-bold text-[#0D2959]">{getAddonName('expressService')}</p>
+                          <p className="text-xs text-[#0D2959]/60">{getAddonDescription('expressService')}</p>
                         </div>
                       </div>
+                      <span className="font-bold text-[#0D2959]">+{getAddonPrice('expressService')} PLN</span>
+                    </div>
+                  </div>
+
+                  {errorMessage && (
+                    <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
+                      {errorMessage}
                     </div>
                   )}
-                </div>
-                
-                {/* Submit button */}
-                <div className="mt-6 flex-grow flex flex-col justify-end">
-                  <button
-                    onClick={handleSubmit}
-                    disabled={!serviceType}
-                    className={`w-full py-3 rounded-lg font-medium transition ${
-                      serviceType 
-                        ? 'bg-[#F17313] text-white hover:bg-[#F17313]/90 pulse-glow' 
-                        : 'bg-[#0D2959]/20 text-[#0D2959]/50 cursor-not-allowed'
-                    }`}
-                  >
-                    {serviceType ? 'Proceed with Service' : 'Select a service to continue'}
-                  </button>
-                </div>
+
+                  {/* Summary and Submit */}
+                  <div className="pt-4 border-t border-gray-100">
+                    <div className="flex justify-between items-center mb-6">
+                      <span className="text-[#0D2959]/60 font-medium">
+                        {locale === 'pl' ? 'Razem do zapłaty:' : 'Total amount:'}
+                      </span>
+                      <span className="text-3xl font-black text-[#0D2959]">
+                        {serviceType ? calculateTotal(serviceType, yearProtection, expressService) : 0} PLN
+                      </span>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={!serviceType || pricingLoading}
+                      className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all transform active:scale-[0.98] ${serviceType
+                        ? 'bg-[#F17313] text-white hover:bg-[#e0660d] hover:shadow-xl pulse-glow'
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        }`}
+                    >
+                      {locale === 'pl' ? 'Przejdź do zamówienia' : 'Proceed to Order'}
+                    </button>
+                    <p className="text-center text-[10px] text-[#0D2959]/40 mt-4 leading-relaxed">
+                      {locale === 'pl'
+                        ? 'Klikając "Przejdź do zamówienia", akceptujesz nasz regulamin oraz politykę prywatności. Dane transakcyjne są przetwarzane bezpiecznie przez Stripe.'
+                        : 'By clicking "Proceed to Order", you agree to our Terms of Service and Privacy Policy. Transaction data is securely processed by Stripe.'
+                      }
+                    </p>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -1105,125 +1013,87 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
 
       {/* Service Details Modal */}
       {showModal && modalContent && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[#0D2959]/10">
-              <h3 className="text-xl font-bold text-[#0D2959]">
-                {modalContent === 'remove' ? getServiceName('remove') : getServiceName('reset')} Details
-              </h3>
-              <button
-                onClick={closeModal}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F17313]/10 transition"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#0D2959]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-6">
-              {/* Service Price */}
-              <div className="text-center mb-6">
-                <span className="text-3xl font-bold text-[#F17313]">
-                  ${modalContent === 'remove' ? getServicePrice('remove') : getServicePrice('reset')}
-                </span>
-                <p className="text-sm text-[#0D2959]/70 mt-1">One-time payment</p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-[#0D2959]/60 backdrop-blur-sm" onClick={closeModal}></div>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative z-10 overflow-hidden animate-fadeInUp">
+            <div className={`h-2 w-full ${modalContent === 'remove' ? 'bg-red-500' : 'bg-blue-500'}`}></div>
+            <div className="p-8">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold text-[#0D2959]">{getServiceName(modalContent)}</h3>
+                  <p className="text-[#F17313] font-bold">{getServicePrice(modalContent)} PLN</p>
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
               </div>
 
-              {/* Service Description */}
-              <div className="mb-6">
-                <p className="text-[#0D2959] mb-4">
-                  {modalContent === 'remove' ? getServiceDescription('remove') : getServiceDescription('reset')}
+              <div className="prose prose-sm max-w-none text-[#0D2959]/80 mb-8">
+                <p className="text-base leading-relaxed">
+                  {getServiceDescription(modalContent)}
                 </p>
-              </div>
 
-              {/* Features List */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-[#0D2959] mb-3">What&apos;s Included:</h4>
+                <h4 className="text-lg font-bold text-[#0D2959] mt-6 mb-3">
+                  {locale === 'pl' ? 'Co obejmuje usługa?' : 'What does it include?'}
+                </h4>
                 <ul className="space-y-3">
                   {modalContent === 'remove' ? (
                     <>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-[#F17313] mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <li className="flex gap-3">
+                        <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span className="text-sm text-[#0D2959]">Complete removal of business profile from Google Maps</span>
+                        <span>{locale === 'pl' ? 'Całkowite usunięcie wizytówki z Google Maps i wyników wyszukiwania.' : 'Complete removal of the listing from Google Maps and search results.'}</span>
                       </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-[#F17313] mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <li className="flex gap-3">
+                        <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span className="text-sm text-[#0D2959]">Elimination of all reviews and ratings</span>
+                        <span>{locale === 'pl' ? 'Wyczyszczenie całej historii opinii, zdjęć i postów.' : 'Clearing all review history, photos, and posts.'}</span>
                       </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-[#F17313] mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <li className="flex gap-3">
+                        <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span className="text-sm text-[#0D2959]">Business becomes unsearchable on Google Maps</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-[#F17313] mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-sm text-[#0D2959]">Processing time: 5-7 business days</span>
+                        <span>{locale === 'pl' ? 'Zapobieganie dalszym negatywnym interakcjom pod tym adresem.' : 'Preventing further negative interactions at this address.'}</span>
                       </li>
                     </>
                   ) : (
                     <>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-[#F17313] mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <li className="flex gap-3">
+                        <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span className="text-sm text-[#0D2959]">Removal of all negative reviews and ratings</span>
+                        <span>{locale === 'pl' ? 'Usunięcie obecnego profilu z negatywnymi opiniami.' : 'Removing the current profile with negative reviews.'}</span>
                       </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-[#F17313] mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <li className="flex gap-3">
+                        <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span className="text-sm text-[#0D2959]">Clean slate with fresh profile setup</span>
+                        <span>{locale === 'pl' ? 'Stworzenie nowej, czystej wizytówki dla Twojej firmy.' : 'Creating a new, clean listing for your business.'}</span>
                       </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-[#F17313] mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <li className="flex gap-3">
+                        <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span className="text-sm text-[#0D2959]">Business information and photos remain</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="h-5 w-5 text-[#F17313] mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-sm text-[#0D2959]">Processing time: 3-5 business days</span>
+                        <span>{locale === 'pl' ? 'Zachowanie widoczności na mapach przy jednoczesnym odświeżeniu reputacji.' : 'Maintaining map visibility while refreshing your reputation.'}</span>
                       </li>
                     </>
                   )}
                 </ul>
               </div>
 
-              {/* Ideal For Section */}
-              <div className="p-4 bg-[#F17313]/10 rounded-lg">
-                <h4 className="font-semibold text-[#0D2959] mb-2">✨ Perfect For:</h4>
-                <p className="text-sm text-[#0D2959]">
-                  {modalContent === 'remove' 
-                    ? "Businesses that want to completely start fresh or close permanently"
-                    : "Businesses wanting to keep their location but start with a clean reputation"
-                  }
-                </p>
-              </div>
-
-              {/* Action Button */}
-              <div className="mt-6">
-                <button
-                  onClick={() => {
-                    setServiceType(modalContent);
-                    closeModal();
-                  }}
-                  className="w-full py-3 bg-[#F17313] text-white rounded-lg font-medium hover:bg-[#F17313]/90 transition"
-                >
-                  Select This Service
-                </button>
-              </div>
+              <button
+                onClick={() => { setServiceType(modalContent); closeModal(); }}
+                className="w-full py-4 bg-[#0D2959] text-white font-bold rounded-xl hover:bg-opacity-90 transition-all"
+              >
+                {locale === 'pl' ? 'Wybierz tę usługę' : 'Choose this service'}
+              </button>
             </div>
           </div>
         </div>

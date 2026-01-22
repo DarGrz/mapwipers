@@ -3,15 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import { useLocaleContext } from '../context/LocaleContext';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { t, locale } = useLocaleContext();
-  const pathname = usePathname();
-  
+
   // Get base path with locale prefix if needed
   const getLocalizedPath = (path: string) => {
     return locale === 'pl' ? `/pl${path}` : path;
@@ -22,10 +20,10 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="">
           <Link href={getLocalizedPath('/')} className="flex items-center gap-2">
-            <Image 
-              src="/mapwipers_logo-horizontal.png" 
-              alt="MapWipers Logo" 
-              width={140} 
+            <Image
+              src="/mapwipers_logo-horizontal.png"
+              alt="MapWipers Logo"
+              width={140}
               height={40}
               className="h-10 w-auto"
             />

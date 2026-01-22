@@ -4,7 +4,7 @@ import { logVisitor, getRequestInfo, generateSessionId, extractUtmAndGtmParams }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  
+
   // Skip middleware for API routes, static files, and Next.js internals
   if (
     pathname.startsWith('/api/') ||
@@ -16,8 +16,8 @@ export function middleware(request: NextRequest) {
   }
 
   // Detect Polish users and redirect to /pl if not already there
-  const country = request.geo?.country || request.headers.get('cf-ipcountry') || ''
-  
+  const country = request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry') || ''
+
   if (country === 'PL' && !pathname.startsWith('/pl') && pathname === '/') {
     const url = request.nextUrl.clone()
     url.pathname = '/pl'
@@ -26,10 +26,10 @@ export function middleware(request: NextRequest) {
 
   // Get request info
   const requestInfo = getRequestInfo(request)
-  
+
   // Extract UTM parameters and gtm_from from URL
   const utmAndGtmParams = extractUtmAndGtmParams(request.url)
-  
+
   // Get or create session ID from cookies
   let sessionId = request.cookies.get('session_id')?.value
   if (!sessionId) {
@@ -49,7 +49,7 @@ export function middleware(request: NextRequest) {
 
   // Create response and set session cookie if needed
   const response = NextResponse.next()
-  
+
   if (!request.cookies.get('session_id')?.value) {
     response.cookies.set('session_id', sessionId, {
       httpOnly: true,

@@ -7,8 +7,8 @@ import { PlaceDetails } from "./types";
 import { useLocaleContext } from "./context/LocaleContext";
 
 export default function Home() {
-  const { t, locale, formatPrice } = useLocaleContext();
-  
+  const { locale, formatPrice } = useLocaleContext();
+
   // Schema.org structured data for SEO and trust
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -446,7 +446,7 @@ export default function Home() {
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [selectedService, setSelectedService] = useState<'remove' | 'reset' | null>(null);
   const [resetTrigger, setResetTrigger] = useState(0); // Add reset trigger state
-  
+
   // Order flow state
   const [showOrderForm, setShowOrderForm] = useState(false);
   const [orderData, setOrderData] = useState<{
@@ -507,7 +507,7 @@ export default function Home() {
   const handleOrderSubmit = async (formData: OrderFormData) => {
     try {
       console.log('Submitting order:', { orderData, formData });
-      
+
       // Call the payment API
       const response = await fetch('/api/create-payment', {
         method: 'POST',
@@ -521,9 +521,9 @@ export default function Home() {
           serviceType: orderData?.serviceType
         }),
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success && result.checkoutUrl) {
         // Redirect to Stripe Checkout
         window.location.href = result.checkoutUrl;
@@ -626,7 +626,7 @@ export default function Home() {
           __html: JSON.stringify(certificationSchema)
         }}
       />
-      
+
       <div className="container mx-auto px-4 py-12 md:py-16 mt-10 overflow-hidden">
         {showOrderForm && orderData ? (
           // Show order form
@@ -635,10 +635,10 @@ export default function Home() {
               selectedBusiness={orderData.selectedBusiness}
               serviceType={orderData.serviceType}
               servicePrice={orderData.totalPrice}
-              estimatedTime={orderData.expressService 
-                ? "24-48 hours" 
-                : orderData.serviceType === 'reset' 
-                  ? "3-5 business days" 
+              estimatedTime={orderData.expressService
+                ? "24-48 hours"
+                : orderData.serviceType === 'reset'
+                  ? "3-5 business days"
                   : "5-7 business days"
               }
               onBack={handleBackFromOrder}
@@ -648,7 +648,7 @@ export default function Home() {
         ) : gmbSelected ? (
           // When GMB is selected, show the component full width
           <div className="max-w-7xl mx-auto">
-            <GoogleProfileSearch 
+            <GoogleProfileSearch
               onSelectionChange={handleGmbSelectionChange}
               onProceedToOrder={handleProceedToOrder}
               resetTrigger={resetTrigger}
@@ -691,7 +691,7 @@ export default function Home() {
                   {locale === 'pl' ? 'Wyszukaj' : 'Search'}
                 </h3>
                 <p className="text-[#0D2959]/70">
-                  {locale === 'pl' 
+                  {locale === 'pl'
                     ? 'Znajdź swoją firmę w naszej wyszukiwarce'
                     : 'Find your business in our search engine'}
                 </p>
@@ -700,17 +700,17 @@ export default function Home() {
               {/* First Arrow */}
               <div className="hidden md:flex absolute top-20 left-1/3 transform translate-x-4 z-10">
                 <svg width="60" height="40" viewBox="0 0 60 40" className="text-[#F17313]/60">
-                  <path 
-                    d="M5 20 Q30 5 55 20" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
+                  <path
+                    d="M5 20 Q30 5 55 20"
+                    stroke="currentColor"
+                    strokeWidth="2"
                     fill="none"
                     strokeDasharray="4,4"
                   />
-                  <path 
-                    d="M50 15 L55 20 L50 25" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
+                  <path
+                    d="M50 15 L55 20 L50 25"
+                    stroke="currentColor"
+                    strokeWidth="2"
                     fill="none"
                   />
                 </svg>
@@ -726,7 +726,7 @@ export default function Home() {
                   {locale === 'pl' ? 'Wybierz' : 'Choose'}
                 </h3>
                 <p className="text-[#0D2959]/70">
-                  {locale === 'pl' 
+                  {locale === 'pl'
                     ? 'Wybierz potrzebną usługę'
                     : 'Select the service you need'}
                 </p>
@@ -735,17 +735,17 @@ export default function Home() {
               {/* Second Arrow */}
               <div className="hidden md:flex absolute top-20 right-1/3 transform -translate-x-4 z-10">
                 <svg width="60" height="40" viewBox="0 0 60 40" className="text-[#F17313]/60">
-                  <path 
-                    d="M5 20 Q30 5 55 20" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
+                  <path
+                    d="M5 20 Q30 5 55 20"
+                    stroke="currentColor"
+                    strokeWidth="2"
                     fill="none"
                     strokeDasharray="4,4"
                   />
-                  <path 
-                    d="M50 15 L55 20 L50 25" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
+                  <path
+                    d="M50 15 L55 20 L50 25"
+                    stroke="currentColor"
+                    strokeWidth="2"
                     fill="none"
                   />
                 </svg>
@@ -798,7 +798,7 @@ export default function Home() {
                     {locale === 'pl' ? 'Bezpieczne Płatności Stripe' : 'Secured Stripe Payments'}
                   </h4>
                   <p className="text-xs text-[#0D2959]/70">
-                    {locale === 'pl' 
+                    {locale === 'pl'
                       ? 'Zabezpieczenia na poziomie bankowym z szyfrowanymi transakcjami i ochroną przed oszustwami'
                       : 'Bank-level security with encrypted transactions and fraud protection'
                     }
@@ -849,1154 +849,1154 @@ export default function Home() {
                         strokeLinejoin="round"
                         strokeWidth={2}
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                        />
-                      </svg>
-                    </div>
-                    <h4 className="font-semibold text-[#0D2959] text-sm mb-2">
-                      {locale === 'pl' ? 'Zespół Ekspertów' : 'Expert Team'}
-                    </h4>
-                    <p className="text-xs text-[#0D2959]/70">
-                      {locale === 'pl'
-                        ? 'Ponad 5 lat doświadczenia w zarządzaniu profilami Google Maps'
-                        : '5+ years experience with Google Maps and business profile management'
-                      }
-                    </p>
-                  </div>
-
-                  {/* 24/7 Support */}
-                  <div className="flex flex-col items-center text-center p-6 rounded-lg bg-[#0D2959]/5 shadow-sm border border-[#0D2959]/20 transition-transform hover:translate-y-[-5px]">
-                    <div className="w-12 h-12 bg-[#0D2959]/10 rounded-full flex items-center justify-center mb-3">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 text-[#0D2959]"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25A9.75 9.75 0 002.25 12c0 5.384 4.365 9.75 9.75 9.75s9.75-4.366 9.75-9.75S17.634 2.25 12 2.25z"
-                        />
-                      </svg>
-                    </div>
-                    <h4 className="font-semibold text-[#0D2959] text-sm mb-2">
-                      {locale === 'pl' ? 'Wsparcie 24/7' : '24/7 Customer Support'}
-                    </h4>
-                    <p className="text-xs text-[#0D2959]/70">
-                      {locale === 'pl'
-                        ? 'Zawsze dostępni, aby odpowiedzieć na pytania i informować o postępach sprawy'
-                        : 'Always available to answer questions and provide updates on your case'
-                      }
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Social Proof Section */}
-            <div className="max-w-6xl mx-auto mb-24">
-              <h2 className="text-3xl font-bold text-center mb-12 text-[#0D2959]">
-                {locale === 'pl' ? 'Co Mówią Nasi Klienci' : 'What Our Clients Say'}
-              </h2>
-              
-              {/* Customer Reviews */}
-              <div className="grid md:grid-cols-2 gap-8 mb-24">
-                {/* Review 1 */}
-                <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-                  <div className="flex items-center mb-4">
-                    <div className="flex text-yellow-400 mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                        </svg>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-gray-700 mb-6 italic">
-                    {locale === 'pl'
-                      ? '"Ktoś stworzył fałszywy profil GMB dla naszej restauracji z całkowicie błędnymi informacjami i szkodliwymi opiniami. MapWipers skutecznie usunął cały fałszywy profil w ciągu 12 dni, ratując naszą reputację i zapobiegając zamieszaniu wśród klientów."'
-                      : '"Someone created a fake GMB profile for our restaurant with completely wrong information and damaging reviews. MapWipers successfully removed the entire fake profile within 12 days, saving our reputation and preventing customer confusion."'
-                    }
-                  </p>
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 bg-[#F17313]/10 rounded-full flex items-center justify-center mr-4">
-                      <span className="text-[#F17313] font-semibold">SM</span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[#0D2959]">Sarah Martinez</p>
-                      <p className="text-sm text-gray-600">
-                        {locale === 'pl' ? 'Właścicielka, Restauracja Bella Vista' : 'Owner, Bella Vista Restaurant'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Review 2 */}
-                <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-                  <div className="flex items-center mb-4">
-                    <div className="flex text-yellow-400 mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                        </svg>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-gray-700 mb-6 italic">
-                    {locale === 'pl'
-                      ? '"Konkurent stworzył wiele fałszywych profili Google Business dla naszej kancelarii z nieprawidłowymi danymi kontaktowymi i złośliwymi treściami. MapWipers całkowicie usunął wszystkie nieautoryzowane profile w ciągu 8 dni. Profesjonalna i niezawodna usługa!"'
-                      : '"A competitor created multiple fake Google Business profiles for our law firm with incorrect contact details and malicious content. MapWipers removed all unauthorized profiles completely within 8 days. Professional and reliable service!"'
-                    }
-                  </p>
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 bg-[#0D2959]/10 rounded-full flex items-center justify-center mr-4">
-                      <span className="text-[#0D2959] font-semibold">DT</span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[#0D2959]">David Thompson</p>
-                      <p className="text-sm text-gray-600">
-                        {locale === 'pl' ? 'CEO, Thompson Usługi Prawne' : 'CEO, Thompson Legal Services'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Use Cases */}
-              <div className="bg-gradient-to-br from-[#0D2959]/5 to-[#F17313]/5 rounded-2xl p-8">
-                <h3 className="text-2xl font-bold text-center mb-8 text-[#0D2959]">
-                  {locale === 'pl' ? 'Typowe Przypadki Użycia' : 'Common Use Cases'}
-                </h3>
-                <div className="grid md:grid-cols-2 gap-8">
-                  {/* Use Case 1 */}
-                  <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-white/50">
-                    <div className="w-14 h-14 bg-[#F17313]/10 rounded-full flex items-center justify-center mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-[#F17313]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
-                      </svg>
-                    </div>
-                    <h4 className="font-semibold text-lg mb-3 text-[#0D2959]">
-                      {locale === 'pl' ? 'Fałszywe Profile GMB Konkurencji' : 'Fake Competitor GMB Profiles'}
-                    </h4>
-                    <p className="text-gray-700 text-sm leading-relaxed">
-                      {locale === 'pl' ? (
-                        <>
-                          <strong>Problem:</strong> Klinika stomatologiczna odkryła, że konkurencyjna praktyka stworzyła fałszywy profil Google Moja Firma używając ich nazwy firmy z fałszywymi negatywnymi informacjami i błędnymi danymi kontaktowymi.
-                          <br/><br/>
-                          <strong>Rozwiązanie:</strong> Udokumentowaliśmy fałszywy profil, zebraliśmy dowody podszywania się i współpracowaliśmy z Google, aby całkowicie usunąć fałszywą wizytówkę GMB w ciągu 14 dni, chroniąc ich tożsamość marki.
-                        </>
-                      ) : (
-                        <>
-                          <strong>Problem:</strong> A dental clinic discovered that a competing practice had created a fake Google My Business profile using their business name with false negative information and wrong contact details.
-                          <br/><br/>
-                          <strong>Solution:</strong> We documented the fraudulent profile, gathered evidence of impersonation, and worked with Google to have the entire fake GMB listing removed within 14 days, protecting their brand identity.
-                        </>
-                      )}
-                    </p>
-                  </div>
-
-                  {/* Use Case 2 */}
-                  <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-white/50">
-                    <div className="w-14 h-14 bg-[#0D2959]/10 rounded-full flex items-center justify-center mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-[#0D2959]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </div>
-                    <h4 className="font-semibold text-lg mb-3 text-[#0D2959]">
-                      {locale === 'pl' ? 'Nieautoryzowane Duplikaty Wizytówek GMB' : 'Unauthorized Duplicate GMB Listings'}
-                    </h4>
-                    <p className="text-gray-700 text-sm leading-relaxed">
-                      {locale === 'pl' ? (
-                        <>
-                          <strong>Problem:</strong> Firma księgowa odkryła 4 nieautoryzowane profile Google Moja Firma stworzone z nazwą ich firmy, każdy pokazujący inne adresy i numery telefonów, powodując ogromne zamieszanie wśród klientów.
-                          <br/><br/>
-                          <strong>Rozwiązanie:</strong> Systematycznie usunęliśmy wszystkie nieautoryzowane duplikaty wizytówek GMB, pozostawiając tylko ich zweryfikowany oficjalny profil. Wyeliminowało to zamieszanie wśród klientów i skonsolidowało ich obecność online, poprawiając widoczność w lokalnym wyszukiwaniu o 65%.
-                        </>
-                      ) : (
-                        <>
-                          <strong>Problem:</strong> An accounting firm discovered 4 unauthorized Google My Business profiles created with their company name, each showing different addresses and phone numbers, causing massive customer confusion.
-                          <br/><br/>
-                          <strong>Solution:</strong> We systematically removed all unauthorized duplicate GMB listings, leaving only their verified official profile. This eliminated customer confusion and consolidated their online presence, improving local search visibility by 65%.
-                        </>
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Impact Statistics Section */}
-            <div className="max-w-6xl mx-auto mb-24">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4 text-[#0D2959]">
-                  {locale === 'pl' ? 'Ukryty Koszt Niskich Ocen' : 'The Hidden Cost of Low Ratings'}
-                </h2>
-                <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-                  {locale === 'pl'
-                    ? 'Badania pokazują, że niskie oceny w profilach Google Moja Firma bezpośrednio wpływają na pozyskiwanie klientów i przychody. Zobacz, jak oceny wpływają na wyniki biznesowe.'
-                    : 'Research shows that low ratings on Google Business profiles directly impact customer acquisition and revenue. See how ratings affect business performance.'
-                  }
-                </p>
-              </div>
-
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                {/* Left side - Chart */}
-                <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-8 border border-red-100">
-                  <h3 className="text-xl font-bold mb-6 text-[#0D2959] text-center">
-                    {locale === 'pl' ? 'Utrata Klientów według Średniej Oceny' : 'Customer Loss by Average Rating'}
-                  </h3>
-                  
-                  {/* Chart visualization */}
-                  <div className="space-y-4">
-                    {/* 4.5+ stars */}
-                    <div className="flex items-center">
-                      <div className="w-20 text-sm font-medium text-gray-700">4.5+ ⭐</div>
-                      <div className="flex-1 mx-4">
-                        <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
-                          <div className="bg-green-500 h-full rounded-full" style={{width: '10%'}}></div>
-                          <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                            {locale === 'pl' ? '10% strata' : '10% loss'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-16 text-sm text-gray-600">
-                        {locale === 'pl' ? 'Doskonała' : 'Excellent'}
-                      </div>
-                    </div>
-
-                    {/* 4.1-4.4 stars */}
-                    <div className="flex items-center">
-                      <div className="w-20 text-sm font-medium text-gray-700">4.1-4.4 ⭐</div>
-                      <div className="flex-1 mx-4">
-                        <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
-                          <div className="bg-yellow-500 h-full rounded-full" style={{width: '25%'}}></div>
-                          <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                            {locale === 'pl' ? '25% strata' : '25% loss'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-16 text-sm text-gray-600">
-                        {locale === 'pl' ? 'Dobra' : 'Good'}
-                      </div>
-                    </div>
-
-                    {/* 3.5-4.0 stars - Critical threshold */}
-                    <div className="flex items-center border-2 border-red-300 rounded-lg p-2 bg-red-50">
-                      <div className="w-20 text-sm font-bold text-red-700">3.5-4.0 ⭐</div>
-                      <div className="flex-1 mx-4">
-                        <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
-                          <div className="bg-orange-500 h-full rounded-full" style={{width: '50%'}}></div>
-                          <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                            {locale === 'pl' ? '50% strata' : '50% loss'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-16 text-sm text-red-600 font-bold">
-                        {locale === 'pl' ? 'Strefa Zagrożenia' : 'Danger Zone'}
-                      </div>
-                    </div>
-
-                    {/* 3.0-3.4 stars */}
-                    <div className="flex items-center">
-                      <div className="w-20 text-sm font-medium text-gray-700">3.0-3.4 ⭐</div>
-                      <div className="flex-1 mx-4">
-                        <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
-                          <div className="bg-red-500 h-full rounded-full" style={{width: '70%'}}></div>
-                          <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                            {locale === 'pl' ? '70% strata' : '70% loss'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-16 text-sm text-gray-600">
-                        {locale === 'pl' ? 'Słaba' : 'Poor'}
-                      </div>
-                    </div>
-
-                    {/* Below 3.0 stars */}
-                    <div className="flex items-center">
-                      <div className="w-20 text-sm font-medium text-gray-700">&lt;3.0 ⭐</div>
-                      <div className="flex-1 mx-4">
-                        <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
-                          <div className="bg-red-700 h-full rounded-full" style={{width: '85%'}}></div>
-                          <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                            {locale === 'pl' ? '85% strata' : '85% loss'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-16 text-sm text-gray-600">
-                        {locale === 'pl' ? 'Krytyczna' : 'Critical'}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 p-4 bg-white/70 rounded-lg border border-red-200">
-                    <p className="text-sm text-gray-700 text-center">
-                      <strong className="text-red-600">
-                        {locale === 'pl' ? 'Kluczowa Informacja:' : 'Critical Insight:'}
-                      </strong> 
-                      {locale === 'pl'
-                        ? ' Firmy z ocenami poniżej 4.1 gwiazdek tracą ponad 50% potencjalnych klientów, zanim ci w ogóle się z Tobą skontaktują.'
-                        : ' Businesses with ratings below 4.1 stars lose 50%+ of potential customers before they even contact you.'
-                      }
-                    </p>
-                  </div>
-                </div>
-
-                {/* Right side - Key Statistics */}
-                <div>
-                  <h3 className="text-2xl font-bold mb-6 text-[#0D2959]">
-                    {locale === 'pl' ? 'Wpływ Niskich Ocen' : 'The Impact of Low Ratings'}
-                  </h3>
-                  
-                  <div className="space-y-6">
-                    {/* Stat 1 */}
-                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="text-3xl font-bold text-red-600">87%</div>
-                        <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
-                          </svg>
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-700">
-                        {locale === 'pl'
-                          ? 'konsumentów sprawdza opinie online przed odwiedzeniem firmy'
-                          : 'of consumers check online reviews before visiting a business'
-                        }
-                      </p>
-                    </div>
-
-                    {/* Stat 2 */}
-                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="text-3xl font-bold text-orange-600">68%</div>
-                        <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                          </svg>
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-700">
-                        {locale === 'pl'
-                          ? 'spadek przychodów gdy ocena spada z 4+ do 3+ gwiazdek'
-                          : 'revenue decrease when rating drops from 4+ to 3+ stars'
-                        }
-                      </p>
-                    </div>
-
-                    {/* Stat 3 */}
-                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="text-3xl font-bold text-[#0D2959]">€2,400</div>
-                        <div className="w-12 h-12 bg-[#0D2959]/10 rounded-full flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0D2959]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                          </svg>
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-700">
-                        {locale === 'pl'
-                          ? 'średnia miesięczna strata przychodów przy ocenach poniżej 4.0 gwiazdek'
-                          : 'average monthly revenue loss with ratings below 4.0 stars'
-                        }
-                      </p>
-                    </div>
-
-                    {/* Stat 4 */}
-                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="text-3xl font-bold text-green-600">12x</div>
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                          </svg>
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-700">
-                        {locale === 'pl'
-                          ? 'razy większe prawdopodobieństwo wyboru z oceną 4.5+ vs 3.5 gwiazdek'
-                          : 'more likely to be chosen with 4.5+ star rating vs 3.5 stars'
-                        }
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Call to action */}
-                  <div className="mt-8 p-6 bg-gradient-to-r from-[#F17313] to-[#0D2959] rounded-xl text-white">
-                    <h4 className="font-bold text-lg mb-2">
-                      {locale === 'pl' 
-                        ? 'Nie Pozwól, Aby Niskie Oceny Szkodziły Twojemu Biznesowi'
-                        : "Don't Let Low Ratings Hurt Your Business"
-                      }
-                    </h4>
-                    <p className="text-sm opacity-90 mb-4">
-                      {locale === 'pl'
-                        ? 'Każdy dzień ze słabymi ocenami oznacza utratę potencjalnych klientów na rzecz konkurencji z lepszymi wynikami.'
-                        : 'Every day with poor ratings means losing potential customers to competitors with better scores.'
-                      }
-                    </p>
-                    <button 
-                      onClick={handleStartClick}
-                      className="bg-white text-[#0D2959] px-6 py-2 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors"
-                    >
-                      {locale === 'pl' ? 'Popraw Moją Ocenę Teraz' : 'Improve My Rating Now'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom insight */}
-              <div className="mt-12 bg-yellow-50 border border-yellow-200 rounded-xl p-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      />
                     </svg>
                   </div>
+                  <h4 className="font-semibold text-[#0D2959] text-sm mb-2">
+                    {locale === 'pl' ? 'Zespół Ekspertów' : 'Expert Team'}
+                  </h4>
+                  <p className="text-xs text-[#0D2959]/70">
+                    {locale === 'pl'
+                      ? 'Ponad 5 lat doświadczenia w zarządzaniu profilami Google Maps'
+                      : '5+ years experience with Google Maps and business profile management'
+                    }
+                  </p>
+                </div>
+
+                {/* 24/7 Support */}
+                <div className="flex flex-col items-center text-center p-6 rounded-lg bg-[#0D2959]/5 shadow-sm border border-[#0D2959]/20 transition-transform hover:translate-y-[-5px]">
+                  <div className="w-12 h-12 bg-[#0D2959]/10 rounded-full flex items-center justify-center mb-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 text-[#0D2959]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25A9.75 9.75 0 002.25 12c0 5.384 4.365 9.75 9.75 9.75s9.75-4.366 9.75-9.75S17.634 2.25 12 2.25z"
+                      />
+                    </svg>
+                  </div>
+                  <h4 className="font-semibold text-[#0D2959] text-sm mb-2">
+                    {locale === 'pl' ? 'Wsparcie 24/7' : '24/7 Customer Support'}
+                  </h4>
+                  <p className="text-xs text-[#0D2959]/70">
+                    {locale === 'pl'
+                      ? 'Zawsze dostępni, aby odpowiedzieć na pytania i informować o postępach sprawy'
+                      : 'Always available to answer questions and provide updates on your case'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Proof Section */}
+          <div className="max-w-6xl mx-auto mb-24">
+            <h2 className="text-3xl font-bold text-center mb-12 text-[#0D2959]">
+              {locale === 'pl' ? 'Co Mówią Nasi Klienci' : 'What Our Clients Say'}
+            </h2>
+
+            {/* Customer Reviews */}
+            <div className="grid md:grid-cols-2 gap-8 mb-24">
+              {/* Review 1 */}
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                <div className="flex items-center mb-4">
+                  <div className="flex text-yellow-400 mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-gray-700 mb-6 italic">
+                  {locale === 'pl'
+                    ? '"Ktoś stworzył fałszywy profil GMB dla naszej restauracji z całkowicie błędnymi informacjami i szkodliwymi opiniami. MapWipers skutecznie usunął cały fałszywy profil w ciągu 12 dni, ratując naszą reputację i zapobiegając zamieszaniu wśród klientów."'
+                    : '"Someone created a fake GMB profile for our restaurant with completely wrong information and damaging reviews. MapWipers successfully removed the entire fake profile within 12 days, saving our reputation and preventing customer confusion."'
+                  }
+                </p>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-[#F17313]/10 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-[#F17313] font-semibold">SM</span>
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-yellow-800 mb-2">
-                      {locale === 'pl' ? 'Źródło Badań' : 'Research Source'}
-                    </h4>
-                    <p className="text-sm text-yellow-700">
-                      {locale === 'pl'
-                        ? 'Dane zebrane z Harvard Business Review, BrightLocal Consumer Review Survey 2024 oraz Google Business Performance Studies. Próg 4.1 gwiazdki został zidentyfikowany jako punkt krytyczny, w którym zaufanie klientów znacząco spada.'
-                        : 'Data compiled from Harvard Business Review, BrightLocal Consumer Review Survey 2024, and Google Business Performance Studies. The 4.1-star threshold is identified as the critical point where customer trust significantly decreases.'
-                      }
+                    <p className="font-semibold text-[#0D2959]">Sarah Martinez</p>
+                    <p className="text-sm text-gray-600">
+                      {locale === 'pl' ? 'Właścicielka, Restauracja Bella Vista' : 'Owner, Bella Vista Restaurant'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Review 2 */}
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                <div className="flex items-center mb-4">
+                  <div className="flex text-yellow-400 mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-gray-700 mb-6 italic">
+                  {locale === 'pl'
+                    ? '"Konkurent stworzył wiele fałszywych profili Google Business dla naszej kancelarii z nieprawidłowymi danymi kontaktowymi i złośliwymi treściami. MapWipers całkowicie usunął wszystkie nieautoryzowane profile w ciągu 8 dni. Profesjonalna i niezawodna usługa!"'
+                    : '"A competitor created multiple fake Google Business profiles for our law firm with incorrect contact details and malicious content. MapWipers removed all unauthorized profiles completely within 8 days. Professional and reliable service!"'
+                  }
+                </p>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-[#0D2959]/10 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-[#0D2959] font-semibold">DT</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-[#0D2959]">David Thompson</p>
+                    <p className="text-sm text-gray-600">
+                      {locale === 'pl' ? 'CEO, Thompson Usługi Prawne' : 'CEO, Thompson Legal Services'}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Technology & Expertise Section */}
-            <div className="max-w-6xl mx-auto mb-24">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4 text-[#0D2959]">
-                  {locale === 'pl' 
-                    ? 'Zaawansowana Technologia Spotyka Sprawdzone Doświadczenie'
-                    : 'Advanced Technology Meets Proven Expertise'
-                  }
-                </h2>
-                <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-                  {locale === 'pl'
-                    ? 'Nasze zaawansowane oprogramowanie oparte na AI i lata praktycznego doświadczenia zapewniają najwyższy wskaźnik sukcesu w usuwaniu profili GMB.'
-                    : 'Our sophisticated AI-powered software and years of hands-on experience ensure the highest success rate in GMB profile removal.'
-                  }
-                </p>
+            {/* Use Cases */}
+            <div className="bg-gradient-to-br from-[#0D2959]/5 to-[#F17313]/5 rounded-2xl p-8">
+              <h3 className="text-2xl font-bold text-center mb-8 text-[#0D2959]">
+                {locale === 'pl' ? 'Typowe Przypadki Użycia' : 'Common Use Cases'}
+              </h3>
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Use Case 1 */}
+                <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-white/50">
+                  <div className="w-14 h-14 bg-[#F17313]/10 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-[#F17313]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                  </div>
+                  <h4 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                    {locale === 'pl' ? 'Fałszywe Profile GMB Konkurencji' : 'Fake Competitor GMB Profiles'}
+                  </h4>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {locale === 'pl' ? (
+                      <>
+                        <strong>Problem:</strong> Klinika stomatologiczna odkryła, że konkurencyjna praktyka stworzyła fałszywy profil Google Moja Firma używając ich nazwy firmy z fałszywymi negatywnymi informacjami i błędnymi danymi kontaktowymi.
+                        <br /><br />
+                        <strong>Rozwiązanie:</strong> Udokumentowaliśmy fałszywy profil, zebraliśmy dowody podszywania się i współpracowaliśmy z Google, aby całkowicie usunąć fałszywą wizytówkę GMB w ciągu 14 dni, chroniąc ich tożsamość marki.
+                      </>
+                    ) : (
+                      <>
+                        <strong>Problem:</strong> A dental clinic discovered that a competing practice had created a fake Google My Business profile using their business name with false negative information and wrong contact details.
+                        <br /><br />
+                        <strong>Solution:</strong> We documented the fraudulent profile, gathered evidence of impersonation, and worked with Google to have the entire fake GMB listing removed within 14 days, protecting their brand identity.
+                      </>
+                    )}
+                  </p>
+                </div>
+
+                {/* Use Case 2 */}
+                <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-white/50">
+                  <div className="w-14 h-14 bg-[#0D2959]/10 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-[#0D2959]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </div>
+                  <h4 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                    {locale === 'pl' ? 'Nieautoryzowane Duplikaty Wizytówek GMB' : 'Unauthorized Duplicate GMB Listings'}
+                  </h4>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {locale === 'pl' ? (
+                      <>
+                        <strong>Problem:</strong> Firma księgowa odkryła 4 nieautoryzowane profile Google Moja Firma stworzone z nazwą ich firmy, każdy pokazujący inne adresy i numery telefonów, powodując ogromne zamieszanie wśród klientów.
+                        <br /><br />
+                        <strong>Rozwiązanie:</strong> Systematycznie usunęliśmy wszystkie nieautoryzowane duplikaty wizytówek GMB, pozostawiając tylko ich zweryfikowany oficjalny profil. Wyeliminowało to zamieszanie wśród klientów i skonsolidowało ich obecność online, poprawiając widoczność w lokalnym wyszukiwaniu o 65%.
+                      </>
+                    ) : (
+                      <>
+                        <strong>Problem:</strong> An accounting firm discovered 4 unauthorized Google My Business profiles created with their company name, each showing different addresses and phone numbers, causing massive customer confusion.
+                        <br /><br />
+                        <strong>Solution:</strong> We systematically removed all unauthorized duplicate GMB listings, leaving only their verified official profile. This eliminated customer confusion and consolidated their online presence, improving local search visibility by 65%.
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
+            </div>
+          </div>
 
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                {/* Left side - Technology */}
-                <div>
-                  <h3 className="text-2xl font-bold mb-6 text-[#0D2959]">
-                    {locale === 'pl' ? 'Najnowocześniejsza Technologia' : 'Cutting-Edge Technology'}
-                  </h3>
-                  <div className="space-y-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-[#F17313]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#F17313]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-lg mb-2 text-[#0D2959]">
-                          {locale === 'pl' ? 'Analiza Oparta na AI' : 'AI-Powered Analysis'}
-                        </h4>
-                        <p className="text-gray-700 text-sm">
-                          {locale === 'pl'
-                            ? 'Nasze algorytmy uczenia maszynowego analizują tysiące punktów danych, aby identyfikować fałszywe profile z dokładnością 99,2%, wykrywając wzorce niewidoczne dla ręcznej weryfikacji.'
-                            : 'Our machine learning algorithms analyze thousands of data points to identify fraudulent profiles with 99.2% accuracy, detecting patterns invisible to manual review.'
-                          }
-                        </p>
+          {/* Impact Statistics Section */}
+          <div className="max-w-6xl mx-auto mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 text-[#0D2959]">
+                {locale === 'pl' ? 'Ukryty Koszt Niskich Ocen' : 'The Hidden Cost of Low Ratings'}
+              </h2>
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+                {locale === 'pl'
+                  ? 'Badania pokazują, że niskie oceny w profilach Google Moja Firma bezpośrednio wpływają na pozyskiwanie klientów i przychody. Zobacz, jak oceny wpływają na wyniki biznesowe.'
+                  : 'Research shows that low ratings on Google Business profiles directly impact customer acquisition and revenue. See how ratings affect business performance.'
+                }
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left side - Chart */}
+              <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-8 border border-red-100">
+                <h3 className="text-xl font-bold mb-6 text-[#0D2959] text-center">
+                  {locale === 'pl' ? 'Utrata Klientów według Średniej Oceny' : 'Customer Loss by Average Rating'}
+                </h3>
+
+                {/* Chart visualization */}
+                <div className="space-y-4">
+                  {/* 4.5+ stars */}
+                  <div className="flex items-center">
+                    <div className="w-20 text-sm font-medium text-gray-700">4.5+ ⭐</div>
+                    <div className="flex-1 mx-4">
+                      <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
+                        <div className="bg-green-500 h-full rounded-full" style={{ width: '10%' }}></div>
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                          {locale === 'pl' ? '10% strata' : '10% loss'}
+                        </span>
                       </div>
                     </div>
+                    <div className="w-16 text-sm text-gray-600">
+                      {locale === 'pl' ? 'Doskonała' : 'Excellent'}
+                    </div>
+                  </div>
 
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-[#0D2959]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0D2959]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-lg mb-2 text-[#0D2959]">
-                          {locale === 'pl' ? 'Automatyczna Dokumentacja' : 'Automated Documentation'}
-                        </h4>
-                        <p className="text-gray-700 text-sm">
-                          {locale === 'pl'
-                            ? 'Zaawansowane oprogramowanie automatycznie generuje kompleksowe pakiety dowodów, w tym analizę metadanych i raporty rozpoznawania wzorców wymagane przez Google.'
-                            : 'Advanced software automatically generates comprehensive evidence packages, including metadata analysis and pattern recognition reports required by Google.'
-                          }
-                        </p>
+                  {/* 4.1-4.4 stars */}
+                  <div className="flex items-center">
+                    <div className="w-20 text-sm font-medium text-gray-700">4.1-4.4 ⭐</div>
+                    <div className="flex-1 mx-4">
+                      <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
+                        <div className="bg-yellow-500 h-full rounded-full" style={{ width: '25%' }}></div>
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                          {locale === 'pl' ? '25% strata' : '25% loss'}
+                        </span>
                       </div>
                     </div>
+                    <div className="w-16 text-sm text-gray-600">
+                      {locale === 'pl' ? 'Dobra' : 'Good'}
+                    </div>
+                  </div>
 
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-[#F17313]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#F17313]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
+                  {/* 3.5-4.0 stars - Critical threshold */}
+                  <div className="flex items-center border-2 border-red-300 rounded-lg p-2 bg-red-50">
+                    <div className="w-20 text-sm font-bold text-red-700">3.5-4.0 ⭐</div>
+                    <div className="flex-1 mx-4">
+                      <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
+                        <div className="bg-orange-500 h-full rounded-full" style={{ width: '50%' }}></div>
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                          {locale === 'pl' ? '50% strata' : '50% loss'}
+                        </span>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-lg mb-2 text-[#0D2959]">
-                          {locale === 'pl' ? 'Monitorowanie w Czasie Rzeczywistym' : 'Real-Time Monitoring'}
-                        </h4>
-                        <p className="text-gray-700 text-sm">
-                          {locale === 'pl'
-                            ? 'Nasz autorski system monitorowania śledzi postęp usuwania w czasie rzeczywistym i automatycznie dostosowuje strategie w oparciu o wzorce odpowiedzi Google.'
-                            : "Our proprietary monitoring system tracks removal progress in real-time and automatically adjusts strategies based on Google's response patterns."
-                          }
-                        </p>
+                    </div>
+                    <div className="w-16 text-sm text-red-600 font-bold">
+                      {locale === 'pl' ? 'Strefa Zagrożenia' : 'Danger Zone'}
+                    </div>
+                  </div>
+
+                  {/* 3.0-3.4 stars */}
+                  <div className="flex items-center">
+                    <div className="w-20 text-sm font-medium text-gray-700">3.0-3.4 ⭐</div>
+                    <div className="flex-1 mx-4">
+                      <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
+                        <div className="bg-red-500 h-full rounded-full" style={{ width: '70%' }}></div>
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                          {locale === 'pl' ? '70% strata' : '70% loss'}
+                        </span>
                       </div>
+                    </div>
+                    <div className="w-16 text-sm text-gray-600">
+                      {locale === 'pl' ? 'Słaba' : 'Poor'}
+                    </div>
+                  </div>
+
+                  {/* Below 3.0 stars */}
+                  <div className="flex items-center">
+                    <div className="w-20 text-sm font-medium text-gray-700">&lt;3.0 ⭐</div>
+                    <div className="flex-1 mx-4">
+                      <div className="bg-gray-200 rounded-full h-6 relative overflow-hidden">
+                        <div className="bg-red-700 h-full rounded-full" style={{ width: '85%' }}></div>
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                          {locale === 'pl' ? '85% strata' : '85% loss'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="w-16 text-sm text-gray-600">
+                      {locale === 'pl' ? 'Krytyczna' : 'Critical'}
                     </div>
                   </div>
                 </div>
 
-                {/* Right side - Experience */}
-                <div>
-                  <h3 className="text-2xl font-bold mb-6 text-[#0D2959]">
-                    {locale === 'pl' ? 'Sprawdzone Doświadczenie' : 'Battle-Tested Experience'}
-                  </h3>
-                  <div className="bg-gradient-to-br from-[#0D2959]/5 to-[#F17313]/5 rounded-2xl p-8">
-                    <div className="grid grid-cols-2 gap-6 mb-6">
-                      <div className="text-center">
-                        <div className="text-3xl font-bold text-[#F17313] mb-2">7+</div>
-                        <p className="text-sm text-[#0D2959] font-medium">
-                          {locale === 'pl' ? 'Lat Działalności' : 'Years in Business'}
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-3xl font-bold text-[#0D2959] mb-2">500+</div>
-                        <p className="text-sm text-[#0D2959] font-medium">
-                          {locale === 'pl' ? 'Usuniętych Profili' : 'Profiles Removed'}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-[#F17313] rounded-full"></div>
-                        <p className="text-sm text-gray-700">
-                          {locale === 'pl'
-                            ? 'Głęboka znajomość wewnętrznych procesów weryfikacji Google'
-                            : "Deep understanding of Google's internal review processes"
-                          }
-                        </p>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-[#0D2959] rounded-full"></div>
-                        <p className="text-sm text-gray-700">
-                          {locale === 'pl'
-                            ? 'Ustalone relacje z zespołami wsparcia Google Business'
-                            : 'Established relationships with Google Business support teams'
-                          }
-                        </p>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-[#F17313] rounded-full"></div>
-                        <p className="text-sm text-gray-700">
-                          {locale === 'pl'
-                            ? 'Stale aktualizowana znajomość polityk Google Maps'
-                            : 'Constantly updated knowledge of Google Maps policies'
-                          }
-                        </p>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-[#0D2959] rounded-full"></div>
-                        <p className="text-sm text-gray-700">
-                          {locale === 'pl'
-                            ? 'Sprawdzone strategie udoskonalone przez tysiące udanych spraw'
-                            : 'Proven strategies refined through thousands of successful cases'
-                          }
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Success Rate Highlight */}
-                  <div className="mt-6 bg-white rounded-xl border-2 border-green-200 p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-2xl font-bold text-green-600">
-                          {locale === 'pl' ? '98% Wskaźnik Sukcesu' : '98% Success Rate'}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          {locale === 'pl'
-                            ? 'Osiągnięty dzięki technologii + doświadczeniu'
-                            : 'Achieved through technology + expertise'
-                          }
-                        </p>
-                      </div>
-                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom CTA */}
-              <div className="text-center mt-12">
-                <div className="bg-gradient-to-r from-[#0D2959] to-[#F17313] rounded-2xl p-8 text-white">
-                  <h3 className="text-2xl font-bold mb-4">
-                    {locale === 'pl' ? 'Gotowy, Aby Doświadczyć Różnicy?' : 'Ready to Experience the Difference?'}
-                  </h3>
-                  <p className="text-lg mb-6 opacity-90">
+                <div className="mt-6 p-4 bg-white/70 rounded-lg border border-red-200">
+                  <p className="text-sm text-gray-700 text-center">
+                    <strong className="text-red-600">
+                      {locale === 'pl' ? 'Kluczowa Informacja:' : 'Critical Insight:'}
+                    </strong>
                     {locale === 'pl'
-                      ? 'Pozwól naszej zaawansowanej technologii i sprawdzonemu doświadczeniu rozwiązać Twoje problemy z profilami GMB szybko i trwale.'
-                      : 'Let our advanced technology and proven expertise solve your GMB profile problems quickly and permanently.'
+                      ? ' Firmy z ocenami poniżej 4.1 gwiazdek tracą ponad 50% potencjalnych klientów, zanim ci w ogóle się z Tobą skontaktują.'
+                      : ' Businesses with ratings below 4.1 stars lose 50%+ of potential customers before they even contact you.'
                     }
                   </p>
-                  <button 
+                </div>
+              </div>
+
+              {/* Right side - Key Statistics */}
+              <div>
+                <h3 className="text-2xl font-bold mb-6 text-[#0D2959]">
+                  {locale === 'pl' ? 'Wpływ Niskich Ocen' : 'The Impact of Low Ratings'}
+                </h3>
+
+                <div className="space-y-6">
+                  {/* Stat 1 */}
+                  <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-3xl font-bold text-red-600">87%</div>
+                      <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-700">
+                      {locale === 'pl'
+                        ? 'konsumentów sprawdza opinie online przed odwiedzeniem firmy'
+                        : 'of consumers check online reviews before visiting a business'
+                      }
+                    </p>
+                  </div>
+
+                  {/* Stat 2 */}
+                  <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-3xl font-bold text-orange-600">68%</div>
+                      <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-700">
+                      {locale === 'pl'
+                        ? 'spadek przychodów gdy ocena spada z 4+ do 3+ gwiazdek'
+                        : 'revenue decrease when rating drops from 4+ to 3+ stars'
+                      }
+                    </p>
+                  </div>
+
+                  {/* Stat 3 */}
+                  <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-3xl font-bold text-[#0D2959]">€2,400</div>
+                      <div className="w-12 h-12 bg-[#0D2959]/10 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0D2959]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                        </svg>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-700">
+                      {locale === 'pl'
+                        ? 'średnia miesięczna strata przychodów przy ocenach poniżej 4.0 gwiazdek'
+                        : 'average monthly revenue loss with ratings below 4.0 stars'
+                      }
+                    </p>
+                  </div>
+
+                  {/* Stat 4 */}
+                  <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-3xl font-bold text-green-600">12x</div>
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                        </svg>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-700">
+                      {locale === 'pl'
+                        ? 'razy większe prawdopodobieństwo wyboru z oceną 4.5+ vs 3.5 gwiazdek'
+                        : 'more likely to be chosen with 4.5+ star rating vs 3.5 stars'
+                      }
+                    </p>
+                  </div>
+                </div>
+
+                {/* Call to action */}
+                <div className="mt-8 p-6 bg-gradient-to-r from-[#F17313] to-[#0D2959] rounded-xl text-white">
+                  <h4 className="font-bold text-lg mb-2">
+                    {locale === 'pl'
+                      ? 'Nie Pozwól, Aby Niskie Oceny Szkodziły Twojemu Biznesowi'
+                      : "Don't Let Low Ratings Hurt Your Business"
+                    }
+                  </h4>
+                  <p className="text-sm opacity-90 mb-4">
+                    {locale === 'pl'
+                      ? 'Każdy dzień ze słabymi ocenami oznacza utratę potencjalnych klientów na rzecz konkurencji z lepszymi wynikami.'
+                      : 'Every day with poor ratings means losing potential customers to competitors with better scores.'
+                    }
+                  </p>
+                  <button
                     onClick={handleStartClick}
-                    className="bg-white text-[#0D2959] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors"
+                    className="bg-white text-[#0D2959] px-6 py-2 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors"
                   >
-                    {locale === 'pl' ? 'Rozpocznij Swoją Sprawę Dzisiaj' : 'Start Your Case Today'}
+                    {locale === 'pl' ? 'Popraw Moją Ocenę Teraz' : 'Improve My Rating Now'}
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Secure Payments Section */}
-            <div className="max-w-6xl mx-auto mb-24">
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
-                <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold mb-4 text-[#0D2959]">
+            {/* Bottom insight */}
+            <div className="mt-12 bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-yellow-800 mb-2">
+                    {locale === 'pl' ? 'Źródło Badań' : 'Research Source'}
+                  </h4>
+                  <p className="text-sm text-yellow-700">
                     {locale === 'pl'
-                      ? 'Bezpieczeństwo na Poziomie Bankowym dla Twojego Spokoju'
-                      : 'Bank-Level Security for Your Peace of Mind'
-                    }
-                  </h2>
-                  <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-                    {locale === 'pl'
-                      ? 'Twoje informacje płatnicze są chronione tymi samymi standardami bezpieczeństwa, których używają główne banki i instytucje finansowe na całym świecie.'
-                      : 'Your payment information is protected by the same security standards used by major banks and financial institutions worldwide.'
+                      ? 'Dane zebrane z Harvard Business Review, BrightLocal Consumer Review Survey 2024 oraz Google Business Performance Studies. Próg 4.1 gwiazdki został zidentyfikowany jako punkt krytyczny, w którym zaufanie klientów znacząco spada.'
+                      : 'Data compiled from Harvard Business Review, BrightLocal Consumer Review Survey 2024, and Google Business Performance Studies. The 4.1-star threshold is identified as the critical point where customer trust significantly decreases.'
                     }
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div className="grid md:grid-cols-3 gap-8 mb-8">
-                  {/* Stripe Security */}
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          {/* Technology & Expertise Section */}
+          <div className="max-w-6xl mx-auto mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 text-[#0D2959]">
+                {locale === 'pl'
+                  ? 'Zaawansowana Technologia Spotyka Sprawdzone Doświadczenie'
+                  : 'Advanced Technology Meets Proven Expertise'
+                }
+              </h2>
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+                {locale === 'pl'
+                  ? 'Nasze zaawansowane oprogramowanie oparte na AI i lata praktycznego doświadczenia zapewniają najwyższy wskaźnik sukcesu w usuwaniu profili GMB.'
+                  : 'Our sophisticated AI-powered software and years of hands-on experience ensure the highest success rate in GMB profile removal.'
+                }
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              {/* Left side - Technology */}
+              <div>
+                <h3 className="text-2xl font-bold mb-6 text-[#0D2959]">
+                  {locale === 'pl' ? 'Najnowocześniejsza Technologia' : 'Cutting-Edge Technology'}
+                </h3>
+                <div className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-[#F17313]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#F17313]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                       </svg>
                     </div>
-                    <h3 className="font-semibold text-lg mb-2 text-[#0D2959]">
-                      {locale === 'pl' ? 'Szyfrowanie SSL' : 'SSL Encryption'}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {locale === 'pl'
-                        ? 'Wszystkie przesyłane dane są szyfrowane technologią 256-bitową SSL'
-                        : 'All data transmitted is encrypted with 256-bit SSL technology'
-                      }
-                    </p>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2 text-[#0D2959]">
+                        {locale === 'pl' ? 'Analiza Oparta na AI' : 'AI-Powered Analysis'}
+                      </h4>
+                      <p className="text-gray-700 text-sm">
+                        {locale === 'pl'
+                          ? 'Nasze algorytmy uczenia maszynowego analizują tysiące punktów danych, aby identyfikować fałszywe profile z dokładnością 99,2%, wykrywając wzorce niewidoczne dla ręcznej weryfikacji.'
+                          : 'Our machine learning algorithms analyze thousands of data points to identify fraudulent profiles with 99.2% accuracy, detecting patterns invisible to manual review.'
+                        }
+                      </p>
+                    </div>
                   </div>
 
-                  {/* PCI Compliance */}
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-[#0D2959]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0D2959]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2 text-[#0D2959]">
+                        {locale === 'pl' ? 'Automatyczna Dokumentacja' : 'Automated Documentation'}
+                      </h4>
+                      <p className="text-gray-700 text-sm">
+                        {locale === 'pl'
+                          ? 'Zaawansowane oprogramowanie automatycznie generuje kompleksowe pakiety dowodów, w tym analizę metadanych i raporty rozpoznawania wzorców wymagane przez Google.'
+                          : 'Advanced software automatically generates comprehensive evidence packages, including metadata analysis and pattern recognition reports required by Google.'
+                        }
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-[#F17313]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#F17313]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2 text-[#0D2959]">
+                        {locale === 'pl' ? 'Monitorowanie w Czasie Rzeczywistym' : 'Real-Time Monitoring'}
+                      </h4>
+                      <p className="text-gray-700 text-sm">
+                        {locale === 'pl'
+                          ? 'Nasz autorski system monitorowania śledzi postęp usuwania w czasie rzeczywistym i automatycznie dostosowuje strategie w oparciu o wzorce odpowiedzi Google.'
+                          : "Our proprietary monitoring system tracks removal progress in real-time and automatically adjusts strategies based on Google's response patterns."
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right side - Experience */}
+              <div>
+                <h3 className="text-2xl font-bold mb-6 text-[#0D2959]">
+                  {locale === 'pl' ? 'Sprawdzone Doświadczenie' : 'Battle-Tested Experience'}
+                </h3>
+                <div className="bg-gradient-to-br from-[#0D2959]/5 to-[#F17313]/5 rounded-2xl p-8">
+                  <div className="grid grid-cols-2 gap-6 mb-6">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-[#F17313] mb-2">7+</div>
+                      <p className="text-sm text-[#0D2959] font-medium">
+                        {locale === 'pl' ? 'Lat Działalności' : 'Years in Business'}
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-[#0D2959] mb-2">500+</div>
+                      <p className="text-sm text-[#0D2959] font-medium">
+                        {locale === 'pl' ? 'Usuniętych Profili' : 'Profiles Removed'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-[#F17313] rounded-full"></div>
+                      <p className="text-sm text-gray-700">
+                        {locale === 'pl'
+                          ? 'Głęboka znajomość wewnętrznych procesów weryfikacji Google'
+                          : "Deep understanding of Google's internal review processes"
+                        }
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-[#0D2959] rounded-full"></div>
+                      <p className="text-sm text-gray-700">
+                        {locale === 'pl'
+                          ? 'Ustalone relacje z zespołami wsparcia Google Business'
+                          : 'Established relationships with Google Business support teams'
+                        }
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-[#F17313] rounded-full"></div>
+                      <p className="text-sm text-gray-700">
+                        {locale === 'pl'
+                          ? 'Stale aktualizowana znajomość polityk Google Maps'
+                          : 'Constantly updated knowledge of Google Maps policies'
+                        }
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-[#0D2959] rounded-full"></div>
+                      <p className="text-sm text-gray-700">
+                        {locale === 'pl'
+                          ? 'Sprawdzone strategie udoskonalone przez tysiące udanych spraw'
+                          : 'Proven strategies refined through thousands of successful cases'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Success Rate Highlight */}
+                <div className="mt-6 bg-white rounded-xl border-2 border-green-200 p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-2xl font-bold text-green-600">
+                        {locale === 'pl' ? '98% Wskaźnik Sukcesu' : '98% Success Rate'}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {locale === 'pl'
+                          ? 'Osiągnięty dzięki technologii + doświadczeniu'
+                          : 'Achieved through technology + expertise'
+                        }
+                      </p>
+                    </div>
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <h3 className="font-semibold text-lg mb-2 text-[#0D2959]">
-                      {locale === 'pl' ? 'Zgodny z PCI' : 'PCI Compliant'}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {locale === 'pl'
-                        ? 'Spełnia najwyższe standardy bezpieczeństwa branży kart płatniczych'
-                        : 'Meets the highest standards for payment card industry security'
-                      }
-                    </p>
-                  </div>
-
-                  {/* Fraud Protection */}
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-semibold text-lg mb-2 text-[#0D2959]">
-                      {locale === 'pl' ? 'Ochrona przed Oszustwami' : 'Fraud Protection'}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {locale === 'pl'
-                        ? 'Zaawansowane uczenie maszynowe wykrywa i zapobiega oszukaczym transakcjom'
-                        : 'Advanced machine learning detects and prevents fraudulent transactions'
-                      }
-                    </p>
-                  </div>
-                </div>
-
-                {/* Stripe Logo and Trust Indicators */}
-                <div className="border-t border-blue-200 pt-8">
-                  <div className="flex flex-col md:flex-row items-center justify-between">
-                    <div className="flex items-center space-x-6 mb-4 md:mb-0">
-                      <div className="text-center">
-                        <div className="bg-white px-6 py-3 rounded-lg shadow-sm border border-gray-200">
-                          <span className="text-2xl font-bold text-blue-600">stripe</span>
-                        </div>
-                        <p className="text-xs text-gray-600 mt-2">
-                          {locale === 'pl' ? 'Obsługiwane przez Stripe' : 'Powered by Stripe'}
-                        </p>
-                      </div>
-                      <div className="text-left">
-                        <p className="text-sm font-medium text-[#0D2959]">
-                          {locale === 'pl' ? 'Zaufane przez miliony' : 'Trusted by millions'}
-                        </p>
-                        <p className="text-xs text-gray-600">
-                          {locale === 'pl'
-                            ? 'Używane przez firmy takie jak Lyft, Shopify i Zoom'
-                            : 'Used by companies like Lyft, Shopify, and Zoom'
-                          }
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-4">
-                      <div className="text-center">
-                        <div className="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
-                          <span className="text-xs font-bold">VISA</span>
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <div className="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
-                          <span className="text-xs font-bold">MC</span>
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <div className="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
-                          <span className="text-xs font-bold">AMEX</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Security Promise */}
-                <div className="bg-white/50 rounded-lg p-6 mt-6 border border-blue-200">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="font-medium text-[#0D2959] mb-1">
-                        {locale === 'pl'
-                          ? 'Twoje Bezpieczeństwo Jest Naszym Priorytetem'
-                          : 'Your Security is Our Priority'
-                        }
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {locale === 'pl'
-                          ? 'Nigdy nie przechowujemy Twoich informacji płatniczych na naszych serwerach. Wszystkie transakcje są przetwarzane bezpośrednio przez bezpieczną infrastrukturę Stripe, zapewniając, że Twoje dane finansowe pozostają całkowicie bezpieczne i prywatne.'
-                          : "We never store your payment information on our servers. All transactions are processed directly through Stripe's secure infrastructure, ensuring your financial data remains completely safe and private."
-                        }
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Success Metrics Section */}
-            <div className="max-w-6xl mx-auto mb-24">
-              <h2 className="text-3xl font-bold text-center mb-12 text-[#0D2959]">
-                {locale === 'pl' ? 'Nasze Wyniki' : 'Our Track Record'}
-              </h2>
-              <div className="grid md:grid-cols-4 gap-8">
-                <div className="text-center p-6 bg-gradient-to-br from-[#F17313]/10 to-[#F17313]/5 rounded-xl border border-[#F17313]/20">
-                  <div className="text-4xl font-bold text-[#F17313] mb-2">500+</div>
-                  <p className="text-[#0D2959] font-medium">
-                    {locale === 'pl' ? 'Usuniętych Profili' : 'Profiles Removed'}
-                  </p>
-                  <p className="text-sm text-[#0D2959]/70 mt-1">
-                    {locale === 'pl' ? 'Pomyślnie usuniętych z Google Maps' : 'Successfully deleted from Google Maps'}
-                  </p>
-                </div>
-                <div className="text-center p-6 bg-gradient-to-br from-[#0D2959]/10 to-[#0D2959]/5 rounded-xl border border-[#0D2959]/20">
-                  <div className="text-4xl font-bold text-[#0D2959] mb-2">98%</div>
-                  <p className="text-[#0D2959] font-medium">
-                    {locale === 'pl' ? 'Wskaźnik Sukcesu' : 'Success Rate'}
-                  </p>
-                  <p className="text-sm text-[#0D2959]/70 mt-1">
-                    {locale === 'pl' ? 'Sprawy rozwiązane pomyślnie' : 'Cases resolved successfully'}
-                  </p>
-                </div>
-                <div className="text-center p-6 bg-gradient-to-br from-[#F17313]/10 to-[#F17313]/5 rounded-xl border border-[#F17313]/20">
-                  <div className="text-4xl font-bold text-[#F17313] mb-2">7-14</div>
-                  <p className="text-[#0D2959] font-medium">
-                    {locale === 'pl' ? 'Dni Średnio' : 'Days Average'}
-                  </p>
-                  <p className="text-sm text-[#0D2959]/70 mt-1">
-                    {locale === 'pl' ? 'Czas ukończenia usunięcia' : 'Time to complete removal'}
-                  </p>
-                </div>
-                <div className="text-center p-6 bg-gradient-to-br from-[#0D2959]/10 to-[#0D2959]/5 rounded-xl border border-[#0D2959]/20">
-                  <div className="text-4xl font-bold text-[#0D2959] mb-2">24/7</div>
-                  <p className="text-[#0D2959] font-medium">
-                    {locale === 'pl' ? 'Dostępne Wsparcie' : 'Support Available'}
-                  </p>
-                  <p className="text-sm text-[#0D2959]/70 mt-1">
-                    {locale === 'pl' ? 'Zawsze tutaj, aby Ci pomóc' : 'Always here to help you'}
-                  </p>
-                </div>
+            {/* Bottom CTA */}
+            <div className="text-center mt-12">
+              <div className="bg-gradient-to-r from-[#0D2959] to-[#F17313] rounded-2xl p-8 text-white">
+                <h3 className="text-2xl font-bold mb-4">
+                  {locale === 'pl' ? 'Gotowy, Aby Doświadczyć Różnicy?' : 'Ready to Experience the Difference?'}
+                </h3>
+                <p className="text-lg mb-6 opacity-90">
+                  {locale === 'pl'
+                    ? 'Pozwól naszej zaawansowanej technologii i sprawdzonemu doświadczeniu rozwiązać Twoje problemy z profilami GMB szybko i trwale.'
+                    : 'Let our advanced technology and proven expertise solve your GMB profile problems quickly and permanently.'
+                  }
+                </p>
+                <button
+                  onClick={handleStartClick}
+                  className="bg-white text-[#0D2959] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors"
+                >
+                  {locale === 'pl' ? 'Rozpocznij Swoją Sprawę Dzisiaj' : 'Start Your Case Today'}
+                </button>
               </div>
             </div>
+          </div>
 
-            {/* Pricing Section */}
-            <div id="pricing" className="max-w-6xl mx-auto mb-24">
-              <div className="text-center mb-12">
+          {/* Secure Payments Section */}
+          <div className="max-w-6xl mx-auto mb-24">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
+              <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold mb-4 text-[#0D2959]">
-                  {locale === 'pl' ? 'Wybierz Swoją Usługę' : 'Choose Your Service'}
+                  {locale === 'pl'
+                    ? 'Bezpieczeństwo na Poziomie Bankowym dla Twojego Spokoju'
+                    : 'Bank-Level Security for Your Peace of Mind'
+                  }
                 </h2>
                 <p className="text-lg text-gray-700 max-w-3xl mx-auto">
                   {locale === 'pl'
-                    ? 'Wybierz usługę, która najlepiej odpowiada Twoim potrzebom. Wszystkie ceny to płatności jednorazowe bez ukrytych opłat.'
-                    : 'Select the service that best fits your needs. All prices are one-time payments with no hidden fees.'}
+                    ? 'Twoje informacje płatnicze są chronione tymi samymi standardami bezpieczeństwa, których używają główne banki i instytucje finansowe na całym świecie.'
+                    : 'Your payment information is protected by the same security standards used by major banks and financial institutions worldwide.'
+                  }
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
-                {/* Remove Profile */}
-                <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-shadow">
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-[#0D2959] mb-2">
-                      {locale === 'pl' ? 'Usuń Profil' : 'Remove Profile'}
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      {locale === 'pl'
-                        ? 'Całkowite usunięcie profilu Google Moja Firma'
-                        : 'Complete removal of Google Business Profile'}
-                    </p>
+              <div className="grid md:grid-cols-3 gap-8 mb-8">
+                {/* Stripe Security */}
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
                   </div>
-                  <div className="text-center mb-6">
-                    <div className="text-4xl font-bold text-[#0D2959] mb-2">
-                      {formatPrice(499)}
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      {locale === 'pl' ? 'Płatność jednorazowa' : 'One-time payment'}
-                    </p>
-                  </div>
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-center text-sm">
-                      <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {locale === 'pl' ? 'Całkowite usunięcie profilu' : 'Complete profile removal'}
-                    </li>
-                    <li className="flex items-center text-sm">
-                      <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {locale === 'pl' ? 'Wszystkie powiązane opinie usunięte' : 'All associated reviews deleted'}
-                    </li>
-                    <li className="flex items-center text-sm">
-                      <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {locale === 'pl' ? 'Ukończenie w 7-14 dni' : '7-14 days completion'}
-                    </li>
-                    <li className="flex items-center text-sm">
-                      <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {locale === 'pl' ? 'Gwarancja zwrotu pieniędzy' : 'Money-back guarantee'}
-                    </li>
-                  </ul>
-                  <button 
-                    onClick={() => handleServiceSelect('remove')}
-                    className="w-full py-3 bg-[#F17313] text-white rounded-full font-semibold hover:bg-[#F17313]/90 transition-colors mb-3"
-                  >
-                    {locale === 'pl' ? 'Wybierz' : 'Choose'}
-                  </button>
+                  <h3 className="font-semibold text-lg mb-2 text-[#0D2959]">
+                    {locale === 'pl' ? 'Szyfrowanie SSL' : 'SSL Encryption'}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {locale === 'pl'
+                      ? 'Wszystkie przesyłane dane są szyfrowane technologią 256-bitową SSL'
+                      : 'All data transmitted is encrypted with 256-bit SSL technology'
+                    }
+                  </p>
                 </div>
 
-                {/* Reset Profile */}
-                <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-shadow">
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-[#0D2959] mb-2">
-                      {locale === 'pl' ? 'Zresetuj Profil' : 'Reset Profile'}
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      {locale === 'pl'
-                        ? 'Zresetuj profil Google Moja Firma do czystego stanu'
-                        : 'Reset Google Business Profile to clean state'
-                      }
-                    </p>
+                {/* PCI Compliance */}
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                   </div>
-                  <div className="text-center mb-6">
-                    <div className="text-4xl font-bold text-[#0D2959] mb-2">
-                      {formatPrice(599)}
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      {locale === 'pl' ? 'Płatność jednorazowa' : 'One-time payment'}
-                    </p>
+                  <h3 className="font-semibold text-lg mb-2 text-[#0D2959]">
+                    {locale === 'pl' ? 'Zgodny z PCI' : 'PCI Compliant'}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {locale === 'pl'
+                      ? 'Spełnia najwyższe standardy bezpieczeństwa branży kart płatniczych'
+                      : 'Meets the highest standards for payment card industry security'
+                    }
+                  </p>
+                </div>
+
+                {/* Fraud Protection */}
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
                   </div>
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-center text-sm">
-                      <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {locale === 'pl' ? 'Profil zresetowany do czystego stanu' : 'Profile reset to clean state'}
-                    </li>
-                    <li className="flex items-center text-sm">
-                      <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {locale === 'pl' ? 'Usuń negatywne treści' : 'Remove negative content'}
-                    </li>
-                    <li className="flex items-center text-sm">
-                      <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {locale === 'pl' ? 'Ukończenie w 7-14 dni' : '7-14 days completion'}
-                    </li>
-                    <li className="flex items-center text-sm">
-                      <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {locale === 'pl' ? 'Gwarancja zwrotu pieniędzy' : 'Money-back guarantee'}
-                    </li>
-                  </ul>
-                  <button 
-                    onClick={() => handleServiceSelect('reset')}
-                    className="w-full py-3 bg-[#F17313] text-white rounded-full font-semibold hover:bg-[#F17313]/90 transition-colors mb-3"
-                  >
-                    {locale === 'pl' ? 'Wybierz' : 'Choose'}
-                  </button>
+                  <h3 className="font-semibold text-lg mb-2 text-[#0D2959]">
+                    {locale === 'pl' ? 'Ochrona przed Oszustwami' : 'Fraud Protection'}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {locale === 'pl'
+                      ? 'Zaawansowane uczenie maszynowe wykrywa i zapobiega oszukaczym transakcjom'
+                      : 'Advanced machine learning detects and prevents fraudulent transactions'
+                    }
+                  </p>
                 </div>
               </div>
 
-              {/* Enhance Your Service */}
-              <div className="bg-gradient-to-br from-[#0D2959]/5 to-[#F17313]/5 rounded-2xl p-8 border border-gray-100">
-                <h3 className="text-2xl font-bold text-center mb-8 text-[#0D2959]">
-                  {locale === 'pl' ? 'Ulepsz Swoją Usługę' : 'Enhance Your Service'}
-                </h3>
-                <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                  {/* 1-Year Protection */}
-                  <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-white/50">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="font-semibold text-lg text-[#0D2959]">
-                        {locale === 'pl' ? 'Ochrona na 1 Rok' : '1-Year Protection'}
-                      </h4>
-                      <span className="text-2xl font-bold text-[#F17313]">
-                        {formatPrice(199, true)}
-                      </span>
+              {/* Stripe Logo and Trust Indicators */}
+              <div className="border-t border-blue-200 pt-8">
+                <div className="flex flex-col md:flex-row items-center justify-between">
+                  <div className="flex items-center space-x-6 mb-4 md:mb-0">
+                    <div className="text-center">
+                      <div className="bg-white px-6 py-3 rounded-lg shadow-sm border border-gray-200">
+                        <span className="text-2xl font-bold text-blue-600">stripe</span>
+                      </div>
+                      <p className="text-xs text-gray-600 mt-2">
+                        {locale === 'pl' ? 'Obsługiwane przez Stripe' : 'Powered by Stripe'}
+                      </p>
                     </div>
-                    <p className="text-gray-700 text-sm mb-4">
-                      {locale === 'pl'
-                        ? 'Zapobiega ponownemu pojawieniu się przez 12 miesięcy'
-                        : 'Prevents reappearance for 12 months'
-                      }
-                    </p>
-                    <ul className="space-y-2">
-                      <li className="flex items-center text-sm">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {locale === 'pl' ? 'Ciągły monitoring' : 'Continuous monitoring'}
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {locale === 'pl' ? 'Automatyczne ponowne usunięcie' : 'Automatic re-removal'}
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {locale === 'pl' ? 'Miesięczne raporty' : 'Monthly reports'}
-                      </li>
-                    </ul>
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-[#0D2959]">
+                        {locale === 'pl' ? 'Zaufane przez miliony' : 'Trusted by millions'}
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        {locale === 'pl'
+                          ? 'Używane przez firmy takie jak Lyft, Shopify i Zoom'
+                          : 'Used by companies like Lyft, Shopify, and Zoom'
+                        }
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Express Service */}
-                  <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-white/50">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="font-semibold text-lg text-[#0D2959]">
-                        {locale === 'pl' ? 'Usługa Ekspresowa' : 'Express Service'}
-                      </h4>
-                      <span className="text-2xl font-bold text-[#F17313]">
-                        {formatPrice(99, true)}
-                      </span>
+                  <div className="flex items-center space-x-4">
+                    <div className="text-center">
+                      <div className="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
+                        <span className="text-xs font-bold">VISA</span>
+                      </div>
                     </div>
-                    <p className="text-gray-700 text-sm mb-4">
-                      {locale === 'pl'
-                        ? 'Priorytetowe przetwarzanie w ciągu 24-48 godzin'
-                        : 'Priority processing within 24-48 hours'
-                      }
-                    </p>
-                    <ul className="space-y-2">
-                      <li className="flex items-center text-sm">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {locale === 'pl' ? 'Przetwarzanie w 24-48 godzin' : '24-48 hour processing'}
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {locale === 'pl' ? 'Kolejka priorytetowa' : 'Priority queue'}
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {locale === 'pl' ? 'Dedykowane wsparcie' : 'Dedicated support'}
-                      </li>
-                    </ul>
+                    <div className="text-center">
+                      <div className="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
+                        <span className="text-xs font-bold">MC</span>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
+                        <span className="text-xs font-bold">AMEX</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Payment Info */}
-              <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
-                <div className="grid md:grid-cols-3 gap-8 text-center">
-                  <div>
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                      </svg>
-                    </div>
-                    <h4 className="font-semibold text-[#0D2959] mb-2">
-                      {locale === 'pl' ? 'Płać Tylko za Sukces' : 'Pay Only on Success'}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {locale === 'pl'
-                        ? 'Brak płatności z góry. Płacisz tylko wtedy, gdy pomyślnie ukończymy Twoją usługę.'
-                        : 'No upfront payment. You only pay when we successfully complete your service.'
-                      }
-                    </p>
+              {/* Security Promise */}
+              <div className="bg-white/50 rounded-lg p-6 mt-6 border border-blue-200">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
                   <div>
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <h4 className="font-semibold text-[#0D2959] mb-2">
-                      {locale === 'pl' ? '100% Gwarancja' : '100% Guarantee'}
-                    </h4>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-medium text-[#0D2959] mb-1">
                       {locale === 'pl'
-                        ? 'Jeśli nie możemy ukończyć Twojej usługi w ciągu 30 dni, otrzymujesz pełny zwrot pieniędzy.'
-                        : "If we can't complete your service within 30 days, you get a full refund."
+                        ? 'Twoje Bezpieczeństwo Jest Naszym Priorytetem'
+                        : 'Your Security is Our Priority'
                       }
                     </p>
-                  </div>
-                  <div>
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                    </div>
-                    <h4 className="font-semibold text-[#0D2959] mb-2">
-                      {locale === 'pl' ? 'Bezpieczna Płatność' : 'Secure Payment'}
-                    </h4>
                     <p className="text-sm text-gray-600">
                       {locale === 'pl'
-                        ? 'Wszystkie płatności są przetwarzane bezpiecznie przez Stripe z szyfrowaniem na poziomie bankowym.'
-                        : 'All payments are processed securely through Stripe with bank-level encryption.'
+                        ? 'Nigdy nie przechowujemy Twoich informacji płatniczych na naszych serwerach. Wszystkie transakcje są przetwarzane bezpośrednio przez bezpieczną infrastrukturę Stripe, zapewniając, że Twoje dane finansowe pozostają całkowicie bezpieczne i prywatne.'
+                        : "We never store your payment information on our servers. All transactions are processed directly through Stripe's secure infrastructure, ensuring your financial data remains completely safe and private."
                       }
                     </p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* FAQ Section */}
-            <div id="faq" className="max-w-6xl mx-auto mb-24">
-              <h2 className="text-3xl font-bold text-center mb-12 text-[#0D2959]">
-                {locale === 'pl' ? 'Najczęściej Zadawane Pytania' : 'Frequently Asked Questions'}
+          {/* Success Metrics Section */}
+          <div className="max-w-6xl mx-auto mb-24">
+            <h2 className="text-3xl font-bold text-center mb-12 text-[#0D2959]">
+              {locale === 'pl' ? 'Nasze Wyniki' : 'Our Track Record'}
+            </h2>
+            <div className="grid md:grid-cols-4 gap-8">
+              <div className="text-center p-6 bg-gradient-to-br from-[#F17313]/10 to-[#F17313]/5 rounded-xl border border-[#F17313]/20">
+                <div className="text-4xl font-bold text-[#F17313] mb-2">500+</div>
+                <p className="text-[#0D2959] font-medium">
+                  {locale === 'pl' ? 'Usuniętych Profili' : 'Profiles Removed'}
+                </p>
+                <p className="text-sm text-[#0D2959]/70 mt-1">
+                  {locale === 'pl' ? 'Pomyślnie usuniętych z Google Maps' : 'Successfully deleted from Google Maps'}
+                </p>
+              </div>
+              <div className="text-center p-6 bg-gradient-to-br from-[#0D2959]/10 to-[#0D2959]/5 rounded-xl border border-[#0D2959]/20">
+                <div className="text-4xl font-bold text-[#0D2959] mb-2">98%</div>
+                <p className="text-[#0D2959] font-medium">
+                  {locale === 'pl' ? 'Wskaźnik Sukcesu' : 'Success Rate'}
+                </p>
+                <p className="text-sm text-[#0D2959]/70 mt-1">
+                  {locale === 'pl' ? 'Sprawy rozwiązane pomyślnie' : 'Cases resolved successfully'}
+                </p>
+              </div>
+              <div className="text-center p-6 bg-gradient-to-br from-[#F17313]/10 to-[#F17313]/5 rounded-xl border border-[#F17313]/20">
+                <div className="text-4xl font-bold text-[#F17313] mb-2">7-14</div>
+                <p className="text-[#0D2959] font-medium">
+                  {locale === 'pl' ? 'Dni Średnio' : 'Days Average'}
+                </p>
+                <p className="text-sm text-[#0D2959]/70 mt-1">
+                  {locale === 'pl' ? 'Czas ukończenia usunięcia' : 'Time to complete removal'}
+                </p>
+              </div>
+              <div className="text-center p-6 bg-gradient-to-br from-[#0D2959]/10 to-[#0D2959]/5 rounded-xl border border-[#0D2959]/20">
+                <div className="text-4xl font-bold text-[#0D2959] mb-2">24/7</div>
+                <p className="text-[#0D2959] font-medium">
+                  {locale === 'pl' ? 'Dostępne Wsparcie' : 'Support Available'}
+                </p>
+                <p className="text-sm text-[#0D2959]/70 mt-1">
+                  {locale === 'pl' ? 'Zawsze tutaj, aby Ci pomóc' : 'Always here to help you'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pricing Section */}
+          <div id="pricing" className="max-w-6xl mx-auto mb-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 text-[#0D2959]">
+                {locale === 'pl' ? 'Wybierz Swoją Usługę' : 'Choose Your Service'}
               </h2>
-              <div className="space-y-6">
-                <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-                  <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
-                    {locale === 'pl'
-                      ? 'Jak długo trwa usunięcie fałszywego profilu GMB?'
-                      : 'How long does it take to remove a fake GMB profile?'
-                    }
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+                {locale === 'pl'
+                  ? 'Wybierz usługę, która najlepiej odpowiada Twoim potrzebom. Wszystkie ceny to płatności jednorazowe bez ukrytych opłat.'
+                  : 'Select the service that best fits your needs. All prices are one-time payments with no hidden fees.'}
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+              {/* Remove Profile */}
+              <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-shadow">
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-bold text-[#0D2959] mb-2">
+                    {locale === 'pl' ? 'Usuń Profil' : 'Remove Profile'}
                   </h3>
-                  <p className="text-gray-700">
+                  <p className="text-gray-600 text-sm">
                     {locale === 'pl'
-                      ? 'Większość fałszywych lub nieautoryzowanych profili Google Moja Firma jest usuwana w ciągu 7-14 dni roboczych. Złożone sprawy obejmujące wiele profili lub obszerną dokumentację mogą zająć do 21 dni. Informujemy Cię o postępach przez cały proces.'
-                      : 'Most fake or unauthorized Google My Business profiles are removed within 7-14 business days. Complex cases involving multiple profiles or extensive documentation may take up to 21 days. We keep you updated throughout the entire process.'
+                      ? 'Całkowite usunięcie profilu Google Moja Firma'
+                      : 'Complete removal of Google Business Profile'}
+                  </p>
+                </div>
+                <div className="text-center mb-6">
+                  <div className="text-4xl font-bold text-[#0D2959] mb-2">
+                    {formatPrice(499)}
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    {locale === 'pl' ? 'Płatność jednorazowa' : 'One-time payment'}
+                  </p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center text-sm">
+                    <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {locale === 'pl' ? 'Całkowite usunięcie profilu' : 'Complete profile removal'}
+                  </li>
+                  <li className="flex items-center text-sm">
+                    <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {locale === 'pl' ? 'Wszystkie powiązane opinie usunięte' : 'All associated reviews deleted'}
+                  </li>
+                  <li className="flex items-center text-sm">
+                    <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {locale === 'pl' ? 'Ukończenie w 7-14 dni' : '7-14 days completion'}
+                  </li>
+                  <li className="flex items-center text-sm">
+                    <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {locale === 'pl' ? 'Gwarancja zwrotu pieniędzy' : 'Money-back guarantee'}
+                  </li>
+                </ul>
+                <button
+                  onClick={() => handleServiceSelect('remove')}
+                  className="w-full py-3 bg-[#F17313] text-white rounded-full font-semibold hover:bg-[#F17313]/90 transition-colors mb-3"
+                >
+                  {locale === 'pl' ? 'Wybierz' : 'Choose'}
+                </button>
+              </div>
+
+              {/* Reset Profile */}
+              <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-shadow">
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-bold text-[#0D2959] mb-2">
+                    {locale === 'pl' ? 'Zresetuj Profil' : 'Reset Profile'}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {locale === 'pl'
+                      ? 'Zresetuj profil Google Moja Firma do czystego stanu'
+                      : 'Reset Google Business Profile to clean state'
                     }
                   </p>
                 </div>
-                
-                <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-                  <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                <div className="text-center mb-6">
+                  <div className="text-4xl font-bold text-[#0D2959] mb-2">
+                    {formatPrice(599)}
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    {locale === 'pl' ? 'Płatność jednorazowa' : 'One-time payment'}
+                  </p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center text-sm">
+                    <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {locale === 'pl' ? 'Profil zresetowany do czystego stanu' : 'Profile reset to clean state'}
+                  </li>
+                  <li className="flex items-center text-sm">
+                    <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {locale === 'pl' ? 'Usuń negatywne treści' : 'Remove negative content'}
+                  </li>
+                  <li className="flex items-center text-sm">
+                    <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {locale === 'pl' ? 'Ukończenie w 7-14 dni' : '7-14 days completion'}
+                  </li>
+                  <li className="flex items-center text-sm">
+                    <svg className="w-4 h-4 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {locale === 'pl' ? 'Gwarancja zwrotu pieniędzy' : 'Money-back guarantee'}
+                  </li>
+                </ul>
+                <button
+                  onClick={() => handleServiceSelect('reset')}
+                  className="w-full py-3 bg-[#F17313] text-white rounded-full font-semibold hover:bg-[#F17313]/90 transition-colors mb-3"
+                >
+                  {locale === 'pl' ? 'Wybierz' : 'Choose'}
+                </button>
+              </div>
+            </div>
+
+            {/* Enhance Your Service */}
+            <div className="bg-gradient-to-br from-[#0D2959]/5 to-[#F17313]/5 rounded-2xl p-8 border border-gray-100">
+              <h3 className="text-2xl font-bold text-center mb-8 text-[#0D2959]">
+                {locale === 'pl' ? 'Ulepsz Swoją Usługę' : 'Enhance Your Service'}
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                {/* 1-Year Protection */}
+                <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-white/50">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-lg text-[#0D2959]">
+                      {locale === 'pl' ? 'Ochrona na 1 Rok' : '1-Year Protection'}
+                    </h4>
+                    <span className="text-2xl font-bold text-[#F17313]">
+                      {formatPrice(199)}
+                    </span>
+                  </div>
+                  <p className="text-gray-700 text-sm mb-4">
                     {locale === 'pl'
-                      ? 'Co jeśli profil nie zostanie usunięty?'
-                      : "What if the profile doesn't get removed?"
+                      ? 'Zapobiega ponownemu pojawieniu się przez 12 miesięcy'
+                      : 'Prevents reappearance for 12 months'
                     }
-                  </h3>
-                  <p className="text-gray-700">
+                  </p>
+                  <ul className="space-y-2">
+                    <li className="flex items-center text-sm">
+                      <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {locale === 'pl' ? 'Ciągły monitoring' : 'Continuous monitoring'}
+                    </li>
+                    <li className="flex items-center text-sm">
+                      <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {locale === 'pl' ? 'Automatyczne ponowne usunięcie' : 'Automatic re-removal'}
+                    </li>
+                    <li className="flex items-center text-sm">
+                      <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {locale === 'pl' ? 'Miesięczne raporty' : 'Monthly reports'}
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Express Service */}
+                <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-white/50">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-lg text-[#0D2959]">
+                      {locale === 'pl' ? 'Usługa Ekspresowa' : 'Express Service'}
+                    </h4>
+                    <span className="text-2xl font-bold text-[#F17313]">
+                      {formatPrice(99)}
+                    </span>
+                  </div>
+                  <p className="text-gray-700 text-sm mb-4">
                     {locale === 'pl'
-                      ? 'Oferujemy 100% gwarancję zwrotu pieniędzy. Jeśli nie możemy pomyślnie usunąć nieautoryzowanego profilu w ciągu 30 dni, otrzymujesz pełny zwrot pieniędzy. Nasz 98% wskaźnik sukcesu oznacza, że rzadko się to zdarza, ale Twoja satysfakcja jest gwarantowana.'
-                      : 'We offer a 100% money-back guarantee. If we cannot successfully remove the unauthorized profile within 30 days, you receive a full refund. Our 98% success rate means this rarely happens, but your satisfaction is guaranteed.'
+                      ? 'Priorytetowe przetwarzanie w ciągu 24-48 godzin'
+                      : 'Priority processing within 24-48 hours'
+                    }
+                  </p>
+                  <ul className="space-y-2">
+                    <li className="flex items-center text-sm">
+                      <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {locale === 'pl' ? 'Przetwarzanie w 24-48 godzin' : '24-48 hour processing'}
+                    </li>
+                    <li className="flex items-center text-sm">
+                      <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {locale === 'pl' ? 'Kolejka priorytetowa' : 'Priority queue'}
+                    </li>
+                    <li className="flex items-center text-sm">
+                      <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {locale === 'pl' ? 'Dedykowane wsparcie' : 'Dedicated support'}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Info */}
+            <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
+              <div className="grid md:grid-cols-3 gap-8 text-center">
+                <div>
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                    </svg>
+                  </div>
+                  <h4 className="font-semibold text-[#0D2959] mb-2">
+                    {locale === 'pl' ? 'Płać Tylko za Sukces' : 'Pay Only on Success'}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {locale === 'pl'
+                      ? 'Brak płatności z góry. Płacisz tylko wtedy, gdy pomyślnie ukończymy Twoją usługę.'
+                      : 'No upfront payment. You only pay when we successfully complete your service.'
                     }
                   </p>
                 </div>
-                
-                <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-                  <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                <div>
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h4 className="font-semibold text-[#0D2959] mb-2">
+                    {locale === 'pl' ? '100% Gwarancja' : '100% Guarantee'}
+                  </h4>
+                  <p className="text-sm text-gray-600">
                     {locale === 'pl'
-                      ? 'Czy możecie usunąć profile stworzone przez konkurencję?'
-                      : 'Can you remove profiles that competitors created?'
-                    }
-                  </h3>
-                  <p className="text-gray-700">
-                    {locale === 'pl'
-                      ? 'Tak, specjalizujemy się w usuwaniu fałszywych profili stworzonych przez konkurencję używającą nazwy Twojej firmy, adresu lub innych danych identyfikacyjnych. Dokumentujemy podszywanie się i współpracujemy bezpośrednio z Google, aby usunąć te oszukacze wizytówki.'
-                      : 'Yes, we specialize in removing fake profiles created by competitors using your business name, address, or other identifying information. We document the impersonation and work directly with Google to have these fraudulent listings removed.'
-                    }
-                  </p>
-                </div>
-                
-                <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-                  <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
-                    {locale === 'pl'
-                      ? 'Czy potrzebujecie dostępu do mojego konta Google?'
-                      : 'Do you need access to my Google account?'
-                    }
-                  </h3>
-                  <p className="text-gray-700">
-                    {locale === 'pl'
-                      ? 'Nie, nigdy nie potrzebujemy dostępu do Twoich osobistych kont Google. Pracujemy poprzez oficjalne kanały wsparcia Google i systemy zgłaszania. Zachowujesz pełną kontrolę i bezpieczeństwo swoich kont przez cały proces.'
-                      : 'No, we never need access to your personal Google accounts. We work through official Google support channels and reporting systems. You maintain complete control and security of your accounts throughout the process.'
+                      ? 'Jeśli nie możemy ukończyć Twojej usługi w ciągu 30 dni, otrzymujesz pełny zwrot pieniędzy.'
+                      : "If we can't complete your service within 30 days, you get a full refund."
                     }
                   </p>
                 </div>
-                
-                <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-                  <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                <div>
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <h4 className="font-semibold text-[#0D2959] mb-2">
+                    {locale === 'pl' ? 'Bezpieczna Płatność' : 'Secure Payment'}
+                  </h4>
+                  <p className="text-sm text-gray-600">
                     {locale === 'pl'
-                      ? 'Jakie informacje są potrzebne do rozpoczęcia?'
-                      : 'What information do you need to get started?'
-                    }
-                  </h3>
-                  <p className="text-gray-700">
-                    {locale === 'pl'
-                      ? 'Potrzebujemy URL-a lub szczegółów fałszywego profilu, informacji o Twojej legalnej firmie oraz wszelkich dowodów pokazujących, że profil jest nieautoryzowany (zrzuty ekranu, dokumentacja itp.). Nasz zespół poprowadzi Cię przez zbieranie niezbędnych informacji.'
-                      : 'We need the URL or details of the fake profile, your legitimate business information, and any evidence showing the profile is unauthorized (screenshots, documentation, etc.). Our team will guide you through gathering the necessary information.'
+                      ? 'Wszystkie płatności są przetwarzane bezpiecznie przez Stripe z szyfrowaniem na poziomie bankowym.'
+                      : 'All payments are processed securely through Stripe with bank-level encryption.'
                     }
                   </p>
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* FAQ Section */}
+          <div id="faq" className="max-w-6xl mx-auto mb-24">
+            <h2 className="text-3xl font-bold text-center mb-12 text-[#0D2959]">
+              {locale === 'pl' ? 'Najczęściej Zadawane Pytania' : 'Frequently Asked Questions'}
+            </h2>
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                  {locale === 'pl'
+                    ? 'Jak długo trwa usunięcie fałszywego profilu GMB?'
+                    : 'How long does it take to remove a fake GMB profile?'
+                  }
+                </h3>
+                <p className="text-gray-700">
+                  {locale === 'pl'
+                    ? 'Większość fałszywych lub nieautoryzowanych profili Google Moja Firma jest usuwana w ciągu 7-14 dni roboczych. Złożone sprawy obejmujące wiele profili lub obszerną dokumentację mogą zająć do 21 dni. Informujemy Cię o postępach przez cały proces.'
+                    : 'Most fake or unauthorized Google My Business profiles are removed within 7-14 business days. Complex cases involving multiple profiles or extensive documentation may take up to 21 days. We keep you updated throughout the entire process.'
+                  }
+                </p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                  {locale === 'pl'
+                    ? 'Co jeśli profil nie zostanie usunięty?'
+                    : "What if the profile doesn't get removed?"
+                  }
+                </h3>
+                <p className="text-gray-700">
+                  {locale === 'pl'
+                    ? 'Oferujemy 100% gwarancję zwrotu pieniędzy. Jeśli nie możemy pomyślnie usunąć nieautoryzowanego profilu w ciągu 30 dni, otrzymujesz pełny zwrot pieniędzy. Nasz 98% wskaźnik sukcesu oznacza, że rzadko się to zdarza, ale Twoja satysfakcja jest gwarantowana.'
+                    : 'We offer a 100% money-back guarantee. If we cannot successfully remove the unauthorized profile within 30 days, you receive a full refund. Our 98% success rate means this rarely happens, but your satisfaction is guaranteed.'
+                  }
+                </p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                  {locale === 'pl'
+                    ? 'Czy możecie usunąć profile stworzone przez konkurencję?'
+                    : 'Can you remove profiles that competitors created?'
+                  }
+                </h3>
+                <p className="text-gray-700">
+                  {locale === 'pl'
+                    ? 'Tak, specjalizujemy się w usuwaniu fałszywych profili stworzonych przez konkurencję używającą nazwy Twojej firmy, adresu lub innych danych identyfikacyjnych. Dokumentujemy podszywanie się i współpracujemy bezpośrednio z Google, aby usunąć te oszukacze wizytówki.'
+                    : 'Yes, we specialize in removing fake profiles created by competitors using your business name, address, or other identifying information. We document the impersonation and work directly with Google to have these fraudulent listings removed.'
+                  }
+                </p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                  {locale === 'pl'
+                    ? 'Czy potrzebujecie dostępu do mojego konta Google?'
+                    : 'Do you need access to my Google account?'
+                  }
+                </h3>
+                <p className="text-gray-700">
+                  {locale === 'pl'
+                    ? 'Nie, nigdy nie potrzebujemy dostępu do Twoich osobistych kont Google. Pracujemy poprzez oficjalne kanały wsparcia Google i systemy zgłaszania. Zachowujesz pełną kontrolę i bezpieczeństwo swoich kont przez cały proces.'
+                    : 'No, we never need access to your personal Google accounts. We work through official Google support channels and reporting systems. You maintain complete control and security of your accounts throughout the process.'
+                  }
+                </p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-3 text-[#0D2959]">
+                  {locale === 'pl'
+                    ? 'Jakie informacje są potrzebne do rozpoczęcia?'
+                    : 'What information do you need to get started?'
+                  }
+                </h3>
+                <p className="text-gray-700">
+                  {locale === 'pl'
+                    ? 'Potrzebujemy URL-a lub szczegółów fałszywego profilu, informacji o Twojej legalnej firmie oraz wszelkich dowodów pokazujących, że profil jest nieautoryzowany (zrzuty ekranu, dokumentacja itp.). Nasz zespół poprowadzi Cię przez zbieranie niezbędnych informacji.'
+                    : 'We need the URL or details of the fake profile, your legitimate business information, and any evidence showing the profile is unauthorized (screenshots, documentation, etc.). Our team will guide you through gathering the necessary information.'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
         </main>
       )}
 
@@ -2016,9 +2016,9 @@ export default function Home() {
                     Find Your Business
                   </h2>
                   <p className="text-xs text-gray-500 mt-1">
-                    {selectedService === 'remove' 
-                      ? 'Complete profile removal' 
-                      : selectedService === 'reset' 
+                    {selectedService === 'remove'
+                      ? 'Complete profile removal'
+                      : selectedService === 'reset'
                         ? 'Reset to clean state'
                         : 'First, search for your business profile'
                     }
@@ -2037,9 +2037,9 @@ export default function Home() {
             <div className="flex-1 overflow-y-auto p-4 sm:p-6">
               <div className="w-full">
                 <div className="bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-100">
-                  <GoogleProfileSearch 
-                    onSelectionChange={handleModalGmbSelection} 
-                    isModal={true} 
+                  <GoogleProfileSearch
+                    onSelectionChange={handleModalGmbSelection}
+                    isModal={true}
                     resetTrigger={resetTrigger}
                   />
                 </div>

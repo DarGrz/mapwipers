@@ -4,7 +4,7 @@ import { useLocaleContext } from '../context/LocaleContext';
 import { usePathname } from 'next/navigation';
 
 export default function LocaleDebug() {
-  const { locale, t, currency } = useLocaleContext();
+  const { locale, currency } = useLocaleContext();
   const pathname = usePathname();
 
   // Only show in development

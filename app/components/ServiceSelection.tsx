@@ -2,8 +2,6 @@
 
 import React, { useState } from 'react';
 import { PlaceDetails } from '../types';
-import { useLocale } from '../hooks/useLocale';
-import { convertPrice } from '@/lib/i18n';
 
 interface ServiceSelectionProps {
   selectedBusiness: PlaceDetails;
@@ -11,46 +9,45 @@ interface ServiceSelectionProps {
   onBack: () => void;
 }
 
-const ServiceSelection: React.FC<ServiceSelectionProps> = ({ 
-  selectedBusiness, 
+const ServiceSelection: React.FC<ServiceSelectionProps> = ({
+  selectedBusiness,
   onSelectService,
   onBack
 }) => {
-  const { locale, t } = useLocale();
   const [selectedService, setSelectedService] = useState<'remove' | 'reset' | null>(null);
-  
+
   const handleServiceSelect = (service: 'remove' | 'reset') => {
     setSelectedService(service);
   };
-  
+
   const handleContinue = () => {
     if (selectedService) {
       onSelectService(selectedService);
     }
   };
-  
+
   // Calculate prices based on ratings and reviews
-  const removePrice = selectedBusiness.user_ratings_total 
+  const removePrice = selectedBusiness.user_ratings_total
     ? Math.max(499, 499 + Math.floor(selectedBusiness.user_ratings_total / 10) * 50)
     : 499;
-    
-  const resetPrice = selectedBusiness.user_ratings_total 
+
+  const resetPrice = selectedBusiness.user_ratings_total
     ? Math.max(799, 799 + Math.floor(selectedBusiness.user_ratings_total / 5) * 50)
     : 799;
-  
+
   // Estimate completion time based on complexity
-  const removeTime = selectedBusiness.user_ratings_total && selectedBusiness.user_ratings_total > 50 
-    ? "7-14 days" 
+  const removeTime = selectedBusiness.user_ratings_total && selectedBusiness.user_ratings_total > 50
+    ? "7-14 days"
     : "5-10 days";
-    
-  const resetTime = selectedBusiness.user_ratings_total && selectedBusiness.user_ratings_total > 50 
-    ? "10-18 days" 
+
+  const resetTime = selectedBusiness.user_ratings_total && selectedBusiness.user_ratings_total > 50
+    ? "10-18 days"
     : "7-14 days";
 
   return (
     <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 border border-gray-200">
       <div className="mb-6">
-        <button 
+        <button
           onClick={onBack}
           className="flex items-center text-[#0D2959] hover:underline"
         >
@@ -60,17 +57,16 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
           Back to Business Selection
         </button>
       </div>
-      
+
       <h2 className="text-2xl font-bold mb-6 text-center">Choose Your Service for {selectedBusiness.name}</h2>
-      
+
       <div className="flex flex-col md:flex-row gap-6 mb-8">
         {/* Remove Service Option */}
-        <div 
-          className={`flex-1 border rounded-lg p-6 cursor-pointer transition-all ${
-            selectedService === 'remove' 
-              ? 'border-[#0D2959] bg-blue-50 shadow-md' 
+        <div
+          className={`flex-1 border rounded-lg p-6 cursor-pointer transition-all ${selectedService === 'remove'
+              ? 'border-[#0D2959] bg-blue-50 shadow-md'
               : 'border-gray-200 hover:border-blue-300'
-          }`}
+            }`}
           onClick={() => handleServiceSelect('remove')}
         >
           <div className="flex justify-between items-start mb-4">
@@ -84,13 +80,13 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
               <p className="text-sm text-gray-500">Est. {removeTime}</p>
             </div>
           </div>
-          
+
           <h3 className="text-xl font-semibold mb-2">Remove Google Business Profile</h3>
-          
+
           <p className="text-gray-600 mb-4">
             Permanently delete your business profile from Google Maps. Ideal if you&apos;ve closed your business or want to completely remove your online presence.
           </p>
-          
+
           <ul className="space-y-2 mb-4">
             <li className="flex items-start">
               <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,14 +108,13 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
             </li>
           </ul>
         </div>
-        
+
         {/* Reset Service Option */}
-        <div 
-          className={`flex-1 border rounded-lg p-6 cursor-pointer transition-all ${
-            selectedService === 'reset' 
-              ? 'border-[#0D2959] bg-blue-50 shadow-md' 
+        <div
+          className={`flex-1 border rounded-lg p-6 cursor-pointer transition-all ${selectedService === 'reset'
+              ? 'border-[#0D2959] bg-blue-50 shadow-md'
               : 'border-gray-200 hover:border-blue-300'
-          }`}
+            }`}
           onClick={() => handleServiceSelect('reset')}
         >
           <div className="flex justify-between items-start mb-4">
@@ -133,13 +128,13 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
               <p className="text-sm text-gray-500">Est. {resetTime}</p>
             </div>
           </div>
-          
+
           <h3 className="text-xl font-semibold mb-2">Reset Google Business Profile</h3>
-          
+
           <p className="text-gray-600 mb-4">
             Remove the existing profile and create a fresh one with no history. Perfect for businesses that want to start over with a clean reputation.
           </p>
-          
+
           <ul className="space-y-2 mb-4">
             <li className="flex items-start">
               <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,7 +157,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
           </ul>
         </div>
       </div>
-      
+
       <div className="bg-gray-50 p-4 rounded-lg mb-6">
         <h4 className="font-semibold mb-2 flex items-center">
           <svg className="w-5 h-5 text-[#0D2959] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +171,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
           <li>• You&apos;ll receive progress updates throughout the process</li>
         </ul>
       </div>
-      
+
       <div className="flex justify-between">
         <button
           onClick={onBack}
@@ -184,15 +179,14 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
         >
           Back
         </button>
-        
+
         <button
           onClick={handleContinue}
           disabled={!selectedService}
-          className={`px-6 py-2 rounded-md shadow-sm ${
-            selectedService 
-              ? 'bg-[#0D2959] hover:bg-opacity-90 text-white' 
+          className={`px-6 py-2 rounded-md shadow-sm ${selectedService
+              ? 'bg-[#0D2959] hover:bg-opacity-90 text-white'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
+            }`}
         >
           Continue to Order Details
         </button>
