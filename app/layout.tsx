@@ -3,8 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import LocaleDebug from "./components/LocaleDebug";
-import { LocaleProvider } from "./context/LocaleContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -104,11 +102,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       >
         {/* Google Tag Manager (noscript) */}
         <noscript>
-          <iframe 
+          <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-T3GS7MB9"
-            height="0" 
-            width="0" 
-            style={{display:'none', visibility:'hidden'}}
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
           ></iframe>
         </noscript>
         {/* End Google Tag Manager (noscript) */}
@@ -120,14 +118,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           strategy="beforeInteractive"
         />
         <div className="min-h-screen flex flex-col overflow-x-hidden">
-          <LocaleProvider>
-            <Header />
-            <main className="flex-1 overflow-x-hidden">
-              {children}
-            </main>
-            <Footer />
-            <LocaleDebug />
-          </LocaleProvider>
+          <Header />
+          <main className="flex-1 overflow-x-hidden">
+            {children}
+          </main>
+          <Footer />
         </div>
       </body>
     </html>

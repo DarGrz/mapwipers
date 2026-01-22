@@ -3,23 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useLocaleContext } from '../context/LocaleContext';
-import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { t, locale } = useLocaleContext();
-
-  // Get base path with locale prefix if needed
-  const getLocalizedPath = (path: string) => {
-    return locale === 'pl' ? `/pl${path}` : path;
-  };
 
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="">
-          <Link href={getLocalizedPath('/')} className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <Image
               src="/mapwipers_logo-horizontal.png"
               alt="MapWipers Logo"
@@ -32,30 +24,29 @@ export default function Header() {
 
         <div className="hidden md:flex items-center gap-8">
           <Link
-            href={getLocalizedPath('/#how-it-works')}
+            href="/#how-it-works"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            {t.nav.howItWorks}
+            How it Works
           </Link>
           <Link
-            href={getLocalizedPath('/#pricing')}
+            href="/#pricing"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            {t.nav.pricing}
+            Pricing
           </Link>
           <Link
-            href={getLocalizedPath('/#faq')}
+            href="/#faq"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            {t.nav.faq}
+            FAQ
           </Link>
           <Link
-            href={getLocalizedPath('/contact')}
+            href="/contact"
             className="text-sm text-[#0D2959]/70 hover:text-[#0D2959]"
           >
-            {t.nav.contact}
+            Contact
           </Link>
-          <LanguageSwitcher />
         </div>
 
         {/* Mobile menu button */}

@@ -2,29 +2,22 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useLocaleContext } from '../context/LocaleContext';
 
 interface FooterProps {
   className?: string;
 }
 
 export default function Footer({ className = "" }: FooterProps) {
-  const { t, locale } = useLocaleContext();
-  
-  // Get base path with locale prefix if needed
-  const getLocalizedPath = (path: string) => {
-    return locale === 'pl' ? `/pl${path}` : path;
-  };
   return (
     <footer className={`bg-[#0D2959]/5 border-t border-[#0D2959]/10 py-12 ${className}`}>
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Image 
-                src="/mapwipers_logo-horizontal.png" 
-                alt="MapWipers Logo" 
-                width={120} 
+              <Image
+                src="/mapwipers_logo-horizontal.png"
+                alt="MapWipers Logo"
+                width={120}
                 height={35}
                 className="h-8 w-auto"
               />
@@ -86,10 +79,10 @@ export default function Footer({ className = "" }: FooterProps) {
               </li>
               <li>
                 <Link
-                  href={getLocalizedPath('/contact')}
+                  href="/contact"
                   className="text-[#0D2959]/70 hover:text-[#F17313]"
                 >
-                  {t.footer.contact}
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -106,20 +99,20 @@ export default function Footer({ className = "" }: FooterProps) {
 
         <div className="pt-8 border-t border-[#0D2959]/10 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-xs text-[#0D2959]/70">
-            © {new Date().getFullYear()} Map Wipers. {t.footer.rights}
+            © {new Date().getFullYear()} Map Wipers. All rights reserved.
           </p>
           <div className="flex gap-4 mt-4 sm:mt-0">
             <Link
-              href={getLocalizedPath('/privacy')}
+              href="/privacy"
               className="text-xs text-[#0D2959]/70 hover:text-[#F17313]"
             >
-              {t.footer.privacy}
+              Privacy Policy
             </Link>
             <Link
-              href={getLocalizedPath('/terms')}
+              href="/terms"
               className="text-xs text-[#0D2959]/70 hover:text-[#F17313]"
             >
-              {t.footer.terms}
+              Terms of Service
             </Link>
           </div>
         </div>

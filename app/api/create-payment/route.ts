@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { logOrder, getRequestInfo } from '@/lib/logging';
-import { getLocaleFromHostname, convertPrice } from '@/lib/i18n';
+import { getRequestInfo, logOrder } from '@/lib/logging';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-08-27.basil',
@@ -10,12 +9,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { 
-      orderData, 
+    const {
+      orderData,
       formData,
       totalPrice,
       serviceType,
-      locale 
+      locale
     } = body;
 
     if (!orderData || !formData || !totalPrice || !serviceType) {
@@ -25,11 +24,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Determine locale from request or use default
-    const hostname = req.headers.get('host') || '';
-    const detectedLocale = locale || getLocaleFromHostname(hostname);
-    const currency = detectedLocale === 'pl' ? 'pln' : 'usd';
-    const finalPrice = detectedLocale === 'pl' ? convertPrice(totalPrice, 'pl') : totalPrice;
+    const currency = 'usd';
+    const finalPrice = totalPrice;
 
     // Create or retrieve Stripe customer
     const customerData: Stripe.CustomerCreateParams = {
@@ -53,12 +49,12 @@ export async function POST(req: NextRequest) {
         postal_code: formData.companyZip,
         country: formData.companyCountry === 'Poland' ? 'PL' : 'US', // Map country names to ISO codes
       };
-      
+
       // Ensure metadata is an object before adding properties
       if (customerData.metadata === '') {
         customerData.metadata = {};
       }
-      
+
       (customerData.metadata as Record<string, string>).companyName = formData.companyName;
       (customerData.metadata as Record<string, string>).isCompany = 'true';
       if (formData.companyTaxId) {
@@ -89,7 +85,7 @@ export async function POST(req: NextRequest) {
 
     // Add addon line items if selected
     if (orderData.yearProtection) {
-      const protectionPrice = detectedLocale === 'pl' ? convertPrice(199, 'pl') : 199;
+      const protectionPrice = 199;
       lineItems.push({
         price_data: {
           currency: currency,
@@ -104,7 +100,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (orderData.expressService) {
-      const expressPrice = detectedLocale === 'pl' ? convertPrice(99, 'pl') : 99;
+      const expressPrice = 99;
       lineItems.push({
         price_data: {
           currency: currency,
@@ -157,10 +153,10 @@ export async function POST(req: NextRequest) {
             },
             {
               name: "Processing Time",
-              value: orderData.expressService 
-                ? "24-48 hours (Express)" 
-                : serviceType === 'reset' 
-                  ? "3-5 business days" 
+              value: orderData.expressService
+                ? "24-48 hours (Express)"
+                : serviceType === 'reset'
+                  ? "3-5 business days"
                   : "5-7 business days"
             }
           ],
@@ -244,7 +240,7 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     console.error('Stripe payment processing error:', error);
-    
+
     // Handle specific Stripe errors
     if (error instanceof Stripe.errors.StripeError) {
       return NextResponse.json(
@@ -252,7 +248,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     return NextResponse.json(
       { error: 'Failed to process payment. Please try again.' },
       { status: 500 }

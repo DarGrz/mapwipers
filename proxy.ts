@@ -15,14 +15,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Detect Polish users and redirect to /pl if not already there
-  const country = request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry') || ''
-
-  if (country === 'PL' && !pathname.startsWith('/pl') && pathname === '/') {
-    const url = request.nextUrl.clone()
-    url.pathname = '/pl'
-    return NextResponse.redirect(url)
-  }
 
   // Get request info
   const requestInfo = getRequestInfo(request)

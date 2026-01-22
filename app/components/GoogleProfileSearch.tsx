@@ -3,8 +3,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { GmbLocation, PlaceDetails, Removal } from "../types";
 import { usePricing } from "../hooks/usePricing";
-import { useLocaleContext } from "../context/LocaleContext";
-
 interface GoogleProfileSearchProps {
   onSelectionChange?: (isSelected: boolean) => void;
   onProceedToOrder?: (orderData: {
@@ -19,7 +17,6 @@ interface GoogleProfileSearchProps {
 }
 
 const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = false, resetTrigger }: GoogleProfileSearchProps) => {
-  const { locale } = useLocaleContext();
 
   // Pricing hook
   const {
@@ -42,7 +39,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
   const [selectedPlaceDetails, setSelectedPlaceDetails] = useState<PlaceDetails | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState<boolean>(true);
-  const [headingText, setHeadingText] = useState<string>(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
+  const [headingText, setHeadingText] = useState<string>("Find your business");
   const [removals, setRemovals] = useState<Removal[]>([
     { companyName: '', nip: '' }
   ]);
@@ -58,36 +55,22 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
   const [lastSearchResultsCount, setLastSearchResultsCount] = useState<number>(0);
 
   // Animated placeholder state
-  const [currentPlaceholder, setCurrentPlaceholder] = useState<string>(
-    locale === 'pl' ? "Wyszukaj nazwę firmy..." : "Search for business name..."
-  );
+  const [currentPlaceholder, setCurrentPlaceholder] = useState<string>("Search for business name...");
   const [showCursor, setShowCursor] = useState<boolean>(true);
 
   // Placeholder phrases
-  const placeholderPhrases = useMemo(() =>
-    locale === 'pl' ? [
-      "Wyszukaj nazwę swojej firmy...",
-      "Spróbuj 'Pizzeria Kraków'...",
-      "Wpisz nazwę firmy...",
-      "Znajdź 'Fryzjer Warszawa'...",
-      "Szukaj swojego wpisu Google...",
-      "Wpisz 'Dentysta Wrocław'...",
-      "Znajdź profil swojej firmy...",
-      "Szukaj 'Kawiarnia Gdańsk'...",
-      "Wpisz firmę + lokalizację...",
-      "Spróbuj 'Mechanik Poznań'..."
-    ] : [
-      "Search for your business name...",
-      "Try 'Pizza Restaurant NYC'...",
-      "Enter your company name...",
-      "Find 'Hair Salon Los Angeles'...",
-      "Search your Google listing...",
-      "Type 'Dentist Miami Beach'...",
-      "Find your business profile...",
-      "Search 'Coffee Shop Seattle'...",
-      "Enter business + location...",
-      "Try 'Auto Repair Chicago'..."
-    ], [locale]);
+  const placeholderPhrases = useMemo(() => [
+    "Search for your business name...",
+    "Try 'Pizza Restaurant NYC'...",
+    "Enter your company name...",
+    "Find 'Hair Salon Los Angeles'...",
+    "Search your Google listing...",
+    "Type 'Dentist Miami Beach'...",
+    "Find your business profile...",
+    "Search 'Coffee Shop Seattle'...",
+    "Enter business + location...",
+    "Try 'Auto Repair Chicago'..."
+  ], []);
 
   // Check localStorage for previously selected business on component mount
   useEffect(() => {
@@ -101,7 +84,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         const businessData = JSON.parse(savedBusinessData);
         setSelectedPlaceDetails(businessData);
         setShowSearch(false);
-        setHeadingText(businessData.name || (locale === 'pl' ? "Wybrana firma" : "Selected Business"));
+        setHeadingText(businessData.name || "Selected Business");
 
         // Restore service selections if available
         if (savedServiceType) {
@@ -127,7 +110,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         localStorage.removeItem('selectedBusinessData');
       }
     }
-  }, [onSelectionChange, locale]);
+  }, [onSelectionChange]);
 
   // Search for GMB locations
   const searchLocations = React.useCallback(async (query: string) => {
@@ -153,13 +136,13 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       if (!data.locations || data.locations.length === 0) {
         setErrorMessage('No results found. Please try a different search term.');
         setLocations([]);
-        setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
+        setHeadingText("Find your business");
         setLastSearchQuery("");
         setLastSearchResultsCount(0);
       } else {
         setLocations(data.locations);
         setShowResults(true);
-        setHeadingText(locale === 'pl' ? `Wyniki dla "${query}"` : `Results for "${query}"`);
+        setHeadingText(`Results for "${query}"`);
         // Store search context for later use when business is selected
         setLastSearchQuery(query);
         setLastSearchResultsCount(data.locations.length);
@@ -171,7 +154,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
     } finally {
       setIsSearching(false);
     }
-  }, [locale]);
+  }, []);
 
   // Debounced search effect
   useEffect(() => {
@@ -196,7 +179,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       setSelectedPlaceDetails(null);
       setIsLoadingDetails(false);
       setShowSearch(true);
-      setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
+      setHeadingText("Find your business");
       setRemovals([{ companyName: '', nip: '' }]);
       setServiceType(null);
       setYearProtection(false);
@@ -218,7 +201,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
         onSelectionChange(false);
       }
     }
-  }, [resetTrigger, onSelectionChange, locale]);
+  }, [resetTrigger, onSelectionChange]);
 
   // Animated placeholder effect with typing
   useEffect(() => {
@@ -440,16 +423,12 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
     console.log('🚀 DEBUG: handleSubmit called - proceeding to order');
 
     if (!serviceType) {
-      setErrorMessage(locale === 'pl'
-        ? "Wybierz typ usługi (Usuwanie lub Reset profilu)"
-        : "Please select a service type (Remove or Reset profile)");
+      setErrorMessage("Please select a service type (Remove or Reset profile)");
       return;
     }
 
     if (!selectedPlaceDetails) {
-      setErrorMessage(locale === 'pl'
-        ? "Nie wybrano firmy"
-        : "No business selected");
+      setErrorMessage("No business selected");
       return;
     }
 
@@ -512,7 +491,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       setYearProtection(false);
       setExpressService(false);
       setShowSearch(true);
-      setHeadingText(locale === 'pl' ? "Znajdź swoją firmę" : "Find your business");
+      setHeadingText("Find your business");
       setAnimationState('entering');
 
       // Clear localStorage
@@ -541,16 +520,10 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       {!isModal && (
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-[#0D2959] mb-6 leading-tight">
-            {locale === 'pl'
-              ? 'Usuwanie Profilu Firmowego Google Maps'
-              : 'Google Maps Business Profile Removal'
-            }
+            Google Maps Business Profile Removal
           </h1>
           <p className="text-xl md:text-2xl text-[#0D2959]/70 max-w-4xl mx-auto leading-relaxed">
-            {locale === 'pl'
-              ? 'Usuń profil firmy lub zresetuj opinie. Skutecznie eliminujemy niechciane treści z Google Maps.'
-              : 'Remove your business profile or reset reviews. We effectively eliminate unwanted content from Google Maps.'
-            }
+            Remove your business profile or reset reviews. We effectively eliminate unwanted content from Google Maps.
           </p>
         </div>
       )}
@@ -684,7 +657,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 landscape:h-4 landscape:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  <span className="hidden sm:inline">{locale === 'pl' ? 'Szukaj' : 'Search'}</span>
+                  <span className="hidden sm:inline">Search</span>
                 </span>
               </button>
             </div>
@@ -840,7 +813,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#F17313]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                   </svg>
-                  {locale === 'pl' ? 'Wybierz Usługę' : 'Select Service'}
+                  Select Service
                 </h4>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -872,7 +845,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                         onClick={(e) => { e.stopPropagation(); openServiceModal('remove'); }}
                         className="text-xs font-semibold text-[#F17313] hover:underline"
                       >
-                        {locale === 'pl' ? 'Szczegóły' : 'Details'}
+                        Details
                       </button>
                       <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
                         <span className="text-lg font-black text-[#0D2959]">
@@ -907,7 +880,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                         onClick={(e) => { e.stopPropagation(); openServiceModal('reset'); }}
                         className="text-xs font-semibold text-[#F17313] hover:underline"
                       >
-                        {locale === 'pl' ? 'Szczegóły' : 'Details'}
+                        Details
                       </button>
                       <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
                         <span className="text-lg font-black text-[#0D2959]">
@@ -920,7 +893,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                   {/* Add-ons Section */}
                   <div className="space-y-3">
                     <h5 className="text-sm font-bold text-[#0D2959] uppercase tracking-wider">
-                      {locale === 'pl' ? 'Opcje Dodatkowe' : 'Optional Upgrades'}
+                      Optional Upgrades
                     </h5>
 
                     {/* Year Protection */}
@@ -980,7 +953,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                   <div className="pt-4 border-t border-gray-100">
                     <div className="flex justify-between items-center mb-6">
                       <span className="text-[#0D2959]/60 font-medium">
-                        {locale === 'pl' ? 'Razem do zapłaty:' : 'Total amount:'}
+                        Total amount:
                       </span>
                       <span className="text-3xl font-black text-[#0D2959]">
                         {serviceType ? calculateTotal(serviceType, yearProtection, expressService) : 0} PLN
@@ -995,13 +968,10 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                         : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         }`}
                     >
-                      {locale === 'pl' ? 'Przejdź do zamówienia' : 'Proceed to Order'}
+                      Proceed to Order
                     </button>
                     <p className="text-center text-[10px] text-[#0D2959]/40 mt-4 leading-relaxed">
-                      {locale === 'pl'
-                        ? 'Klikając "Przejdź do zamówienia", akceptujesz nasz regulamin oraz politykę prywatności. Dane transakcyjne są przetwarzane bezpiecznie przez Stripe.'
-                        : 'By clicking "Proceed to Order", you agree to our Terms of Service and Privacy Policy. Transaction data is securely processed by Stripe.'
-                      }
+                      By clicking "Proceed to Order", you agree to our Terms of Service and Privacy Policy. Transaction data is securely processed by Stripe.
                     </p>
                   </div>
                 </form>
@@ -1039,7 +1009,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                 </p>
 
                 <h4 className="text-lg font-bold text-[#0D2959] mt-6 mb-3">
-                  {locale === 'pl' ? 'Co obejmuje usługa?' : 'What does it include?'}
+                  What does it include?
                 </h4>
                 <ul className="space-y-3">
                   {modalContent === 'remove' ? (
@@ -1048,19 +1018,19 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>{locale === 'pl' ? 'Całkowite usunięcie wizytówki z Google Maps i wyników wyszukiwania.' : 'Complete removal of the listing from Google Maps and search results.'}</span>
+                        <span>Complete removal of the listing from Google Maps and search results.</span>
                       </li>
                       <li className="flex gap-3">
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>{locale === 'pl' ? 'Wyczyszczenie całej historii opinii, zdjęć i postów.' : 'Clearing all review history, photos, and posts.'}</span>
+                        <span>Clearing all review history, photos, and posts.</span>
                       </li>
                       <li className="flex gap-3">
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>{locale === 'pl' ? 'Zapobieganie dalszym negatywnym interakcjom pod tym adresem.' : 'Preventing further negative interactions at this address.'}</span>
+                        <span>Preventing further negative interactions at this address.</span>
                       </li>
                     </>
                   ) : (
@@ -1069,19 +1039,19 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>{locale === 'pl' ? 'Usunięcie obecnego profilu z negatywnymi opiniami.' : 'Removing the current profile with negative reviews.'}</span>
+                        <span>Removing the current profile with negative reviews.</span>
                       </li>
                       <li className="flex gap-3">
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>{locale === 'pl' ? 'Stworzenie nowej, czystej wizytówki dla Twojej firmy.' : 'Creating a new, clean listing for your business.'}</span>
+                        <span>Creating a new, clean listing for your business.</span>
                       </li>
                       <li className="flex gap-3">
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>{locale === 'pl' ? 'Zachowanie widoczności na mapach przy jednoczesnym odświeżeniu reputacji.' : 'Maintaining map visibility while refreshing your reputation.'}</span>
+                        <span>Maintaining map visibility while refreshing your reputation.</span>
                       </li>
                     </>
                   )}
@@ -1092,7 +1062,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                 onClick={() => { setServiceType(modalContent); closeModal(); }}
                 className="w-full py-4 bg-[#0D2959] text-white font-bold rounded-xl hover:bg-opacity-90 transition-all"
               >
-                {locale === 'pl' ? 'Wybierz tę usługę' : 'Choose this service'}
+                Choose this service
               </button>
             </div>
           </div>
