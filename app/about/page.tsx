@@ -47,16 +47,14 @@ export default function AboutUs() {
                                 </p>
                             </div>
                         </div>
-                        <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                            <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                                <Image
-                                    src="/mapwipers_logo-horizontal.png"
-                                    alt="MapWipers Logo"
-                                    width={400}
-                                    height={114}
-                                    className="opacity-50"
-                                />
-                            </div>
+                        <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-video">
+                            <Image
+                                src="/team_office.png"
+                                alt="MapWipers Team"
+                                fill
+                                className="object-cover"
+                                priority
+                            />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#0D2959]/40 to-transparent"></div>
                         </div>
                     </div>
