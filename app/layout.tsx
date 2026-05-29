@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import CookieConsent from "./components/CookieConsent";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -110,13 +111,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           ></iframe>
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        <Script
-          id="Cookiebot"
-          src="https://consent.cookiebot.com/uc.js"
-          data-cbid="2ecc4883-3772-48cf-a6ac-37fb69de61cb"
-          data-blockingmode="auto"
-          strategy="beforeInteractive"
-        />
         <div className="min-h-screen flex flex-col overflow-x-hidden">
           <Header />
           <main className="flex-1 overflow-x-hidden">
@@ -124,6 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </main>
           <Footer />
         </div>
+        <CookieConsent />
       </body>
     </html>
   );
