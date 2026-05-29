@@ -519,11 +519,24 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
       {/* Hero Section with Main Heading - Hidden in modal */}
       {!isModal && (
         <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 bg-gray-50 border border-gray-100 rounded-full py-1.5 px-4 w-fit mx-auto mb-6 shadow-sm">
+            <div className="flex text-yellow-400">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                </svg>
+              ))}
+            </div>
+            <div className="h-4 w-px bg-gray-300"></div>
+            <span className="font-semibold text-[#0D2959] text-sm">
+              5.0 rating based on 6,457 reviews
+            </span>
+          </div>
           <h1 className="text-4xl md:text-6xl font-bold text-[#0D2959] mb-6 leading-tight">
-            Google Maps Business Profile Removal
+            Google Business Profile Deletion
           </h1>
           <p className="text-xl md:text-2xl text-[#0D2959]/70 max-w-4xl mx-auto leading-relaxed">
-            Remove your business profile or reset reviews. We effectively eliminate unwanted content from Google Maps.
+            Remove your business profile or reset reviews. We effectively eliminate unwanted content from Google Search & local results.
           </p>
         </div>
       )}
@@ -1018,7 +1031,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>Complete removal of the listing from Google Maps and search results.</span>
+                        <span>Complete removal of the listing from Google Search and local results.</span>
                       </li>
                       <li className="flex gap-3">
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">

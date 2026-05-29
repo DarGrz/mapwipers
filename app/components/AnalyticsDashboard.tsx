@@ -311,7 +311,7 @@ export default function AnalyticsDashboard() {
                               rel="noopener noreferrer"
                               className="text-green-600 hover:text-green-800 font-medium"
                             >
-                              📍 Google Maps
+                              📍 Google Listing
                             </a>
                           </div>
                         )}

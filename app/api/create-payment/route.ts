@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
         price_data: {
           currency: currency,
           product_data: {
-            name: `Google Maps ${serviceType === 'remove' ? 'Profile Removal' : 'Profile Reset'} Service`,
+            name: `Google Business ${serviceType === 'remove' ? 'Profile Deletion' : 'Profile Reset'} Service`,
             description: `${serviceType === 'remove' ? 'Complete removal' : 'Reset reviews'} for ${orderData.selectedBusiness.name}`,
             metadata: {
               businessName: orderData.selectedBusiness.name,
@@ -144,7 +144,7 @@ export async function POST(req: NextRequest) {
       invoice_creation: {
         enabled: true,
         invoice_data: {
-          description: `Google Maps ${serviceType === 'remove' ? 'Profile Removal' : 'Profile Reset'} Service`,
+          description: `Google Business ${serviceType === 'remove' ? 'Profile Deletion' : 'Profile Reset'} Service`,
           // Invoice will be automatically sent via webhook after successful payment (see /api/stripe/webhook/route.ts)
           custom_fields: [
             {

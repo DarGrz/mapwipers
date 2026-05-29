@@ -288,7 +288,7 @@ export default function SearchedGMBsList({ initialData, showFilters = true }: Se
                         rel="noopener noreferrer"
                         className="text-green-600 hover:text-green-800 truncate block max-w-xs font-medium"
                       >
-                        📍 View on Google Maps
+                        📍 View on Google
                       </a>
                     </div>
                   )}

@@ -18,10 +18,10 @@ export default function Pricing() {
         {
             title: "Profile Removal",
             price: getServicePrice('remove') || 499,
-            description: "Complete removal of a fraudulent or unauthorized Google Business Profile from Search and Maps.",
+            description: "Complete removal of a fraudulent or unauthorized Google Business Profile from Search and local results.",
             features: [
                 "Elimination from Google Search",
-                "Elimination from Google Maps",
+                "Elimination from local listings",
                 "All fake reviews permanently gone",
                 "7-14 business days completion",
                 "Dedicated case manager",

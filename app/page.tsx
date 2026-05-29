@@ -845,7 +845,7 @@ export default function Home() {
                     Expert Team
                   </h4>
                   <p className="text-xs text-[#0D2959]/70">
-                    5+ years experience with Google Maps and business profile management
+                    5+ years experience with Google Business Profile and listing management
                   </p>
                 </div>
 
@@ -1306,7 +1306,7 @@ export default function Home() {
                     <div className="flex items-center space-x-3">
                       <div className="w-2 h-2 bg-[#F17313] rounded-full"></div>
                       <p className="text-sm text-gray-700">
-                        Constantly updated knowledge of Google Maps policies
+                        Constantly updated knowledge of Google Business policies
                       </p>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -1492,7 +1492,7 @@ export default function Home() {
                   Profiles Removed
                 </p>
                 <p className="text-sm text-[#0D2959]/70 mt-1">
-                  Successfully deleted from Google Maps
+                  Successfully deleted from Google local results
                 </p>
               </div>
               <div className="text-center p-6 bg-gradient-to-br from-[#0D2959]/10 to-[#0D2959]/5 rounded-xl border border-[#0D2959]/20">

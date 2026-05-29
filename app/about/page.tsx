@@ -21,7 +21,7 @@ export default function AboutUs() {
                             <span className="text-[#F17313]">Reputation Online</span>
                         </h1>
                         <p className="text-xl md:text-2xl opacity-90 mb-10 leading-relaxed">
-                            We are a team of experts dedicated to cleaning up Google Maps from fake, duplicate, and unauthorized business profiles.
+                            We are a team of experts dedicated to cleaning up Google Search and listings from fake, duplicate, and unauthorized business profiles.
                             Our mission is to ensure every business has a fair and accurate digital presence.
                         </p>
                     </div>

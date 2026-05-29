@@ -81,7 +81,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
           <h3 className="text-xl font-semibold mb-2">Remove Google Business Profile</h3>
 
           <p className="text-gray-600 mb-4">
-            Permanently delete your business profile from Google Maps. Ideal if you&apos;ve closed your business or want to completely remove your online presence.
+            Permanently delete your Google Business Profile. Ideal if you&apos;ve closed your business or want to completely remove your online presence.
           </p>
 
           <ul className="space-y-2 mb-4">
@@ -89,7 +89,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
               <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
-              <span>Complete removal from Google Maps</span>
+              <span>Complete removal from local search listings</span>
             </li>
             <li className="flex items-start">
               <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -149,7 +149,7 @@ const ServiceSelection: React.FC<ServiceSelectionProps> = ({
               <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
-              <span>Keep your business visible on maps</span>
+              <span>Keep your business visible online</span>
             </li>
           </ul>
         </div>
