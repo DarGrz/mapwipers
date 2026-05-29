@@ -897,7 +897,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                     </h5>
 
                     {/* Year Protection */}
-                    <div
+                    {/* <div
                       onClick={() => setYearProtection(!yearProtection)}
                       className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${yearProtection ? 'border-[#F17313] bg-[#F17313]/5' : 'border-gray-100 hover:bg-gray-50'
                         }`}
@@ -917,7 +917,7 @@ const GoogleProfileSearch = ({ onSelectionChange, onProceedToOrder, isModal = fa
                         </div>
                       </div>
                       <span className="font-bold text-[#0D2959]">+${getAddonPrice('yearProtection')}</span>
-                    </div>
+                    </div> */}
 
                     {/* Express Service */}
                     <div
